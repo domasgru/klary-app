@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "feedback-2263b"
+  },
+  "targets": {
+    "feedback-2263b": {
+      "hosting": {
+        "app": [
+          "feedback-2263b"
+        ]
+      }
+    }
   }
 }

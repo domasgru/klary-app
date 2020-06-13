@@ -32,11 +32,9 @@ export default {
       }
       Firebase.db.collection('workspaces').add({
         name: this.name,
-        team: {
-          [this.user.uid]: {
-            role: 'admin',
-          },
-        },
+        team: [
+          this.user.uid,
+        ],
       }).then((docRef) => {
         console.log('Document written with: ', docRef);
       }).catch((error) => {

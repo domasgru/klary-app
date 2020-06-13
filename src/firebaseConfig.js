@@ -40,7 +40,7 @@ export default {
   db: firebase.firestore(),
   login(email, redirectToPage = '') {
     const actionCodeSettings = {
-      url: `http://localhost:8080${redirectToPage}`,
+      url: `${window.location.href}${redirectToPage}`,
       handleCodeInApp: true,
     };
 

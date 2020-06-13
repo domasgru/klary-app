@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -61,10 +61,9 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "linebreak-style": [
-        "error",
-        "windows"
-      ],
+      "linebreak-style": 0,
+      "eslint linebreak-style": [0, "error", "windows"],
+      "global-require": 0,
       "no-param-reassign": [
         "error",
         {

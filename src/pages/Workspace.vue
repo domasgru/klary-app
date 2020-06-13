@@ -1,23 +1,18 @@
 <template>
   <div>
-    Your workspaces
+    <h1>Welcome to your workspace - <b>{{ workspace.name }}</b></h1>
+
+    <h2>Team: </h2>
+    <ul />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import Firebase from '@/firebaseConfig';
 
 export default {
   computed: {
-    ...mapState('user', ['user']),
-  },
-  mounted() {
-    Firebase.db.collection('cities').where(`team.${this.user.uid}`);
+    ...mapState('user', ['workspace']),
   },
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

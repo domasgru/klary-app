@@ -1,0 +1,77 @@
+[debug] [2020-05-24T14:35:25.346Z] ----------------------------------------------------------------------
+[debug] [2020-05-24T14:35:25.347Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Domas\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2020-05-24T14:35:25.348Z] CLI Version:   8.2.0
+[debug] [2020-05-24T14:35:25.348Z] Platform:      win32
+[debug] [2020-05-24T14:35:25.348Z] Node Version:  v13.10.1
+[debug] [2020-05-24T14:35:25.349Z] Time:          Sun May 24 2020 17:35:25 GMT+0300 (Eastern European Summer Time)
+[debug] [2020-05-24T14:35:25.349Z] ----------------------------------------------------------------------
+[debug] [2020-05-24T14:35:25.349Z] 
+[debug] [2020-05-24T14:35:25.354Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-05-24T14:35:25.355Z] > authorizing via signed-in user
+[debug] [2020-05-24T14:35:25.355Z] [iam] checking project feedback-2263b for permissions ["firebase.projects.get"]
+[debug] [2020-05-24T14:35:25.357Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/feedback-2263b:testIamPermissions  
+ {"permissions":["firebase.projects.get"]}
+[debug] [2020-05-24T14:35:26.205Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 24 May 2020 14:35:26 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=740","alt-svc":"h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-05-24T14:35:26.206Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/feedback-2263b  
+ 
+[debug] [2020-05-24T14:35:26.436Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 24 May 2020 14:35:26 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Serving from 'C:\Users\Domas\Desktop\feedbackapp\app'...
+[info] 
+[debug] [2020-05-24T14:35:26.440Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/feedback-2263b/webApps/-/config  
+ 
+[debug] [2020-05-24T14:35:27.183Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 24 May 2020 14:35:27 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  hosting: Serving hosting files from: dist
+[info] +  hosting: Local server: http://localhost:5000
+[warn] !  Your requested "node" version "8" doesn't match your global version "13"
+[info] +  functions: functions emulator started at http://localhost:5001
+[info] i  functions: Watching "C:\Users\Domas\Desktop\feedbackapp\app\functions" for Cloud Functions...
+[debug] [2020-05-24T14:35:28.456Z] [worker-pool] addWorker(~diagnostic~) 
+[debug] [2020-05-24T14:35:28.457Z] [worker-pool] Adding worker with key ~diagnostic~, total=1 
+[debug] [2020-05-24T14:35:28.457Z] [worker-pool] submitWork(triggerId=) 
+[debug] [2020-05-24T14:35:28.457Z] [worker-~diagnostic~-5fb7a07c-425d-4001-beba-2359fd674f54]: Assigning socketPath: \\?\pipe\C:\Users\Domas\Desktop\feedbackapp\app\functions\8968 
+[debug] [2020-05-24T14:35:28.457Z] [worker-~diagnostic~-5fb7a07c-425d-4001-beba-2359fd674f54]: BUSY 
+[debug] [2020-05-24T14:35:28.727Z] [runtime-status] [8968] Functions runtime initialized. {"cwd":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions","node_version":"13.10.1"} 
+[debug] [2020-05-24T14:35:28.728Z] [runtime-status] [8968] Disabled runtime features: undefined 
+[debug] [2020-05-24T14:35:28.730Z] [runtime-status] [8968] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.12.1","resolution":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions\\node_modules\\firebase-admin\\lib\\index.js"} 
+[debug] [2020-05-24T14:35:28.733Z] [runtime-status] [8968] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.6.1","resolution":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
+[debug] [2020-05-24T14:35:28.734Z] [runtime-status] [8968] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] 
+[debug] [2020-05-24T14:35:28.766Z] [runtime-status] [8968] Checked functions.config() {"config":{}} 
+[debug] [2020-05-24T14:35:28.766Z] [runtime-status] [8968] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.6.1","resolution":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
+[debug] [2020-05-24T14:35:28.767Z] [runtime-status] [8968] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.12.1","resolution":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions\\node_modules\\firebase-admin\\lib\\index.js"} 
+[debug] [2020-05-24T14:35:28.767Z] [runtime-status] [8968] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.6.1","resolution":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
+[debug] [2020-05-24T14:35:28.767Z] [runtime-status] [8968] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"8.12.1","resolution":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions\\node_modules\\firebase-admin\\lib\\index.js"}} 
+[info] +  functions[hello]: http function initialized (http://localhost:5001/feedback-2263b/us-central1/hello).
+[debug] [2020-05-24T14:35:28.769Z] [worker-~diagnostic~-5fb7a07c-425d-4001-beba-2359fd674f54]: IDLE 
+[info] [hosting] Rewriting / to http://localhost:5001/feedback-2263b/us-central1/hello for local Function hello
+[debug] [2020-05-24T14:35:30.961Z] [work-queue] {"queueLength":1,"workRunningCount":0}
+[debug] [2020-05-24T14:35:30.961Z] [work-queue] {"queueLength":0,"workRunningCount":1}
+[debug] [2020-05-24T14:35:30.961Z] Accepted request GET /feedback-2263b/us-central1/hello/ --> hello
+[debug] [2020-05-24T14:35:30.964Z] [worker-pool] addWorker(hello) 
+[debug] [2020-05-24T14:35:30.965Z] [worker-pool] Adding worker with key hello, total=1 
+[debug] [2020-05-24T14:35:30.965Z] [worker-pool] submitWork(triggerId=hello) 
+[debug] [2020-05-24T14:35:30.965Z] [worker-hello-bbb0a431-38f7-4b31-8eca-8db15d5b5abb]: Assigning socketPath: \\?\pipe\C:\Users\Domas\Desktop\feedbackapp\app\functions\12428 
+[debug] [2020-05-24T14:35:30.965Z] [worker-hello-bbb0a431-38f7-4b31-8eca-8db15d5b5abb]: BUSY 
+[debug] [2020-05-24T14:35:31.227Z] [runtime-status] [12428] Functions runtime initialized. {"cwd":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions","node_version":"13.10.1"} 
+[debug] [2020-05-24T14:35:31.228Z] [runtime-status] [12428] Disabled runtime features: undefined 
+[debug] [2020-05-24T14:35:31.230Z] [runtime-status] [12428] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.12.1","resolution":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions\\node_modules\\firebase-admin\\lib\\index.js"} 
+[debug] [2020-05-24T14:35:31.233Z] [runtime-status] [12428] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.6.1","resolution":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
+[debug] [2020-05-24T14:35:31.235Z] [runtime-status] [12428] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] 
+[debug] [2020-05-24T14:35:31.266Z] [runtime-status] [12428] Checked functions.config() {"config":{}} 
+[debug] [2020-05-24T14:35:31.266Z] [runtime-status] [12428] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.6.1","resolution":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
+[debug] [2020-05-24T14:35:31.267Z] [runtime-status] [12428] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.12.1","resolution":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions\\node_modules\\firebase-admin\\lib\\index.js"} 
+[debug] [2020-05-24T14:35:31.267Z] [runtime-status] [12428] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.6.1","resolution":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
+[debug] [2020-05-24T14:35:31.268Z] [runtime-status] [12428] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"8.12.1","resolution":"C:\\Users\\Domas\\Desktop\\feedbackapp\\app\\functions\\node_modules\\firebase-admin\\lib\\index.js"}} 
+[debug] [2020-05-24T14:35:31.269Z] [runtime-status] [12428] Trigger "hello" has been found, beginning invocation! 
+[info] i  functions: Beginning execution of "hello"
+[debug] [2020-05-24T14:35:31.269Z] [runtime-status] [12428] triggerDefinition {"httpsTrigger":{},"name":"hello","entryPoint":"hello"} 
+[debug] [2020-05-24T14:35:31.269Z] [runtime-status] [12428] Running hello in mode HTTPS 
+[debug] [2020-05-24T14:35:31.273Z] [runtime-status] [12428] Attempting to listen to socketPath: \\?\pipe\C:\Users\Domas\Desktop\feedbackapp\app\functions\12428 
+[debug] [2020-05-24T14:35:31.275Z] [functions] Runtime ready! Sending request! 
+[debug] [2020-05-24T14:35:31.279Z] [runtime-status] [12428] Ephemeral server handling GET request 
+[debug] [2020-05-24T14:35:31.282Z] [runtime-status] [12428] Ephemeral server survived. 
+[info] i  functions: Finished "hello" in ~1s
+[debug] [2020-05-24T14:35:31.284Z] [worker-hello-bbb0a431-38f7-4b31-8eca-8db15d5b5abb]: IDLE 
+[debug] [2020-05-24T14:35:31.285Z] [work-queue] {"queueLength":0,"workRunningCount":0}
+[debug] [2020-05-24T18:59:56.113Z] [worker-hello-bbb0a431-38f7-4b31-8eca-8db15d5b5abb]: exited 
+[debug] [2020-05-24T18:59:56.113Z] [worker-hello-bbb0a431-38f7-4b31-8eca-8db15d5b5abb]: FINISHED 

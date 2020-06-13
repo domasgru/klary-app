@@ -21,13 +21,20 @@
         >
           Get started
         </BaseButton>
-        <BaseButton
-          v-else
-          class="navigation__button"
-          @click="logout"
-        >
-          Logout
-        </BaseButton>
+        <template v-else>
+          <BaseButton
+            class="navigation__button"
+            @click="$router.push('/workspaces')"
+          >
+            Your workspaces
+          </BaseButton>
+          <BaseButton
+            class="navigation__button"
+            @click="logout"
+          >
+            Logout
+          </BaseButton>
+        </template>
       </div>
     </div>
   </nav>

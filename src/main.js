@@ -5,7 +5,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import './firebaseConfig';
-import './scss/_global.scss';
+import './scss/global/_global.scss';
 
 Vue.use(VueRouter);
 Vue.use(firestorePlugin);

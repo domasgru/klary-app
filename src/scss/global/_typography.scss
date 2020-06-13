@@ -1,0 +1,109 @@
+body {
+  font-family: 'Inter', sans-serif;
+  color: $primary-400;
+}
+
+h1,
+.base-typography--h1 {
+  font-size: 80px;
+  font-weight: bold;
+}
+
+h2,
+.base-typography--h2 {
+  font-size: 72px;
+  font-weight: bold;
+}
+
+h3,
+.base-typography--h3 {
+  font-size: 64px;
+  font-weight: bold;
+}
+
+h4,
+.base-typography--h4 {
+  font-size: 56px;
+  font-weight: bold;
+}
+
+h5,
+.base-typography--h5 {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+h6,
+.base-typography--h6 {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.base-typography--h7 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.base-typography--h8 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+p,
+.base-typography--b1 {
+  font-size: 20px;
+  font-weight: normal;
+}
+
+p,
+.base-typography--b2 {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+p,
+.base-typography--b3 {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+p,
+.base-typography--bb1 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+p,
+.base-typography--bb2 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+p,
+.base-typography--bb3 {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+button,
+.base-typography--button {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.base-typography--button2 {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.base-typography--caption {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.base-typography--overline {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+}

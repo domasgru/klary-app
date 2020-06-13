@@ -6,6 +6,8 @@ import GetStartedCreate from '@/pages/get-started/GetStartedCreate.vue';
 import GetStartedJoin from '@/pages/get-started/GetStartedJoin.vue';
 import CreateWorkspace from '@/pages/CreateWorkspace.vue';
 import JoinWorkspace from '@/pages/JoinWorkspace.vue';
+import Workspaces from '@/pages/Workspaces.vue';
+import Workspace from '@/pages/Workspace.vue';
 
 Vue.use(Router);
 
@@ -35,6 +37,14 @@ export default new Router({
     {
       path: '/join-workspace',
       component: JoinWorkspace,
+    },
+    {
+      path: '/workspaces',
+      component: Workspaces,
+    },
+    {
+      path: '/workspace',
+      component: Workspace,
     },
   ],
 });
