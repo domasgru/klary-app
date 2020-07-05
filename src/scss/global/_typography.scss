@@ -1,6 +1,6 @@
 body {
   font-family: 'Inter', sans-serif;
-  color: $primary-400;
+  color: $dark;
 }
 
 h1,
@@ -55,31 +55,26 @@ p,
   font-weight: normal;
 }
 
-p,
 .base-typography--b2 {
   font-size: 16px;
   font-weight: normal;
 }
 
-p,
 .base-typography--b3 {
   font-size: 14px;
   font-weight: normal;
 }
 
-p,
 .base-typography--bb1 {
   font-size: 20px;
   font-weight: bold;
 }
 
-p,
 .base-typography--bb2 {
   font-size: 16px;
   font-weight: bold;
 }
 
-p,
 .base-typography--bb3 {
   font-size: 14px;
   font-weight: bold;

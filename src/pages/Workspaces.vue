@@ -17,7 +17,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import Firebase from '@/firebaseConfig';
+import { db } from '@/firebase';
 
 export default {
   data() {
@@ -26,10 +26,10 @@ export default {
     };
   },
   computed: {
-    ...mapState('user', ['user']),
+    ...mapState('user', ['userData']),
   },
   async mounted() {
-    const data = await Firebase.db.collection('workspaces').where('team', 'array-contains', this.user.uid).get();
+    const data = await db.collection('workspaces').where('team', 'array-contains', this.user.uid).get();
     const workspaces = data.docs.map((doc) => doc.data());
     this.workspaces = workspaces;
   },
@@ -37,7 +37,7 @@ export default {
     ...mapActions('user', ['setWorkspace']),
     select(workspace) {
       this.setWorkspace(workspace);
-      Firebase.db.collection('users').doc(this.user.uid).update({
+      db.collection('users').doc(this.user.uid).update({
         currentWorkspace: workspace.name,
       });
       this.$router.push('/workspace');

@@ -1,11 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import user from './user';
+import { vuexfireMutations } from 'vuexfire';
+import modules from './modules';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  modules: {
-    user,
+  state: {
+    loading: false,
   },
+  mutations: {
+    setLoading(state, value) {
+      state.loading = value;
+    },
+    ...vuexfireMutations,
+  },
+  modules,
 });

@@ -1,24 +1,28 @@
 <template>
   <div id="app">
-    <Navigation />
     <router-view />
+    <LoaderFullscreen v-if="loading" />
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import Firebase from '@/firebaseConfig';
-import Navigation from '@/components/Navigation.vue';
+import { mapState } from 'vuex';
+import LoaderFullscreen from '@/components/ui/LoaderFullscreen.vue';
+
 
 export default {
   components: {
-    Navigation,
+    LoaderFullscreen,
   },
-  mounted() {
-    Firebase.auth.onAuthStateChanged((user) => {
-      this.setUser(user);
-    });
+  computed: {
+    ...mapState(['loading']),
+
   },
-  methods: mapActions('user', ['setUser']),
 };
 </script>
+
+<style lang="scss" scoped>
+#app {
+  height: 100%;
+}
+</style>

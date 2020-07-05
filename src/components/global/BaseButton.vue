@@ -1,6 +1,8 @@
 <template>
   <button
-    class="button"
+    class="button base-typography--button"
+    :class="computedClasses"
+    :disabled="disabled"
     v-on="$listeners"
   >
     <slot />
@@ -14,16 +16,47 @@ export default {
       type: String,
       default: '',
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    fluid: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    computedClasses() {
+      return {
+        'button--disabled': this.disabled,
+        'button--fluid': this.fluid,
+      };
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .button {
-  padding: 15px 32px;
+  padding: 16px 24px;
   color: white;
-  background: #5867e6;
+  background: $primary;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
+  outline: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &--disabled {
+    //pointer-events: none;
+    cursor: not-allowed;
+    background: $primary-disabled;
+  }
+
+  &--fluid {
+    width: 100%;
+  }
 }
 </style>

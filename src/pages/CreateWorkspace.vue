@@ -14,7 +14,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import Firebase from '@/firebaseConfig';
+import { db } from '@/firebase';
 
 export default {
   data() {
@@ -23,14 +23,14 @@ export default {
     };
   },
   computed: {
-    ...mapState('user', ['user']),
+    ...mapState('user', ['userData']),
   },
   methods: {
     create() {
       if (!this.user) {
         return;
       }
-      Firebase.db.collection('workspaces').add({
+      db.collection('workspaces').add({
         name: this.name,
         team: [
           this.user.uid,

@@ -1,17 +1,22 @@
 <template>
   <div class="header-auth">
-    <p>C</p>
+    <BaseSvg
+      class="header-auth__logo"
+      name="logo"
+    />
   </div>
 </template>
 
-<script>
-export default {
-
-};
-</script>
-
 <style lang="scss" scoped>
 .header-auth {
+  display: flex;
+  justify-content: center;
   padding: 40px 0;
+
+  &__logo {
+    width: 120px;
+    height: 26px;
+    cursor: pointer;
+  }
 }
 </style>
