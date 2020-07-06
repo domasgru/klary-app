@@ -1,5 +1,5 @@
 import { firestoreAction } from 'vuexfire';
-import { db } from '@/firebase';
+import { db, auth } from '@/firebase';
 
 export default {
   state: {

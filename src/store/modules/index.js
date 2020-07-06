@@ -15,7 +15,6 @@ requireModule.keys().forEach((fileName) => {
     namespaced: true,
     ...requireModule(fileName).default,
   };
-  console.log(modules);
 });
 
 export default modules;

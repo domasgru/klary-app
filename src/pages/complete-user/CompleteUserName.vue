@@ -36,7 +36,6 @@
 import { mapState } from 'vuex';
 import { required, alpha } from 'vuelidate/lib/validators';
 import { updateUserProfileDocument } from '@/firebase';
-import { animeStaggerIn, animeStaggerOut } from '@/utils/animation';
 
 export default {
   data() {
@@ -54,9 +53,6 @@ export default {
   computed: {
     ...mapState('user', ['userAuth']),
   },
-  mounted() {
-    animeStaggerIn();
-  },
   methods: {
     async setName() {
       if (this.$v.name.$invalid) {
@@ -64,7 +60,6 @@ export default {
         return;
       }
 
-      await animeStaggerOut();
       updateUserProfileDocument(this.userAuth.uid, { name: this.name });
       this.$emit('submit');
     },

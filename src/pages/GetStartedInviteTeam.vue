@@ -1,39 +1,45 @@
 <template>
-  <div class="complete-company">
-    <h5 class="complete-company__title stagger">
-      Invite your teammates to this new feedback-space 🙌
-    </h5>
-    <div class="complete-company__wrapper">
-      <BaseTextarea
-        v-model="emails"
-        label="Emails"
-        class="complete-company__input stagger"
-        placeholder="Ex. justin@work-inc.com, dominic@work-inc.com"
-      />
-      <BaseButton
-        fluid
-        :disabled="$v.emails.$invalid"
-        class="complete-company__button stagger"
-        @click="addTeamates"
-      >
-        Add teammate
-      </BaseButton>
-      <p
-        class="complete-company__skip base-typography--b2"
-        @click="$router.push('/workspace')"
-      >
-        Or, <b>skip for now</b>
-      </p>
+  <GetStartedLayout>
+    <div class="complete-company">
+      <h5 class="complete-company__title stagger">
+        Invite your teammates to this new feedback-space 🙌
+      </h5>
+      <div class="complete-company__wrapper">
+        <BaseTextarea
+          v-model="emails"
+          label="Emails"
+          class="complete-company__input stagger"
+          placeholder="Ex. justin@work-inc.com, dominic@work-inc.com"
+        />
+        <BaseButton
+          fluid
+          :disabled="$v.emails.$invalid"
+          class="complete-company__button stagger"
+          @click="addTeamates"
+        >
+          Add teammate
+        </BaseButton>
+        <p
+          class="complete-company__skip base-typography--b2"
+          @click="$router.push('/workspace')"
+        >
+          Or, <b>skip for now</b>
+        </p>
+      </div>
     </div>
-  </div>
+  </GetStartedLayout>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 import { db, updateUserProfileDocument, FieldValue } from '@/firebase';
+import GetStartedLayout from '@/pages/GetStartedLayout.vue';
 
 export default {
+  components: {
+    GetStartedLayout,
+  },
   data() {
     return {
       emails: '',
@@ -65,10 +71,14 @@ export default {
 
 <style lang="scss" scoped>
 .complete-company {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
 
   &__wrapper {
-    padding: 0 149px;
+    width: 100%;
+    max-width: 470px;
   }
 
   &__title {

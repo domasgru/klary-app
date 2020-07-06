@@ -29,7 +29,6 @@
 import { mapState, mapActions } from 'vuex';
 import { required, alphaNum } from 'vuelidate/lib/validators';
 import { db, updateUserProfileDocument, getWorkspace } from '@/firebase';
-import { animeStaggerIn, animeStaggerOut } from '@/utils/animation';
 
 export default {
   data() {
@@ -46,9 +45,6 @@ export default {
   },
   computed: {
     ...mapState('user', ['userAuth']),
-  },
-  mounted() {
-    animeStaggerIn();
   },
   methods: {
     ...mapActions('workspace', ['setAllWorkspaces', 'setCurrentWorkspace']),
@@ -71,7 +67,6 @@ export default {
       });
 
       const currentWorkspace = await getWorkspace(workspaceId);
-      await animeStaggerOut();
       this.setAllWorkspaces([workspaceId]);
       updateUserProfileDocument(this.userAuth.uid, { currentWorkspace: workspaceId });
       this.setCurrentWorkspace(currentWorkspace);

@@ -24,12 +24,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    inverse: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     computedClasses() {
       return {
         'button--disabled': this.disabled,
         'button--fluid': this.fluid,
+        'button--inverse': this.inverse,
       };
     },
   },
@@ -44,9 +49,11 @@ export default {
   border: none;
   border-radius: 10px;
   outline: none;
+  transition: background-color 0.2s;
 
   &:hover {
     cursor: pointer;
+    background: $primary-400;
   }
 
   &--disabled {
@@ -57,6 +64,15 @@ export default {
 
   &--fluid {
     width: 100%;
+  }
+
+  &--inverse {
+    color: $primary;
+    background: $light;
+
+    &:hover {
+      background: $light;
+    }
   }
 }
 </style>

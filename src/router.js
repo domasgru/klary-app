@@ -1,12 +1,23 @@
+/* eslint-disable no-use-before-define */
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
 import Home from '@/pages/Home.vue';
 import Login from '@/pages/get-started/Login.vue';
 import Workspace from '@/pages/Workspace.vue';
-import CompleteUser from '@/pages/complete-user/CompleteUser.vue';
-import CompleteAuth from '@/pages/CompleteAuth.vue';
-import { getCurrentUser, getUserDocument, getWorkspace } from '@/firebase';
+import GetStartedCreateName from '@/pages/GetStartedCreateName.vue';
+import GetStartedCreateTeam from '@/pages/GetStartedCreateTeam.vue';
+import GetStartedInviteTeam from '@/pages/GetStartedInviteTeam.vue';
+import SelectWorkspace from '@/pages/SelectWorkspace.vue';
+
+import {
+  auth,
+  getCurrentUser,
+  createUserProfileDocument,
+  getWorkspace,
+  getUserWorkspaces,
+  getInvitedWorkspaces,
+} from '@/firebase';
 
 Vue.use(Router);
 
@@ -19,26 +30,46 @@ const router = new Router({
     },
     {
       path: '/complete-auth',
-      component: CompleteAuth,
+      beforeEnter: copmleteAuth,
     },
     {
       path: '/login',
       component: Login,
-      // beforeEnter: async (to, from, next) => {
-      //   const user = await getCurrentUser();
-      //   console.log(user);
-      //   if (user) {
-      //     next('/');
-      //     return;
-      //   }
-      //   next();
-      // },
     },
     {
-      path: '/complete-user',
-      component: CompleteUser,
+      path: '/create-name',
+      component: GetStartedCreateName,
       meta: {
-        requiresUncompletedUser: true,
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/create-team',
+      component: GetStartedCreateTeam,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/invite-team',
+      component: GetStartedInviteTeam,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/select-workspace',
+      component: SelectWorkspace,
+      meta: {
+        requiresAuth: true,
+      },
+      beforeEnter: async (to, from, next) => {
+        const { uid, email } = store.state.user.userData;
+        const allWorkspaces = await getUserWorkspaces(uid);
+        const invitedWorkspaces = await getInvitedWorkspaces(email);
+        store.dispatch('workspace/setAllWorkspaces', allWorkspaces);
+        store.dispatch('workspace/setInvitedWorkspaces', invitedWorkspaces);
+        next();
       },
     },
     {
@@ -52,53 +83,70 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
+  store.commit('setLoading', true);
   if (to.matched.some((route) => route.meta.requiresAuth)) {
     // eslint-disable-next-line max-len
     if (store.state.user.userAuth && store.state.workspace.currentWorkspace && store.state.user.userData) {
-      next();
-      return;
+      return next();
     }
 
-    store.commit('setLoading', true);
-
-    // Check if user logged in
+    // Check/set userAuth
     const userAuth = store.state.user.userAuth || await getCurrentUser();
     store.dispatch('user/setUserAuth', userAuth);
     if (!userAuth) {
-      next('/login');
-      store.commit('setLoading', false);
-      return;
+      return next('/login');
     }
 
-    // Check if user is completed
-    const userData = store.state.userData || await store.dispatch('user/bindUser', userAuth.uid);
+    // Check/set userData
+    const userData = store.state.user.userData || await store.dispatch('user/bindUser', userAuth.uid);
     if (!userData.name || !userData.currentWorkspace) {
-      next('/complete-user');
-      store.commit('setLoading', false);
-      return;
+      return next('/complete-user');
     }
 
     // Set current workspace
     const currentWorkspace = await getWorkspace(userData.currentWorkspace);
     await store.dispatch('workspace/setCurrentWorkspace', currentWorkspace);
-    next();
-    store.commit('setLoading', false);
-    return;
+    return next();
   }
-
-  if (to.matched.some((route) => route.meta.requiresUncompletedUser)) {
-    if (!from.path === '/complete-auth') {
-      next('/login');
-    }
-
-    next();
-  }
-
-  // if (to.matched.some((route) => route.path === '/workspace')) {
-  //   console.log('route');
-  // }
-  next();
+  return next();
 });
 
+router.afterEach(async (to, from, next) => {
+  store.commit('setLoading', false);
+});
+
+
+const copmleteAuth = async (to, from, next) => {
+  if (auth.isSignInWithEmailLink(window.location.href)) {
+    const email = window.localStorage.getItem('emailForSignIn');
+    if (!email) {
+      return next('/login');
+    }
+
+    const result = await auth.signInWithEmailLink(email, window.location.href);
+    window.localStorage.removeItem('emailForSignIn');
+
+    const { user } = result;
+    store.dispatch('user/setUserAuth', user);
+
+    // Create new user profile
+    if (result.additionalUserInfo.isNewUser) {
+      await createUserProfileDocument(user);
+      await store.dispatch('user/bindUser', user.uid);
+      store.dispatch('setAllWorkspaces', []);
+      return next('/create-name');
+    }
+
+    await store.dispatch('user/bindUser', user.uid);
+    const userWorkspaces = await getUserWorkspaces(user.uid);
+    store.dispatch('setAllWorkspaces', userWorkspaces);
+    if (!store.state.user.userData.name || !userWorkspaces.length) {
+      return next('/complete-user');
+    }
+
+    next('/workspace');
+  }
+  return next('/');
+};
 
 export default router;

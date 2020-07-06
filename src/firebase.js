@@ -23,7 +23,7 @@ export const login = (email, redirectToPage = '') => {
     handleCodeInApp: true,
   };
 
-  firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+  auth.sendSignInLinkToEmail(email, actionCodeSettings)
     .then(() => {
       window.localStorage.setItem('emailForSignIn', email);
     })
@@ -31,10 +31,10 @@ export const login = (email, redirectToPage = '') => {
       console.log(error);
     });
 };
-export const logout = () => firebase.auth().signOut();
+export const logout = () => auth.signOut();
 
 export const getCurrentUser = () => new Promise((resolve, reject) => {
-  const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+  const unsubscribe = auth.onAuthStateChanged((user) => {
     unsubscribe();
     resolve(user);
   }, reject);
@@ -78,6 +78,23 @@ export const updateUserProfileDocument = async (uid, userData) => {
   });
 };
 export const getUserWorkspaces = async (userId) => (await db.collection('workspaces').where('team', 'array-contains', userId).get())
-  .docs.map((doc) => doc.data());
+  .docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
+export const getInvitedWorkspaces = async (userEmail) => (await db.collection('workspaces').where('invited', 'array-contains', userEmail).get())
+  .docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+export const createWorkspace = async (userId, workspaceName) => {
+  const workspaceRef = await db.collection('workspaces').add({
+    name: workspaceName,
+    team: [userId],
+  });
+  await db.collection('workspaces').doc(workspaceRef.id).collection('roles').doc(userId)
+    .set({
+      role: 'admin',
+    });
+  return {
+    id: workspaceRef.id,
+    data: (await workspaceRef.get()).data(),
+  };
+};
 export const getWorkspace = async (workspaceId) => (await db.doc(`workspaces/${workspaceId}`).get()).data();

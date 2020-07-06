@@ -108,9 +108,6 @@ export default {
       }
     },
   },
-  mounted() {
-    animeStaggerIn('.login-form .stagger');
-  },
   methods: {
     showHint() {
       if (!this.$v.email.email) {
@@ -122,7 +119,6 @@ export default {
         return;
       }
 
-      await animeStaggerOut('.login-form .stagger');
       login(this.email, '/complete-auth');
       this.showForm = false;
     },

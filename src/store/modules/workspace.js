@@ -3,7 +3,8 @@ import { db } from '@/firebase';
 export default {
   state: {
     currentWorkspace: null,
-    allWorkspaces: null,
+    allWorkspaces: [],
+    invitedWorkspaces: [],
   },
   mutations: {
     setCurrentWorkspace(state, value) {
@@ -12,6 +13,9 @@ export default {
     setAllWorkspaces(state, value) {
       state.allWorkspaces = value;
     },
+    setInvitedWorkspaces(state, value) {
+      state.invitedWorkspaces = value;
+    },
   },
   actions: {
     setCurrentWorkspace({ commit }, value) {
@@ -19,6 +23,9 @@ export default {
     },
     setAllWorkspaces({ commit }, value) {
       commit('setAllWorkspaces', value);
+    },
+    setInvitedWorkspaces({ commit }, value) {
+      commit('setInvitedWorkspaces', value);
     },
   },
 };
