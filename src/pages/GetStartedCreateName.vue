@@ -78,9 +78,9 @@ export default {
 
       updateUserProfileDocument(this.userAuth.uid, { name: this.name });
       if (this.hasInvitaions) {
-        this.$router.push('/create-team');
-      } else {
         this.$router.push('/select-workspace');
+      } else {
+        this.$router.push('/create-team');
       }
     },
   },

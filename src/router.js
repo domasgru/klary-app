@@ -30,7 +30,7 @@ const router = new Router({
     },
     {
       path: '/complete-auth',
-      beforeEnter: copmleteAuth,
+      beforeEnter: completeAuth,
     },
     {
       path: '/login',
@@ -39,9 +39,6 @@ const router = new Router({
     {
       path: '/create-name',
       component: GetStartedCreateName,
-      meta: {
-        requiresAuth: true,
-      },
     },
     {
       path: '/create-team',
@@ -86,7 +83,7 @@ router.beforeEach(async (to, from, next) => {
   store.commit('setLoading', true);
   if (to.matched.some((route) => route.meta.requiresAuth)) {
     // eslint-disable-next-line max-len
-    if (store.state.user.userAuth && store.state.workspace.currentWorkspace && store.state.user.userData) {
+    if (store.state.user.userAuth && store.state.user.userData && store.state.workspace.currentWorkspace) {
       return next();
     }
 
@@ -97,16 +94,15 @@ router.beforeEach(async (to, from, next) => {
       return next('/login');
     }
 
-    // Check/set userData
     const userData = store.state.user.userData || await store.dispatch('user/bindUser', userAuth.uid);
-    if (!userData.name || !userData.currentWorkspace) {
-      return next('/complete-user');
+    if (!userData.name) {
+      return next('/create-name');
     }
 
     // Set current workspace
-    const currentWorkspace = await getWorkspace(userData.currentWorkspace);
-    await store.dispatch('workspace/setCurrentWorkspace', currentWorkspace);
-    return next();
+    // const currentWorkspace = await getWorkspace(userData.currentWorkspace);
+    // await store.dispatch('workspace/setCurrentWorkspace', currentWorkspace);
+    // return next();
   }
   return next();
 });
@@ -115,8 +111,7 @@ router.afterEach(async (to, from, next) => {
   store.commit('setLoading', false);
 });
 
-
-const copmleteAuth = async (to, from, next) => {
+async function completeAuth(to, from, next) {
   if (auth.isSignInWithEmailLink(window.location.href)) {
     const email = window.localStorage.getItem('emailForSignIn');
     if (!email) {
@@ -128,12 +123,12 @@ const copmleteAuth = async (to, from, next) => {
 
     const { user } = result;
     store.dispatch('user/setUserAuth', user);
-
+    debugger;
     // Create new user profile
     if (result.additionalUserInfo.isNewUser) {
       await createUserProfileDocument(user);
       await store.dispatch('user/bindUser', user.uid);
-      store.dispatch('setAllWorkspaces', []);
+      store.dispatch('workspace/setAllWorkspaces', []);
       return next('/create-name');
     }
 
@@ -147,6 +142,6 @@ const copmleteAuth = async (to, from, next) => {
     next('/workspace');
   }
   return next('/');
-};
+}
 
 export default router;

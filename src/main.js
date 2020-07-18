@@ -25,6 +25,9 @@ globalComponents.keys().forEach((fileName) => {
 
 Vue.config.productionTip = false;
 
+// const svgModules = require.context('./assets/icons', false, /\.svg$/);
+// svgModules.keys().forEach(svgModules);
+
 new Vue({
   store,
   router,

@@ -13,7 +13,7 @@ export default {
     },
   },
   created() {
-    import(`@/assets/icons/${this.name}.svg`);
+    // import(`@/assets/icons/${this.name}.svg`);
   },
 };
 </script>

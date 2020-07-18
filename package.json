@@ -85,7 +85,9 @@
         }
       ],
       "no-debugger": 0,
-      "no-unused-vars": 0
+      "no-unused-vars": 0,
+      "template-curly-spacing" : "off",
+      "indent" : "off"
     }
   },
   "browserslist": [
