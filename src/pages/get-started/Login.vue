@@ -82,7 +82,6 @@
 import Header from '@/components/ui/HeaderAuth.vue';
 import { required, email } from 'vuelidate/lib/validators';
 import { login } from '@/firebase';
-import { animeStaggerIn, animeStaggerOut } from '@/utils/animation';
 
 export default {
   components: {
@@ -99,13 +98,6 @@ export default {
     email: {
       required,
       email,
-    },
-  },
-  watch: {
-    showForm(newValue) {
-      if (!newValue) {
-        animeStaggerIn('.check-email .stagger-check-email');
-      }
     },
   },
   methods: {
