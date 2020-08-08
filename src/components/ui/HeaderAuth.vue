@@ -14,7 +14,7 @@
   padding: 32px 0;
 
   &__logo {
-    width: 116px;
+    width: 36px;
     height: 26px;
     cursor: pointer;
   }

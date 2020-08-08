@@ -1,6 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import shortId from 'shortid';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAFS8RVfGHghmSagIJ3FDRVcYTWaPCGMMw',
@@ -77,6 +78,8 @@ export const updateUserProfileDocument = async (uid, userData) => {
     ...userData,
   });
 };
+
+// Workspace
 export const getUserWorkspaces = async (userId) => (await db.collection('workspaces').where('team', 'array-contains', userId).get())
   .docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
@@ -97,4 +100,38 @@ export const createWorkspace = async (userId, workspaceName) => {
     data: (await workspaceRef.get()).data(),
   };
 };
-export const getWorkspace = async (workspaceId) => (await db.doc(`workspaces/${workspaceId}`).get()).data();
+export const getWorkspace = async (id) => (await db.doc(`workspaces/${id}`).get()).data();
+
+
+// Feedback
+export const getFeedback = async (id) => {
+  const feedback = await db.doc(`feedbacks/${id}`).get();
+  return { id: feedback.id, ...feedback.data() };
+};
+
+export const addComment = async (feedbackId, content, author) => {
+  const comment = {
+    content,
+    author: {
+      fullName: author.name,
+      uid: author.uid,
+    },
+    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+  };
+  const discussionRef = await db.collection(`feedbacks/${feedbackId}/discussion`);
+  return discussionRef.add(comment);
+};
+
+export const addCommentReply = async (feedbackId, commentId, content, author) => {
+  const reply = {
+    id: shortId.generate(),
+    author: {
+      fullName: author.name,
+      uid: author.uid,
+    },
+    content,
+    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+  };
+  const commentRef = await db.doc(`feedbacks/${feedbackId}/discussion/${commentId}`);
+  return commentRef.update({ replies: firebase.firestore.FieldValue.arrayUnion(reply) });
+};

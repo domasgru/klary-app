@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Vuelidate from 'vuelidate';
+import VueFuse from 'vue-fuse';
 import { firestorePlugin } from 'vuefire';
 import LottiePlayer from 'lottie-player-vue';
 import App from './App.vue';
@@ -13,6 +14,7 @@ Vue.use(VueRouter);
 Vue.use(firestorePlugin);
 Vue.use(Vuelidate);
 Vue.use(LottiePlayer);
+Vue.use(VueFuse);
 
 const globalComponents = require.context('./components/global', false, /Base[A-Z]\w+\.(vue|js)$/);
 globalComponents.keys().forEach((fileName) => {

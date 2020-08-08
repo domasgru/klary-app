@@ -4,10 +4,14 @@ import Router from 'vue-router';
 import store from '@/store';
 import Home from '@/pages/Home.vue';
 import Login from '@/pages/get-started/Login.vue';
-import Workspace from '@/pages/Workspace.vue';
 import GetStartedCreateName from '@/pages/GetStartedCreateName.vue';
 import GetStartedCreateTeam from '@/pages/GetStartedCreateTeam.vue';
 import GetStartedInviteTeam from '@/pages/GetStartedInviteTeam.vue';
+import Workspace from '@/pages/workspace/Workspace.vue';
+import WorkspaceInbox from '@/pages/workspace/WorkspaceInbox.vue';
+import WorkspaceRequest from '@/pages/workspace/WorkspaceRequest.vue';
+import WorkspaceGive from '@/pages/workspace/WorkspaceGive.vue';
+import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
 import SelectWorkspace from '@/pages/SelectWorkspace.vue';
 import PageNotFound from '@/pages/PageNotFound.vue';
 
@@ -18,6 +22,7 @@ import {
   getWorkspace,
   getUserWorkspaces,
   getInvitedWorkspaces,
+  getFeedback,
 } from '@/firebase';
 
 Vue.use(Router);
@@ -90,6 +95,8 @@ const router = new Router({
         const { currentWorkspace, uid, email } = store.state.user.userData;
         if (currentWorkspace) {
           const workspace = await getWorkspace(currentWorkspace);
+          await store.dispatch('feedback/bindFeedbacks', { receiverId: uid, workspaceId: currentWorkspace });
+          await store.dispatch('workspace/setTeam', currentWorkspace);
           store.dispatch('workspace/setCurrentWorkspace', workspace);
           return next();
         }
@@ -101,6 +108,35 @@ const router = new Router({
         }
         return next('/create-team');
       },
+      children: [
+        {
+          path: '',
+          component: WorkspaceInbox,
+        },
+        {
+          path: 'request-feedback',
+          component: WorkspaceRequest,
+        },
+        {
+          path: 'give-feedback',
+          component: WorkspaceGive,
+        },
+        {
+          path: 'feedback/:id',
+          component: WorkspaceFeedbackView,
+          beforeEnter: async (to, from, next) => {
+            if (!store.state.feedback.currentFeedback) {
+              try {
+                const feedback = await getFeedback(to.params.id);
+                store.dispatch('feedback/setCurrentFeedback', feedback);
+              } catch (e) {
+                console.error(e);
+              }
+            }
+            next();
+          },
+        },
+      ],
     },
     {
       path: '*',

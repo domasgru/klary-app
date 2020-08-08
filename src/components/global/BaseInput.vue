@@ -29,6 +29,7 @@
         :placeholder="placeholder"
         class="base-input__input base-typography--b2"
         :autofocus="autofocus"
+        :autocomplete="autocomplete ? null : 'off'"
         v-on="{
           ...$listeners,
           input: event => $emit('input', event.target.value)
@@ -37,7 +38,7 @@
       >
     </div>
     <span class="base-input__hint">
-      {{ error || success }}
+      {{ hint || error || success }}
     </span>
   </div>
 </template>
@@ -58,6 +59,10 @@ export default {
       type: String,
       default: '',
     },
+    hint: {
+      type: String,
+      default: '',
+    },
     error: {
       type: String,
       default: '',
@@ -67,6 +72,10 @@ export default {
       default: '',
     },
     autofocus: {
+      type: Boolean,
+      default: false,
+    },
+    autocomplete: {
       type: Boolean,
       default: true,
     },
@@ -100,7 +109,9 @@ export default {
     },
   },
   mounted() {
-    this.$refs.input.focus();
+    if (this.autofocus) {
+      this.$refs.input.focus();
+    }
   },
   methods: {
     handleSubmitKeyDown() {
@@ -142,7 +153,7 @@ export default {
     padding: 16px;
     font-family: 'Inter', sans-serif;
     color: $dark;
-    background: $grey-50;
+    background: $light;
     border: 1px solid $grey-200;
     border-radius: 10px;
     outline: none;
@@ -197,6 +208,7 @@ export default {
     margin-top: 4px;
     font-size: 12px;
     font-weight: 500;
+    color: $grey-500;
 
     #{$this}--success & {
       color: $success;
