@@ -4,11 +4,11 @@
       <div class="feedback-comment__author">
         <BaseInitial
           class="feedback-comment__initial"
-          :name="comment.author.fullName"
+          :name="comment.author.name"
           size="sm"
         />
         <p class="base-typography--b3">
-          {{ comment.author.fullName }}
+          {{ comment.author.name }}
         </p>
       </div>
       <BaseTimestamp :timestamp="comment.createdAt.seconds" />
@@ -29,14 +29,14 @@
         <div class="comment-reply__left">
           <BaseInitial
             size="sm"
-            :name="reply.author.fullName"
+            :name="reply.author.name"
           />
           <div class="comment-reply__vertical-line" />
         </div>
         <div class="comment-reply__right">
           <div class="comment-reply__name-and-time">
             <p class="comment-reply__name base-typography--b3">
-              {{ reply.author.fullName }}
+              {{ reply.author.name }}
             </p>
             <BaseTimestamp :timestamp="reply.createdAt.seconds" />
           </div>

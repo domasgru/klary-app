@@ -5,8 +5,10 @@
     </div>
     <BaseBackgroundWrapper class="give__wrapper">
       <WorkspaceSelectTeamate
+        v-model="userInput"
         label="To"
         class="give__to"
+        @select="selectUser"
       />
       <BaseInput
         v-model="title"
@@ -21,7 +23,10 @@
         label="Your feedback"
         placeholder="Always be candid when writing feedback."
       />
-      <BaseButton class="give__submit">
+      <BaseButton
+        class="give__submit"
+        @click="sendFeedback"
+      >
         Send feedback
       </BaseButton>
     </BaseBackgroundWrapper>
@@ -29,6 +34,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { createFeedback } from '@/firebase';
 import WorkspaceSelectTeamate from './WorkspaceSelectTeamate.vue';
 
 export default {
@@ -37,9 +44,35 @@ export default {
   },
   data() {
     return {
+      userInput: '',
+      selectedUser: null,
       title: '',
       content: '',
     };
+  },
+  computed: {
+    ...mapState('user', ['userData']),
+    ...mapState('workspace', ['currentWorkspace']),
+  },
+  created() {
+    this.title = `Feedback from ${this.userData.name}`;
+  },
+  methods: {
+    selectUser(user) {
+      this.selectedUser = user;
+      this.userInput = user.name;
+    },
+    sendFeedback() {
+      createFeedback({
+        authorId: this.userData.uid,
+        receiverId: this.selectedUser.uid,
+        workspaceId: this.currentWorkspace.id,
+        author: this.userData,
+        receiver: this.selectedUser,
+        title: this.title,
+        content: this.content,
+      });
+    },
   },
 };
 </script>

@@ -3,23 +3,28 @@
     <BaseInput
       v-bind="$attrs"
       :autocomplete="false"
+      :autofocus="autofocus"
       v-on="{
         ...$listeners,
         input: value => $emit('input', value)
       }"
-      @keydown.up="handleArrowSelect('up')"
-      @keydown.down="handleArrowSelect('down')"
+      @keydown.up.prevent="handleArrowSelect('up')"
+      @keydown.down.prevent="handleArrowSelect('down')"
       @keydown.enter="select"
       @input="search"
+      @focus="isOpen = true"
+      @blur="isOpen = false"
     />
     <div
-      v-if="results.length"
+      v-if="isOpen && results.length"
       class="base-select__results"
     >
       <div
-        v-for="user in results"
-        :key="user.uid"
+        v-for="(user, index) in results"
+        :ref="user.item.uid"
+        :key="user.item.uid"
         class="base-select__result"
+        :class="{'base-select__result--active': index === activeResultIndex}"
       >
         <BaseInitial
           class="base-select__initial"
@@ -43,6 +48,10 @@ export default {
       type: Array,
       required: true,
     },
+    autofocus: {
+      type: Boolean,
+      required: true,
+    },
     searchKeys: {
       type: Array,
       required: true,
@@ -50,30 +59,54 @@ export default {
   },
   data() {
     return {
+      isOpen: false,
       results: [],
+      activeResultIndex: 0,
+      selectedResult: null,
       fuseSearcher: null,
     };
   },
   watch: {
-    list(newVal) {
-      if (newVal) {
-        this.fuseSearcher = new Fuse(
-          this.list,
-          {
-            keys: this.searchKeys,
-            threshold: 0.2,
-            useExtendedSearch: true,
-          },
-        );
-      }
+    list(newValue) {
+      this.initSearcher();
     },
   },
   created() {
-
+    this.initSearcher();
   },
   methods: {
+    initSearcher() {
+      this.fuseSearcher = new Fuse(
+        this.list,
+        {
+          keys: this.searchKeys,
+          threshold: 0.2,
+          useExtendedSearch: true,
+        },
+      );
+    },
     async search(value) {
       this.results = await this.fuseSearcher.search(value);
+    },
+    handleArrowSelect(direction) {
+      if (direction === 'down') {
+        if (this.activeResultIndex === this.results.length - 1) {
+          this.activeResultIndex = 0;
+        } else {
+            this.activeResultIndex += 1;
+        }
+      } else if (direction === 'up') {
+        if (this.activeResultIndex === 0) {
+          this.activeResultIndex = this.results.length - 1;
+        } else {
+          this.activeResultIndex -= 1;
+        }
+      }
+      this.$refs[this.results[this.activeResultIndex].item.uid][0].scrollIntoView({ block: 'nearest' });
+    },
+    select() {
+      this.$emit('select', this.results[this.activeResultIndex].item);
+      this.isOpen = false;
     },
   },
 };
@@ -87,8 +120,11 @@ export default {
     position: absolute;
     bottom: 24px;
     left: 0;
+    z-index: 1;
     width: 100%;
+    max-height: 208px;
     padding: 8px 0;
+    overflow-y: scroll;
     background: $light;
     border: $stroke;
     border-radius: 10px;
@@ -99,6 +135,10 @@ export default {
     display: flex;
     align-items: center;
     padding: 8px 15px;
+
+    &--active {
+      background: $grey-100;
+    }
 
     &:hover {
       cursor: pointer;

@@ -33,7 +33,10 @@
         Give feedback
       </BaseLink>
     </ul>
-    <div class="navigation__user">
+    <div
+      class="navigation__user"
+      @click="logoutUser"
+    >
       <BaseInitial
         class="navigation__initial"
         :name="userData.name"
@@ -51,12 +54,18 @@
 
 <script>
 import { mapState } from 'vuex';
+import { logout } from '@/firebase';
 
-  export default {
-    computed: {
-      ...mapState('user', ['userData']),
+export default {
+  computed: {
+    ...mapState('user', ['userData']),
+  },
+  methods: {
+    logoutUser() {
+      logout();
     },
-  };
+  },
+};
 </script>
 
 <style lang="scss" scoped>

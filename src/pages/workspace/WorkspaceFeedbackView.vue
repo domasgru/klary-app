@@ -9,10 +9,10 @@
           <BaseInitial
             class="feedback__author-initial"
             size="sm"
-            :name="currentFeedback.author.fullName"
+            :name="currentFeedback.author.name"
           />
           <div class="feedback__author-name base-typography--b3">
-            {{ currentFeedback.author.fullName }}
+            {{ currentFeedback.author.name }}
           </div>
         </div>
         <BaseTimestamp :timestamp="currentFeedback.createdAt.seconds" />

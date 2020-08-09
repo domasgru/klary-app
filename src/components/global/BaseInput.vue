@@ -16,8 +16,8 @@
       {{ label }}
     </label>
     <div
-      :style="styleVariables"
       class="base-input__input-wrapper"
+      :style="styleVariables"
       :class="{'base-input__input-wrapper--pulse': inputPulseAnimation}"
       @animationend="inputPulseAnimation = false"
     >
@@ -25,9 +25,10 @@
         :id="_uid"
         ref="input"
         type="text"
+        class="base-input__input base-typography--b2"
+        spellcheck="false"
         :value="value"
         :placeholder="placeholder"
-        class="base-input__input base-typography--b2"
         :autofocus="autofocus"
         :autocomplete="autocomplete ? null : 'off'"
         v-on="{

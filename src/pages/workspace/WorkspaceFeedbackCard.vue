@@ -14,11 +14,11 @@
     <div class="card__author">
       <BaseInitial
         class="card__initial"
-        :name="feedbackData.author.fullName"
+        :name="feedbackData.author.name"
         size="sm"
       />
       <div class="card__name base-typography--b3">
-        {{ feedbackData.author.fullName }}
+        {{ feedbackData.author.name }}
       </div>
     </div>
     <div class="card__time base-typography--b3">

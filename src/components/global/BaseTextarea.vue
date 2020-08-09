@@ -20,7 +20,10 @@
       }"
       @input="autoResize"
     />
-    <span class="base-textarea__hint">
+    <span
+      v-if="!noHint"
+      class="base-textarea__hint"
+    >
       {{ hint || error || success }}
     </span>
   </div>
@@ -45,9 +48,21 @@ export default {
       type: String,
       default: '',
     },
+     error: {
+      type: String,
+      default: '',
+    },
+    success: {
+      type: String,
+      default: '',
+    },
     rows: {
       type: [Number, String],
       default: 1,
+    },
+    noHint: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -90,7 +105,7 @@ export default {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    padding: 8px 12px;
+    padding: 7px 12px;
     font-family: 'Inter';
     line-height: 24px;
     resize: vertical;

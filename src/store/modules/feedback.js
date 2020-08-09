@@ -23,7 +23,7 @@ export default {
       commit('setCurrentFeedback', value);
     },
     bindFeedbacks: firestoreAction(({ bindFirestoreRef }, { receiverId, workspaceId }) => (
-      bindFirestoreRef('feedbacks', db.collection('feedbacks').where('reciever', '==', receiverId).where('workspaceId', '==', workspaceId))
+      bindFirestoreRef('feedbacks', db.collection('feedbacks').where('receiverId', '==', receiverId).where('workspaceId', '==', workspaceId))
     )),
     bindCurrentFeedbackComments: firestoreAction(({ bindFirestoreRef }, id) => (
       bindFirestoreRef('currentFeedbackComments', db.collection(`feedbacks/${id}/discussion`).orderBy('createdAt', 'asc'))

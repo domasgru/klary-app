@@ -42,19 +42,21 @@ export default {
       commit('setInvitedWorkspaces', value);
     },
     async setTeam({ commit, state }, workspaceId) {
-      const unsubscribe = await db.doc(`workspaces/${workspaceId}`).onSnapshot(async (doc) => {
-        const newTeamIds = doc.data().team;
-        const { added, removed } = diff(state.teamIds, newTeamIds);
-        if (added.length) {
-          const users = await Promise.all(added.map(async (userId) => getUserDocument(userId)));
-          users.forEach((user) => { commit('setTeamMember', { id: user.uid, value: user }); });
-        }
-        if (removed.length) {
-          removed.forEach((user) => { commit('delete', user); });
-        }
+      return new Promise((resolve, reject) => {
+        db.doc(`workspaces/${workspaceId}`).onSnapshot(async (doc) => {
+          const newTeamIds = doc.data().team;
+          const { added, removed } = diff(state.teamIds, newTeamIds);
+          if (added.length) {
+            const users = await Promise.all(added.map(async (userId) => getUserDocument(userId)));
+            users.forEach((user) => { commit('setTeamMember', { id: user.uid, value: user }); });
+          }
+          if (removed.length) {
+            removed.forEach((user) => { commit('delete', user); });
+          }
 
-        commit('setTeamIds', newTeamIds);
-        return unsubscribe;
+          commit('setTeamIds', newTeamIds);
+          resolve(doc);
+        }, reject);
       });
     },
   },

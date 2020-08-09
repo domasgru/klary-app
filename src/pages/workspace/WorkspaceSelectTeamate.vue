@@ -1,9 +1,12 @@
 <template>
   <BaseSelect
-    v-model="teamate"
+    :value="value"
     :label="label"
-    :list="teamArray"
+    :list="usersArray"
     :search-keys="['name']"
+    :autofocus="true"
+    @input="$emit('input', $event)"
+    @select="$emit('select', $event)"
   />
 </template>
 
@@ -12,19 +15,18 @@ import { mapState } from 'vuex';
 
 export default {
   props: {
+    value: {
+      type: String,
+      required: true,
+    },
     label: {
       type: String,
       default: '',
     },
   },
-  data() {
-    return {
-      teamate: '',
-    };
-  },
   computed: {
     ...mapState('workspace', ['team']),
-    teamArray() {
+    usersArray() {
       return Object.values(this.team);
     },
   },

@@ -100,7 +100,10 @@ export const createWorkspace = async (userId, workspaceName) => {
     data: (await workspaceRef.get()).data(),
   };
 };
-export const getWorkspace = async (id) => (await db.doc(`workspaces/${id}`).get()).data();
+export const getWorkspace = async (id) => {
+  const workspaceRef = db.doc(`workspaces/${id}`);
+  return { id: workspaceRef.id, ...(await workspaceRef.get()).data() };
+};
 
 
 // Feedback
@@ -113,12 +116,12 @@ export const addComment = async (feedbackId, content, author) => {
   const comment = {
     content,
     author: {
-      fullName: author.name,
+      name: author.name,
       uid: author.uid,
     },
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
   };
-  const discussionRef = await db.collection(`feedbacks/${feedbackId}/discussion`);
+  const discussionRef = db.collection(`feedbacks/${feedbackId}/discussion`);
   return discussionRef.add(comment);
 };
 
@@ -126,12 +129,33 @@ export const addCommentReply = async (feedbackId, commentId, content, author) =>
   const reply = {
     id: shortId.generate(),
     author: {
-      fullName: author.name,
+      name: author.name,
       uid: author.uid,
     },
     content,
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
   };
-  const commentRef = await db.doc(`feedbacks/${feedbackId}/discussion/${commentId}`);
+  const commentRef = db.doc(`feedbacks/${feedbackId}/discussion/${commentId}`);
   return commentRef.update({ replies: firebase.firestore.FieldValue.arrayUnion(reply) });
+};
+
+export const createFeedbackRequest = async (requestData) => {
+  const feedbackRequest = {
+    craetedAt: firebase.firestore.Timestamp.fromDate(new Date()),
+    ...requestData,
+  };
+  const requestRef = db.collection('feedbackRequests');
+  return requestRef.add(feedbackRequest);
+};
+
+export const createFeedback = async (feedbackData) => {
+  const timeNow = firebase.firestore.Timestamp.fromDate(new Date());
+  const feedback = {
+    craetedAt: timeNow,
+    ...feedbackData,
+    author: { name: feedbackData.author.name, seenAt: timeNow, lastAction: { type: 'CREATE', createdAt: timeNow } },
+    receiver: { name: feedbackData.receiver.name, seenAt: null, lastAction: { type: '', createdAt: null } },
+  };
+  const feedbackRef = db.collection('feedbacks');
+  return feedbackRef.add(feedback);
 };

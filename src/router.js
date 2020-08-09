@@ -95,8 +95,10 @@ const router = new Router({
         const { currentWorkspace, uid, email } = store.state.user.userData;
         if (currentWorkspace) {
           const workspace = await getWorkspace(currentWorkspace);
-          await store.dispatch('feedback/bindFeedbacks', { receiverId: uid, workspaceId: currentWorkspace });
-          await store.dispatch('workspace/setTeam', currentWorkspace);
+          await Promise.all([
+            store.dispatch('feedback/bindFeedbacks', { receiverId: uid, workspaceId: currentWorkspace }),
+            store.dispatch('workspace/setTeam', currentWorkspace),
+          ]);
           store.dispatch('workspace/setCurrentWorkspace', workspace);
           return next();
         }
