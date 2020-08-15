@@ -6,8 +6,10 @@
     <div class="comment__main">
       <BaseTextarea
         v-model="comment"
+        v-shortkey="['ctrl', 'enter']"
         class="comment__textarea"
         rows="5"
+        @shortkey.native="addComment"
       />
       <BaseButton
         class="comment__button"
@@ -22,6 +24,7 @@
 <script>
 import { addComment } from '@/firebase';
 import { mapState } from 'vuex';
+import { required } from 'vuelidate/lib/validators';
 
 export default {
   props: {
@@ -35,13 +38,22 @@ export default {
       comment: '',
     };
   },
+  validations: {
+    comment: {
+      required,
+    },
+  },
   computed: {
     ...mapState('user', ['userData']),
     ...mapState('feedback', ['currentFeedback']),
   },
   methods: {
     addComment() {
+      if (this.$v.comment.$invalid) {
+        return;
+      }
       addComment(this.currentFeedback.id, this.comment, this.userData);
+      this.comment = '';
     },
   },
 };

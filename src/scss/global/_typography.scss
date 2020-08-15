@@ -106,14 +106,26 @@ p,
   line-height: 20px;
 }
 
-.base-typography--button {
+.base-typography--button1 {
   font-size: 16px;
-  font-weight: bold;
+  font-weight: normal;
+  line-height: 24px;
+}
+
+.base-typography--bold-button1 {
+  font-size: 16px;
+  font-weight: 600;
   line-height: 24px;
 }
 
 .base-typography--button2 {
   font-size: 14px;
+  line-height: 20px;
+}
+
+.base-typography--bold-button2 {
+  font-size: 14px;
+  font-weight: 600;
   line-height: 20px;
 }
 

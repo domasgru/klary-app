@@ -9,18 +9,18 @@
       v-if="isNew"
       class="workspace-card__message base-typography--bb2"
     >
-      Hey, {{ workspace.name }} has invited you to join
+      Hey, {{ workspaceName }} has invited you to join
     </p>
     <div class="workspace-card__content">
       <div class="workspace-card__logo">
-        {{ workspace.name.slice(0, 1) }}
+        {{ workspaceName.slice(0, 1) }}
       </div>
       <div class="workspace-card__info">
         <p class="workspace-card__name base-typography--bb2">
-          {{ workspace.name }}
+          {{ workspaceName }}
         </p>
         <p class="workspace-card__domain base-typography--b-16-24">
-          {{ workspace.name }}.curiodesk.com
+          {{ workspaceName }}.curiodesk.com
         </p>
       </div>
       <template v-if="!isNew">
@@ -40,7 +40,7 @@
         </BaseButton>
         <BaseButton
           inverse
-          @click="$emit('join')"
+          @click="$emit('open')"
         >
           Join
         </BaseButton>
@@ -52,8 +52,8 @@
 <script>
 export default {
   props: {
-    workspace: {
-      type: Object,
+    workspaceName: {
+      type: String,
       required: true,
     },
     isNew: {

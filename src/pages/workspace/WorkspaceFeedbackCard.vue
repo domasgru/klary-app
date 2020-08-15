@@ -14,11 +14,11 @@
     <div class="card__author">
       <BaseInitial
         class="card__initial"
-        :name="feedbackData.author.name"
+        :name="!isSentFeedback ? feedbackData.author.name : feedbackData.receiver.name"
         size="sm"
       />
       <div class="card__name base-typography--b-14-20">
-        {{ feedbackData.author.name }}
+        {{ !isSentFeedback ? feedbackData.author.name : feedbackData.receiver.name }}
       </div>
     </div>
     <BaseTimestamp
@@ -40,6 +40,10 @@ export default {
     feedbackData: {
       type: Object,
       required: true,
+    },
+    isSentFeedback: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

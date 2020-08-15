@@ -9,6 +9,7 @@ import GetStartedCreateTeam from '@/pages/GetStartedCreateTeam.vue';
 import GetStartedInviteTeam from '@/pages/GetStartedInviteTeam.vue';
 import Workspace from '@/pages/workspace/Workspace.vue';
 import WorkspaceInbox from '@/pages/workspace/WorkspaceInbox.vue';
+import WorkspaceSent from '@/pages/workspace/WorkspaceSent.vue';
 import WorkspaceRequest from '@/pages/workspace/WorkspaceRequest.vue';
 import WorkspaceGive from '@/pages/workspace/WorkspaceGive.vue';
 import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
@@ -72,8 +73,10 @@ const router = new Router({
       component: SelectWorkspace,
       beforeEnter: async (to, from, next) => {
         const { uid, email } = store.state.user.userData;
-        const allWorkspaces = await getUserWorkspaces(uid);
-        const invitedWorkspaces = await getInvitedWorkspaces(email);
+        const [allWorkspaces, invitedWorkspaces] = await Promise.all([
+          getUserWorkspaces(uid),
+          getInvitedWorkspaces(email),
+        ]);
         if (!allWorkspaces.length && !invitedWorkspaces.length) {
           return next('/create-team');
         }
@@ -98,6 +101,10 @@ const router = new Router({
           await Promise.all([
             store.dispatch('feedback/bindFeedbacks', { receiverId: uid, workspaceId: currentWorkspace }),
             store.dispatch('workspace/setTeam', currentWorkspace),
+            store.dispatch('feedback/bindSentFeedbacks', {
+              authorId: uid,
+              workspaceId: currentWorkspace,
+            }),
           ]);
           store.dispatch('workspace/setCurrentWorkspace', workspace);
           return next();
@@ -114,6 +121,20 @@ const router = new Router({
         {
           path: '',
           component: WorkspaceInbox,
+        },
+        {
+          path: 'sent-feedbacks',
+          component: WorkspaceSent,
+          beforeEnter: async (to, from, next) => {
+            if (!store.state.feedback.sentFeedbacks) {
+              await store.dispatch('feedback/bindSentFeedbacks', {
+                authorId: store.state.user.userData.uid,
+                workspaceId: store.state.workspace.currentWorkspace.id,
+              });
+              return next();
+            }
+            return next();
+          },
         },
         {
           path: 'request-feedback',
@@ -187,6 +208,12 @@ async function completeAuth(to, from, next) {
       await store.dispatch('user/bindUser', user.uid);
       store.dispatch('workspace/setAllWorkspaces', []);
       return next('/create-name');
+    }
+
+    // Redirect to invites if present
+    const invitedWorkspaces = await getInvitedWorkspaces(user.email);
+    if (invitedWorkspaces.length) {
+      return next('/select-workspace');
     }
 
     await store.dispatch('user/bindUser', user.uid);

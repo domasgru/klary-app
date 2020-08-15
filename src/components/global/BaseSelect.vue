@@ -1,19 +1,22 @@
 <template>
-  <div class="base-select">
+  <div
+    v-click-outside="{
+      handler: () => isOpen = false,
+      events: ['mousedown']
+    }"
+    class="base-select"
+  >
     <BaseInput
+      ref="input"
       v-bind="$attrs"
       :autocomplete="false"
       :autofocus="autofocus"
-      v-on="{
-        ...$listeners,
-        input: value => $emit('input', value)
-      }"
+      @input="$emit('input', $event), search($event)"
       @keydown.up.prevent="handleArrowSelect('up')"
       @keydown.down.prevent="handleArrowSelect('down')"
-      @keydown.enter="select"
-      @input="search"
+      @keydown.enter="select()"
       @focus="isOpen = true"
-      @blur="isOpen = false"
+      @keydown.esc="isOpen = false"
     />
     <div
       v-if="isOpen && results.length"
@@ -25,6 +28,7 @@
         :key="user.item.uid"
         class="base-select__result"
         :class="{'base-select__result--active': index === activeResultIndex}"
+        @click="select(user.item)"
       >
         <BaseInitial
           class="base-select__initial"
@@ -62,7 +66,6 @@ export default {
       isOpen: false,
       results: [],
       activeResultIndex: 0,
-      selectedResult: null,
       fuseSearcher: null,
     };
   },
@@ -104,9 +107,12 @@ export default {
       }
       this.$refs[this.results[this.activeResultIndex].item.uid][0].scrollIntoView({ block: 'nearest' });
     },
-    select() {
-      this.$emit('select', this.results[this.activeResultIndex].item);
-      this.isOpen = false;
+    select(user) {
+      const selectedUser = user || this.results[this.activeResultIndex]?.item || null;
+      if (selectedUser) {
+        this.$emit('select', selectedUser);
+        this.isOpen = false;
+      }
     },
   },
 };

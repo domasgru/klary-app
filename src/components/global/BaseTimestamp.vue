@@ -24,7 +24,7 @@ export default {
         && today.year() === feedbackCreatedDate.year();
 
       if (isTodayFeedback) {
-        return feedbackCreatedDate.format('h:m A');
+        return feedbackCreatedDate.format('h:mm A');
       }
       return feedbackCreatedDate.format('MMM D');
     },

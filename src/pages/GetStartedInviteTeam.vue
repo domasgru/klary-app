@@ -33,7 +33,9 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
-import { db, updateUserProfileDocument, FieldValue } from '@/firebase';
+import {
+ db, updateUserProfileDocument, FieldValue, addWorkspaceInvites,
+} from '@/firebase';
 import GetStartedLayout from '@/pages/GetStartedLayout.vue';
 
 export default {
@@ -57,12 +59,13 @@ export default {
   methods: {
     ...mapActions('workspace', ['setAllWorkspaces', 'setCurrentWorkspace']),
     async addTeamates() {
-      const workspaceRef = db.doc(`workspaces/${this.userData.currentWorkspace}`);
+      const { userData } = this;
       const emails = this.emails.trim().split(',');
-      await workspaceRef.update({
-        invited: emails,
+      await addWorkspaceInvites({
+        invitedEmails: emails,
+        workspace: { id: userData.currentWorkspace, name: userData.name },
+        author: { uid: userData.uid, name: userData.name },
       });
-
       this.$router.push('/workspace');
     },
   },

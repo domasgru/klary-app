@@ -1,18 +1,19 @@
 <template>
   <div class="feedback-comment">
     <div class="feedback-comment__header">
+      <div class="feedback-comment__line-top" />
       <div class="feedback-comment__author">
         <BaseInitial
           class="feedback-comment__initial"
           :name="comment.author.name"
           size="sm"
         />
-        <p class="base-typography--b-14-20">
+        <p class="feedback-comment__author-name base-typography--b-14-20">
           {{ comment.author.name }}
         </p>
+        <BaseTimestamp :timestamp="comment.createdAt.seconds" />
       </div>
-      <BaseTimestamp :timestamp="comment.createdAt.seconds" />
-      <div class="feedback-comment__line" />
+      <div class="feedback-comment__line-bottom" />
     </div>
     <div class="feedback-comment__content base-typography--b-16-24">
       {{ comment.content }}
@@ -55,7 +56,9 @@
       <div class="feedback-comment__reply-input-wrapper">
         <BaseTextarea
           v-model="replyContent"
+          v-shortkey="['ctrl', 'enter']"
           class="feedback-comment__reply-input base-typography--b-16-24"
+          @shortkey.native="addReply(comment.id)"
         />
         <BaseSvg
           class="feedback-comment__send-icon"
@@ -111,33 +114,42 @@ export default {
   &__header {
     position: relative;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 48px 0 20px 0;
+    flex-direction: column;
   }
 
   &__author {
     z-index: 2;
     display: flex;
     align-items: center;
-    justify-content: space-between;
   }
 
   &__initial {
     margin-right: 12px;
   }
 
-  &__line {
-    position: absolute;
-    top: 0;
-    left: 15px;
+  &__author-name {
+    margin-right: auto;
+  }
+
+  &__line-top {
     width: 2px;
-    height: 100%;
+    height: 36px;
+    margin-bottom: 4px;
+    margin-left: 14px;
+    background: $grey-200;
+  }
+
+  &__line-bottom {
+    width: 2px;
+    height: 16px;
+    margin-top: 4px;
+    margin-left: 14px;
     background: $grey-200;
   }
 
   &__content {
     padding: 24px;
+    white-space: pre-line;
     background: $light;
     border: $stroke;
     border-top-left-radius: $border-radius;
@@ -206,6 +218,10 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px;
+  }
+
+  &__content {
+    white-space: pre-line;
   }
 
   &__name {

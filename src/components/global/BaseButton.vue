@@ -1,6 +1,6 @@
 <template>
   <button
-    class="button base-typography--button1"
+    class="button base-typography--bold-button1"
     :class="computedClasses"
     :disabled="disabled"
     v-on="$listeners"

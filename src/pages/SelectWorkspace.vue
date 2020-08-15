@@ -8,17 +8,17 @@
     </p>
     <div class="workspace-cards">
       <SelectWorkspaceCard
-        v-for="workspace in invitedWorkspaces"
-        :key="workspace.name"
-        :workspace="workspace"
+        v-for="invite in invitedWorkspaces"
+        :key="invite.workspace.id"
+        :workspace-name="invite.workspace.name"
         is-new
-        @open="openWorkspace(workspace.id)"
+        @open="joinWorkspace(invite)"
       />
       <SelectWorkspaceCard
         v-for="workspace in allWorkspaces"
         :key="workspace.name"
-        :workspace="workspace"
-        @open="openWorkspace(workspace.id)"
+        :workspace-name="workspace.name"
+        @open="openWorkspace(workspace)"
       />
     </div>
     <BaseLink to="/create-workspace">
@@ -31,6 +31,9 @@
 import { mapState, mapActions } from 'vuex';
 import GetStartedLayout from '@/pages/GetStartedLayout.vue';
 import SelectWorkspaceCard from '@/components/ui/SelectWorkspaceCard.vue';
+import {
+ updateUserProfileDocument, updateWorkspaceInvite, getWorkspace, updateWorkspaceTeam,
+} from '@/firebase';
 
 export default {
   components: {
@@ -38,13 +41,25 @@ export default {
     SelectWorkspaceCard,
   },
   computed: {
+    ...mapState('user', ['userData']),
     ...mapState('workspace', ['allWorkspaces', 'invitedWorkspaces']),
   },
   methods: {
     ...mapActions('workspace', ['setCurrentWorkspace']),
-    openWorkspace(id) {
-      const currentWorkspace = this.allWorkspaces.find((workspace) => workspace.id === id);
-      this.setCurrentWorkspace(currentWorkspace);
+    async openWorkspace(workspace) {
+      this.setCurrentWorkspace(workspace);
+      await updateUserProfileDocument(this.userData.uid, { currentWorkspace: workspace.id });
+      this.$router.push('/workspace');
+    },
+    async joinWorkspace(invite) {
+      console.log(invite);
+      const [workspace] = await Promise.all([
+        getWorkspace(invite.workspace.id),
+        updateWorkspaceInvite(invite.id, { status: 'ACCEPTED' }),
+        updateUserProfileDocument(this.userData.uid, { currentWorkspace: invite.workspace.id }),
+        updateWorkspaceTeam(invite.workspace.id, this.userData.uid),
+      ]);
+      this.setCurrentWorkspace(workspace);
       this.$router.push('/workspace');
     },
   },

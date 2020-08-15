@@ -1,6 +1,9 @@
 <template>
   <nav class="navigation">
-    <div class="navigation__logo">
+    <div
+      class="navigation__logo"
+      @click="$router.push('/workspace')"
+    >
       <BaseSvg
         name="logo-icon"
         class="navigation__logo-icon"
@@ -17,6 +20,13 @@
         to="/workspace"
       >
         Inbox
+      </BaseLink>
+      <BaseLink
+        theme="navigation"
+        class="navigation__item"
+        to="/workspace/sent-feedbacks"
+      >
+        Sent
       </BaseLink>
       <BaseLink
         theme="navigation"
@@ -51,8 +61,8 @@
         />
       </div>
       <template v-slot:content>
-        <div class="user-popup base-typography--b-14-16">
-          <div class="user-popup__user-info">
+        <div class="user-popup ">
+          <div class="user-popup__user-info base-typography--b-14-20">
             <BaseInitial
               class="user-popup__initial"
               :name="userData.name"
@@ -66,13 +76,13 @@
               </div>
             </div>
           </div>
-          <div class="user-popup__item">
+          <div class="user-popup__item base-typography--b-14-16">
             My account
           </div>
-          <div class="user-popup__item">
+          <div class="user-popup__item base-typography--b-14-16">
             Preferences
           </div>
-          <div class="user-popup__workspace">
+          <div class="user-popup__workspace base-typography--b-14-16">
             <div class="user-popup__workspace-title">
               Workspace:
             </div>
@@ -84,6 +94,12 @@
               <div class="user-popup__workspace-name">
                 {{ currentWorkspace.name }}
               </div>
+              <button
+                class="user-popup__change base-typography--b-14-16"
+                @click="$router.push('/select-workspace')"
+              >
+                Change
+              </button>
             </div>
             <div class="user-popup__item">
               Workspace settings
@@ -93,7 +109,7 @@
             </div>
           </div>
           <div
-            class="user-popup__item"
+            class="user-popup__item base-typography--b-14-16"
             @click="userSignout"
           >
             Sign out
@@ -150,6 +166,7 @@ export default {
   &__items {
     display: flex;
     margin-right: auto;
+    -webkit-user-drag: none;
   }
 
   &__item {
@@ -254,7 +271,13 @@ export default {
   }
 
   &__workspace-name {
+    margin-right: auto;
+  }
 
+  &__change {
+    padding: 5px 0;
+    color: $grey-500;
+    cursor: pointer;
   }
 }
 </style>

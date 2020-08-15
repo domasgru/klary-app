@@ -47,7 +47,6 @@ export default {
   },
   methods: {
     hide(e) {
-      console.log(e);
       this.isOpen = false;
     },
   },

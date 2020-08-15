@@ -36,6 +36,7 @@
           input: event => $emit('input', event.target.value)
         }"
         @keydown.enter="handleSubmitKeyDown"
+        @keydown.esc="blur"
       >
     </div>
     <span class="base-input__hint">
@@ -130,6 +131,9 @@ export default {
 
       this.animateLiftUp = true;
       this.inputPulseAnimation = true;
+    },
+    blur() {
+      this.$refs.input.blur();
     },
   },
 };

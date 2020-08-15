@@ -9,6 +9,7 @@
         label="To"
         class="give__to"
         @select="selectUser"
+        @input="t"
       />
       <BaseInput
         v-model="title"
@@ -72,6 +73,9 @@ export default {
         title: this.title,
         content: this.content,
       });
+    },
+    t(e) {
+      console.log(e);
     },
   },
 };
