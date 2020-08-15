@@ -30,7 +30,7 @@
       </BaseButton>
     </div>
     <!-- eslint-disable -->
-      <p class="login-form__terms base-typography--b3 stagger">
+      <p class="login-form__terms base-typography--b-14-20 stagger">
         By continuing with Google, Apple, or email, you agree
         to Curiodesk’s <a href="#" class="login-form__terms-link"> Terms of Service</a> and
         <a href="#" class="login-form__terms-link"> Privacy Police</a>.

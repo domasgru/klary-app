@@ -1,5 +1,5 @@
 <template>
-  <div class="base-timestamp base-typography--b3">
+  <div class="base-timestamp base-typography--b-14-20">
     {{ time }}
   </div>
 </template>

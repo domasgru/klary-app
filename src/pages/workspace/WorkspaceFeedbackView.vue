@@ -11,13 +11,13 @@
             size="sm"
             :name="currentFeedback.author.name"
           />
-          <div class="feedback__author-name base-typography--b3">
+          <div class="feedback__author-name base-typography--b-14-20">
             {{ currentFeedback.author.name }}
           </div>
         </div>
         <BaseTimestamp :timestamp="currentFeedback.createdAt.seconds" />
       </div>
-      <div class="feedback__content base-typography--b2">
+      <div class="feedback__content base-typography--b-16-24">
         {{ currentFeedback.content }}
       </div>
     </div>

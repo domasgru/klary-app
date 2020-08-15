@@ -32,7 +32,7 @@ export const login = (email, redirectToPage = '') => {
       console.log(error);
     });
 };
-export const logout = () => auth.signOut();
+export const logout = async () => auth.signOut();
 
 export const getCurrentUser = () => new Promise((resolve, reject) => {
   const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -141,7 +141,7 @@ export const addCommentReply = async (feedbackId, commentId, content, author) =>
 
 export const createFeedbackRequest = async (requestData) => {
   const feedbackRequest = {
-    craetedAt: firebase.firestore.Timestamp.fromDate(new Date()),
+    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
     ...requestData,
   };
   const requestRef = db.collection('feedbackRequests');
@@ -151,7 +151,7 @@ export const createFeedbackRequest = async (requestData) => {
 export const createFeedback = async (feedbackData) => {
   const timeNow = firebase.firestore.Timestamp.fromDate(new Date());
   const feedback = {
-    craetedAt: timeNow,
+    createdAt: timeNow,
     ...feedbackData,
     author: { name: feedbackData.author.name, seenAt: timeNow, lastAction: { type: 'CREATE', createdAt: timeNow } },
     receiver: { name: feedbackData.receiver.name, seenAt: null, lastAction: { type: '', createdAt: null } },

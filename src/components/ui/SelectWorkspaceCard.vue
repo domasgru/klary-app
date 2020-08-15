@@ -19,7 +19,7 @@
         <p class="workspace-card__name base-typography--bb2">
           {{ workspace.name }}
         </p>
-        <p class="workspace-card__domain base-typography--b2">
+        <p class="workspace-card__domain base-typography--b-16-24">
           {{ workspace.name }}.curiodesk.com
         </p>
       </div>

@@ -39,7 +39,7 @@
           </BaseButton>
         </div>
         <!-- eslint-disable -->
-      <p class="login-form__terms base-typography--b3 stagger">
+      <p class="login-form__terms base-typography--b-14-20 stagger">
         By continuing with Google, Apple, or email, you agree
         to Curiodesk’s <a href="#" class="login-form__terms-link"> Terms of Service</a> and
         <a href="#" class="login-form__terms-link"> Privacy Police</a>.
@@ -72,7 +72,7 @@
             <p class="base-typography--bb2">Open Outlook</p>
           </div>
         </div>
-        <p class="check-email__resend base-typography--b3 stagger-check-email">Didn’t receive the emai? <span class="login__terms-link" @click="submit">Resend email</span></p>
+        <p class="check-email__resend base-typography--b-14-20 stagger-check-email">Didn’t receive the emai? <span class="login__terms-link" @click="submit">Resend email</span></p>
       </div>
     </div>
   </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="comment">
-    <div class="comment__header base-typography--b3">
+    <div class="comment__header base-typography--b-14-20">
       Write comment:
     </div>
     <div class="comment__main">

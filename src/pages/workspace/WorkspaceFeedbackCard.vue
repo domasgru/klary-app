@@ -1,12 +1,12 @@
 <template>
   <div class="card">
     <div class="card__description">
-      <div class="card__title base-typography--b2">
+      <div class="card__title base-typography--b-16-24">
         {{ feedbackData.title }}
       </div>
       <div
         v-if="lastAction"
-        class="card__last-action base-typography--b3"
+        class="card__last-action base-typography--b-14-20"
       >
         {{ lastAction }}
       </div>
@@ -17,13 +17,14 @@
         :name="feedbackData.author.name"
         size="sm"
       />
-      <div class="card__name base-typography--b3">
+      <div class="card__name base-typography--b-14-20">
         {{ feedbackData.author.name }}
       </div>
     </div>
-    <div class="card__time base-typography--b3">
-      {{ timestamp }}
-    </div>
+    <BaseTimestamp
+      class="card__time"
+      :timestamp="feedbackData.createdAt.seconds"
+    />
     <BaseSvg
       class="card__more"
       name="more-horizontal"
@@ -44,19 +45,6 @@ export default {
   computed: {
     lastAction() {
       return '';
-    },
-    timestamp() {
-      const today = dayjs();
-      const feedbackCreatedDate = dayjs(this.feedbackData.createdAt.seconds * 1000);
-
-      const isTodayFeedback = today.date() === feedbackCreatedDate.date()
-        && today.month() === feedbackCreatedDate.month()
-        && today.year() === feedbackCreatedDate.year();
-
-      if (isTodayFeedback) {
-        return feedbackCreatedDate.format('h:m A');
-      }
-      return feedbackCreatedDate.format('MMM D');
     },
   },
 };
@@ -108,7 +96,6 @@ export default {
 
   &__time {
     margin-right: 36px;
-    color: $grey-500;
   }
 
   &__more {

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Vuelidate from 'vuelidate';
 import VueFuse from 'vue-fuse';
 import { firestorePlugin } from 'vuefire';
+import ClickOutside from 'vue-click-outside';
 import LottiePlayer from 'lottie-player-vue';
 import App from './App.vue';
 import router from './router';
@@ -15,6 +16,8 @@ Vue.use(firestorePlugin);
 Vue.use(Vuelidate);
 Vue.use(LottiePlayer);
 Vue.use(VueFuse);
+
+Vue.directive('click-outside', ClickOutside);
 
 const globalComponents = require.context('./components/global', false, /Base[A-Z]\w+\.(vue|js)$/);
 globalComponents.keys().forEach((fileName) => {

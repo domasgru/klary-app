@@ -21,7 +21,7 @@
             <p class="base-typography--bb2">Open Outlook</p>
           </div>
         </div>
-        <p class="check-email__resend base-typography--b3">Didn’t receive the emai? <span class="login__terms-link" @click="$emit('resend')">Resend email</span></p>
+        <p class="check-email__resend base-typography--b-14-20">Didn’t receive the emai? <span class="login__terms-link" @click="$emit('resend')">Resend email</span></p>
   </div>
 </template>
 

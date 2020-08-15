@@ -25,7 +25,7 @@
         :id="_uid"
         ref="input"
         type="text"
-        class="base-input__input base-typography--b2"
+        class="base-input__input base-typography--b-16-24"
         spellcheck="false"
         :value="value"
         :placeholder="placeholder"

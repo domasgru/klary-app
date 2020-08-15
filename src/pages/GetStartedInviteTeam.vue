@@ -20,7 +20,7 @@
           Add teammate
         </BaseButton>
         <p
-          class="complete-company__skip base-typography--b2"
+          class="complete-company__skip base-typography--b-16-24"
           @click="$router.push('/workspace')"
         >
           Or, <b>skip for now</b>

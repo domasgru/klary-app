@@ -1,20 +1,54 @@
 <template>
-  <div class="base-popup">
-    <div class="base-popup__trigger">
+  <div
+    v-click-outside="hide"
+    class="base-popup"
+  >
+    <button
+      class="base-popup__trigger"
+      @click="isOpen = !isOpen"
+    >
       <slot />
-    </div>
-    <BaseBackgroundWraper class="base-popup__content">
+    </button>
+    <BaseBackgroundWrapper
+      v-if="isOpen"
+
+      class="base-popup__content"
+      :style="{top, right, bottom, left}"
+    >
       <slot name="content" />
-    </BaseBackgroundWraper>
+    </BaseBackgroundWrapper>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    isOpen: {
-      type: Boolean,
-      required: true,
+    top: {
+      type: [String, Number],
+      default: 'auto',
+    },
+    right: {
+       type: [String, Number],
+      default: '0',
+    },
+    bottom: {
+       type: [String, Number],
+      default: '0',
+    },
+    left: {
+       type: [String, Number],
+      default: 'auto',
+    },
+  },
+  data() {
+    return {
+      isOpen: false,
+    };
+  },
+  methods: {
+    hide(e) {
+      console.log(e);
+      this.isOpen = false;
     },
   },
 };
@@ -22,8 +56,16 @@ export default {
 
 <style lang="scss" scoped>
 .base-popup {
+  position: relative;
+
+  &__trigger {
+    cursor: pointer;
+  }
+
   &__content {
-    padding: 12px 0;
+    position: absolute;
+    z-index: 100;
+    transform: translateY(100%);
   }
 }
 </style>

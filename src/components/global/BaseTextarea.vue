@@ -8,17 +8,15 @@
     <textarea
       :id="_uid"
       ref="textarea"
-      class="base-textarea__textarea base-typography--b2"
+      class="base-textarea__textarea base-typography--b-16-24"
       :class="{'base-textarea__textarea--enlarged': textareaEnlarged}"
       :placeholder="placeholder"
       :value="value"
       :rows="rows"
-      :style="{height: textareaHeight}"
       v-on="{
         ...$listeners,
         input: event => $emit('input', event.target.value)
       }"
-      @input="autoResize"
     />
     <span
       v-if="!noHint"
@@ -30,6 +28,8 @@
 </template>
 
 <script>
+import autosize from 'autosize';
+
 export default {
   props: {
     value: {
@@ -67,23 +67,19 @@ export default {
   },
   data() {
     return {
-      textareaInitialHeight: null,
-      textareaHeight: null,
       textareaEnlarged: false,
     };
   },
-  mounted() {
-    // debugger;
-    this.textareaInitialHeight = this.$refs.textarea;
-  },
-  methods: {
-    async autoResize(event) {
-      const { textarea } = this.$refs;
-      const offset = textarea.offsetHeight - textarea.clientHeight;
-      // this.textareaHeight = 'auto';
-      // await this.$nextTick();
-      this.textareaHeight = `${this.$refs.textarea.scrollHeight + offset}px`;
+  watch: {
+    async value(newValue) {
+      if (newValue === '') {
+        await this.$nextTick();
+        autosize.update(this.$refs.textarea);
+      }
     },
+  },
+  mounted() {
+    autosize(this.$refs.textarea);
   },
 };
 </script>
@@ -92,6 +88,7 @@ export default {
 .base-textarea {
   $this: &;
 
+  position: relative;
   display: flex;
   flex-direction: column;
   text-align: start;

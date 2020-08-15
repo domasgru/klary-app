@@ -7,14 +7,14 @@
           :name="comment.author.name"
           size="sm"
         />
-        <p class="base-typography--b3">
+        <p class="base-typography--b-14-20">
           {{ comment.author.name }}
         </p>
       </div>
       <BaseTimestamp :timestamp="comment.createdAt.seconds" />
       <div class="feedback-comment__line" />
     </div>
-    <div class="feedback-comment__content base-typography--b2">
+    <div class="feedback-comment__content base-typography--b-16-24">
       {{ comment.content }}
     </div>
     <div
@@ -35,7 +35,7 @@
         </div>
         <div class="comment-reply__right">
           <div class="comment-reply__name-and-time">
-            <p class="comment-reply__name base-typography--b3">
+            <p class="comment-reply__name base-typography--b-14-20">
               {{ reply.author.name }}
             </p>
             <BaseTimestamp :timestamp="reply.createdAt.seconds" />
@@ -55,7 +55,7 @@
       <div class="feedback-comment__reply-input-wrapper">
         <BaseTextarea
           v-model="replyContent"
-          class="feedback-comment__reply-input base-typography--b2"
+          class="feedback-comment__reply-input base-typography--b-16-24"
         />
         <BaseSvg
           class="feedback-comment__send-icon"
@@ -70,6 +70,7 @@
 <script>
 import { mapState } from 'vuex';
 import { addCommentReply } from '@/firebase';
+import { required } from 'vuelidate/lib/validators';
 
 export default {
   props: {
@@ -83,13 +84,23 @@ export default {
       replyContent: '',
     };
   },
+  validations: {
+    replyContent: {
+      required,
+    },
+  },
   computed: {
     ...mapState('user', ['userData']),
     ...mapState('feedback', ['currentFeedback']),
   },
   methods: {
     addReply(commentId) {
+      if (this.$v.replyContent.$invalid) {
+        return;
+      }
+
       addCommentReply(this.currentFeedback.id, commentId, this.replyContent, this.userData);
+      this.replyContent = '';
     },
   },
 };
@@ -113,7 +124,7 @@ export default {
   }
 
   &__initial {
-    margin-right: 8px;
+    margin-right: 12px;
   }
 
   &__line {
