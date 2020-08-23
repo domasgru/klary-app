@@ -8,11 +8,13 @@
   >
     <BaseInput
       ref="input"
-      type="multi"
+      :type="type"
       v-bind="$attrs"
       :autocomplete="false"
       :autofocus="autofocus"
-      :selected-values="selectedUsers"
+      :placeholder="placeholder"
+      :selected-value="selectedValue"
+      :selected-values="selectedValues"
       @remove="$emit('remove', $event)"
       @input="$emit('input', $event), search($event)"
       @keydown.up.prevent="handleArrowSelect('up')"
@@ -52,6 +54,10 @@ import Fuse from 'fuse.js';
 
 export default {
   props: {
+    type: {
+      type: String,
+      required: true,
+    },
     list: {
       type: Array,
       required: true,
@@ -60,13 +66,21 @@ export default {
       type: Boolean,
       required: true,
     },
+    placeholder: {
+      type: String,
+      default: '',
+    },
     searchKeys: {
       type: Array,
       required: true,
     },
-    selectedUsers: {
+    selectedValue: {
+      type: Object,
+      default: () => ({}),
+    },
+    selectedValues: {
       type: Array,
-      required: true,
+      default: () => ([]),
     },
   },
   data() {

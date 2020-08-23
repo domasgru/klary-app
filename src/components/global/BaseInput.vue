@@ -40,14 +40,61 @@
         @keydown.enter="handleSubmitKeyDown"
         @keydown.esc="blur"
       >
-      <!-- MULTI INPUT -->
+      <!-- SINGLE SELECT INPUT -->
+      <div
+        v-if="type==='single-select'"
+        :id="`singleInput-${_uid}`"
+        class="base-input__input base-input__single-select base-typography--b-16-24"
+      >
+        <div
+          v-if="selectedValue.uid"
+          class="base-input__single-select-selected"
+        >
+          <BaseInitial
+            size="sm"
+            class="base-input__single-select-initial"
+            :name="selectedValue.name"
+          />
+          <div class="base-input__single-select-name">
+            {{ selectedValue.name }}
+          </div>
+          <button
+            class="base-input__multi-x"
+            @click="$emit('remove', selectedValue.uid)"
+          >
+            <BaseSvg
+              class="base-input__multi-x-icon"
+              name="x"
+            />
+          </button>
+        </div>
+        <input
+          v-else
+          :id="`input${_uid}`"
+          ref="input"
+          class="base-input__single-select-input base-typography--b-16-24"
+          spellcheck="false"
+          type="text"
+          :value="value"
+          :placeholder="placeholder"
+          :autofocus="autofocus"
+          :autocomplete="autocomplete ? null : 'off'"
+          v-on="{
+            ...$listeners,
+            input: event => $emit('input', event.target.value)
+          }"
+          @keydown.enter="handleSubmitKeyDown"
+          @keydown.esc="blur"
+        >
+      </div>
+      <!-- MULTI SELECT INPUT -->
       <div
         ref="multiInputMeasurer"
         class="base-input__multi-input-measurer base-typography--b-16-24"
         v-text="value"
       />
       <div
-        v-if="type=== 'multi'"
+        v-if="type=== 'multi-select'"
         :id="`multiInput-${_uid}`"
         class="base-input__multi base-input__input base-typography--b-16-24"
         @mousedown="handleMultiInputMousedown"
@@ -63,11 +110,15 @@
             :name="selectedValue.name"
           />
           {{ selectedValue.name }}
-          <BaseSvg
+          <button
             class="base-input__multi-x"
-            name="x"
-            @click.native="$emit('remove', selectedValue.uid)"
-          />
+            @click="$emit('remove', selectedValue.uid)"
+          >
+            <BaseSvg
+              class="base-input__multi-x-icon"
+              name="x"
+            />
+          </button>
         </div>
         <input
           :id="`input${_uid}`"
@@ -76,10 +127,10 @@
           spellcheck="false"
           type="text"
           :value="value"
-          :placeholder="placeholder"
+          :placeholder="!selectedValues.length ? placeholder : ''"
           :autofocus="autofocus"
           :autocomplete="autocomplete ? null : 'off'"
-          :style="{width: `${multiInputWidth}px`}"
+          :style="{width: multiSelectWidth}"
           v-on="{
             ...$listeners,
             input: event => $emit('input', event.target.value)
@@ -159,7 +210,12 @@ export default {
       type: [Number, String],
       default: 1,
     },
-    // Multi specific
+    // Single-select specific
+    selectedValue: {
+      type: Object,
+      default: () => ({}),
+    },
+    // Multi-select specific
     selectedValues: {
       type: Array,
       default: () => ([]),
@@ -184,6 +240,13 @@ export default {
         '--outlineColor': outlineColor,
         '--outlineColorEnd': outlineColorEnd,
       };
+    },
+    multiSelectWidth() {
+      if (!this.selectedValues.length) {
+        return '100%';
+      }
+
+      return `${this.multiInputWidth}px`;
     },
   },
   watch: {
@@ -265,6 +328,7 @@ export default {
     position: relative;
     width: 100%;
     padding: 16px;
+    overflow: hidden;
     font-family: 'Inter', sans-serif;
     color: $dark;
     cursor: text;
@@ -299,7 +363,36 @@ export default {
       border: 1px solid $success;
     }
   }
+  // Single-select
+  &__single-select {
+    padding: 0;
+  }
 
+  &__single-select-input {
+    width: 100%;
+    padding: 16px;
+  }
+
+  &__single-select-selected {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 16px;
+    cursor: pointer;
+  }
+
+  &__single-select-initial {
+    margin-right: 8px;
+  }
+
+  &__single-select-name {
+    margin-right: auto;
+  }
+
+  &__single-select-no-padding {
+    padding: 0;
+  }
+  // Multi-select
   &__multi {
     display: flex;
     flex-wrap: wrap;
@@ -310,9 +403,6 @@ export default {
   &__multi-input {
     padding: 4px 0;
     margin-bottom: 8px;
-    font-family: 'Inter';
-    border: none;
-    outline: none;
   }
 
   &__multi-selected-item {
@@ -331,10 +421,23 @@ export default {
   }
 
   &__multi-x {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 24px;
     height: 24px;
     margin-left: 8px;
     cursor: pointer;
+    border-radius: 4px;
+
+    &:hover {
+      background: $grey-200;
+    }
+  }
+
+  &__multi-x-icon {
+    width: 12px;
+    height: 12px;
   }
 
   &__multi-input-measurer {

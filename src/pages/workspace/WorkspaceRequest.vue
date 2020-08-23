@@ -6,6 +6,7 @@
     <div class="request__form">
       <WorkspaceSelectTeamate
         v-model="userInput"
+        type="multi-select"
         label="Request feedback from?"
         class="request__input"
         :selected-users="selectedUsers"
@@ -58,7 +59,6 @@ export default {
       this.selectedUsers = [...this.selectedUsers, user];
     },
     removeUser(uid) {
-      console.log(uid);
       this.selectedUsers = this.selectedUsers.filter((user) => user.uid !== uid);
     },
     sendRequest() {

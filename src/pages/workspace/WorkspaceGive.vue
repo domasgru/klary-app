@@ -6,10 +6,12 @@
     <BaseBackgroundWrapper class="give__wrapper">
       <WorkspaceSelectTeamate
         v-model="userInput"
+        :selected-user="selectedUser"
+        type="single-select"
         label="To"
         class="give__to"
         @select="selectUser"
-        @input="t"
+        @remove="removeUser"
       />
       <BaseInput
         v-model="title"
@@ -47,7 +49,7 @@ export default {
   data() {
     return {
       userInput: '',
-      selectedUser: null,
+      selectedUser: {},
       title: '',
       content: '',
     };
@@ -62,7 +64,11 @@ export default {
   methods: {
     selectUser(user) {
       this.selectedUser = user;
-      this.userInput = user.name;
+      this.userInput = '';
+    },
+    removeUser(uid) {
+      this.selectedUser = {};
+      this.userInput = '';
     },
     sendFeedback() {
       createFeedback({

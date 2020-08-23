@@ -1,11 +1,14 @@
 <template>
   <BaseSelect
+    :type="type"
     :value="value"
     :label="label"
     :list="usersArray"
     :search-keys="['name']"
     :autofocus="true"
-    :selected-users="selectedUsers"
+    :selected-value="selectedUser"
+    :selected-values="selectedUsers"
+    :placeholder="`Type the person's name`"
     @input="$emit('input', $event)"
     @select="$emit('select', $event)"
     @remove="$emit('remove', $event)"
@@ -17,6 +20,10 @@ import { mapState } from 'vuex';
 
 export default {
   props: {
+    type: {
+      type: String,
+      required: true,
+    },
     value: {
       type: String,
       required: true,
@@ -25,9 +32,13 @@ export default {
       type: String,
       default: '',
     },
+    selectedUser: {
+      type: Object,
+      default: () => ({}),
+    },
     selectedUsers: {
       type: Array,
-      required: true,
+      default: () => ([]),
     },
   },
   computed: {
