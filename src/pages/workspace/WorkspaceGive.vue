@@ -17,8 +17,9 @@
         label="Feedback title"
         hint="Specify what feedback you are writing."
       />
-      <BaseTextarea
+      <BaseInput
         v-model="content"
+        type="textarea"
         class="give__content"
         rows="4"
         label="Your feedback"
@@ -73,9 +74,6 @@ export default {
         title: this.title,
         content: this.content,
       });
-    },
-    t(e) {
-      console.log(e);
     },
   },
 };

@@ -8,12 +8,16 @@
   >
     <BaseInput
       ref="input"
+      type="multi"
       v-bind="$attrs"
       :autocomplete="false"
       :autofocus="autofocus"
+      :selected-values="selectedUsers"
+      @remove="$emit('remove', $event)"
       @input="$emit('input', $event), search($event)"
       @keydown.up.prevent="handleArrowSelect('up')"
       @keydown.down.prevent="handleArrowSelect('down')"
+      @keydown="openResultsIfClosed"
       @keydown.enter="select()"
       @focus="isOpen = true"
       @keydown.esc="isOpen = false"
@@ -60,6 +64,10 @@ export default {
       type: Array,
       required: true,
     },
+    selectedUsers: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
@@ -72,6 +80,7 @@ export default {
   watch: {
     list(newValue) {
       this.initSearcher();
+      this.results = [];
     },
   },
   created() {
@@ -113,6 +122,13 @@ export default {
         this.$emit('select', selectedUser);
         this.isOpen = false;
       }
+    },
+    openResultsIfClosed() {
+      if (this.isOpen) {
+        return;
+      }
+
+      this.isOpen = true;
     },
   },
 };

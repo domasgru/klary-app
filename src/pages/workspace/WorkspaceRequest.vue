@@ -8,7 +8,9 @@
         v-model="userInput"
         label="Request feedback from?"
         class="request__input"
+        :selected-users="selectedUsers"
         @select="selectUser"
+        @remove="removeUser"
       />
       <BaseTextarea
         v-model="message"
@@ -39,7 +41,7 @@ export default {
   data() {
     return {
       userInput: '',
-      selectedUser: null,
+      selectedUsers: [],
       message: 'I’m gathering professional feedback from a handful of my peers to help me learn my strengths and opportunities to improve. I’m using a new app called Matter and it should only take a few minutes.',
     };
   },
@@ -52,8 +54,12 @@ export default {
   },
   methods: {
     selectUser(user) {
-      this.userInput = user.name;
-      this.selectedUser = user;
+      this.userInput = '';
+      this.selectedUsers = [...this.selectedUsers, user];
+    },
+    removeUser(uid) {
+      console.log(uid);
+      this.selectedUsers = this.selectedUsers.filter((user) => user.uid !== uid);
     },
     sendRequest() {
       createFeedbackRequest({
