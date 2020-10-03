@@ -1,6 +1,9 @@
 @import 'reset';
 @import 'typography';
-html { overflow-y: scroll; }
+
+html {
+  overflow-y: scroll;
+}
 
 .container--md {
   width: 100%;

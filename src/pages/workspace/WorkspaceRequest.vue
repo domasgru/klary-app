@@ -7,7 +7,7 @@
       <WorkspaceSelectTeamate
         v-model="userInput"
         type="multi-select"
-        label="Request feedback from?"
+        label="From"
         class="request__input"
         :selected-users="selectedUsers"
         @select="selectUser"
@@ -22,6 +22,7 @@
       />
       <BaseButton
         class="request__submit"
+        :disabled="!isFormValid"
         @click="sendRequest"
       >
         Send request
@@ -33,6 +34,7 @@
 <script>
 import { mapState } from 'vuex';
 import { createFeedbackRequest } from '@/firebase';
+import anime from 'animejs/lib/anime.es';
 import WorkspaceSelectTeamate from './WorkspaceSelectTeamate.vue';
 
 export default {
@@ -43,7 +45,7 @@ export default {
     return {
       userInput: '',
       selectedUsers: [],
-      message: 'I’m gathering professional feedback from a handful of my peers to help me learn my strengths and opportunities to improve. I’m using a new app called Matter and it should only take a few minutes.',
+      message: 'I’m gathering professional feedback from a handful of my peers to help me learn my strengths and opportunities to improve. I’m using a new app called Kuri and it should only take a few minutes.',
     };
   },
   computed: {
@@ -51,6 +53,9 @@ export default {
     ...mapState('workspace', ['currentWorkspace', 'team']),
     teamArray() {
       return Object.values(this.team);
+    },
+    isFormValid() {
+      return !!this.selectedUsers.length;
     },
   },
   methods: {
