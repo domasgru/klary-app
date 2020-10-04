@@ -1,122 +1,87 @@
 <template>
   <nav class="navigation">
-    <div
-      class="navigation__logo"
-      @click="$router.push('/workspace')"
-    >
-      <BaseSvg
+    <div class="navigation__container">
+      <div class="navigation__logo-container">
+        <div
+          class="navigation__logo"
+          @click="$router.push('/workspace')"
+        >
+          <!-- <BaseSvg
         name="logo-icon"
         class="navigation__logo-icon"
-      />
-      <BaseSvg
-        name="logo"
-        class="navigation__logo-text"
-      />
-    </div>
-    <ul class="navigation__items base-typography--button2">
-      <BaseLink
-        theme="navigation"
-        class="navigation__item"
-        to="/workspace"
-      >
-        Inbox
-      </BaseLink>
-      <BaseLink
-        theme="navigation"
-        class="navigation__item"
-        to="/workspace/sent-feedbacks"
-      >
-        Sent
-      </BaseLink>
-      <BaseLink
-        theme="navigation"
-        class="navigation__item"
-        to="/workspace/request-feedback"
-      >
-        Request feedback
-      </BaseLink>
-      <BaseLink
-        theme="navigation"
-        class="navigation__item"
-        to="/workspace/give-feedback"
-      >
-        Give feedback
-      </BaseLink>
-    </ul>
-
-    <BasePopup bottom="-4px">
-      <div
-        class="navigation__user"
-      >
-        <BaseAvatar
-          class="navigation__workspace-initial"
-          :name="currentWorkspace.name"
-        />
-        <div class="navigation__workspace-name base-typography--button2">
-          {{ currentWorkspace.name }}
+      /> -->
+          <BaseSvg
+            name="logo"
+            class="navigation__logo-text"
+          />
         </div>
+      </div>
+
+      <BasePopup bottom="-4px">
         <BaseAvatar
           class="navigation__user-initial"
           :name="userData.name"
+          size="sm"
+          :picture="userData.googlePicture || ''"
         />
-      </div>
-      <template v-slot:content>
-        <div class="user-popup ">
-          <div class="user-popup__user-info base-typography--b-14-20">
-            <BaseAvatar
-              class="user-popup__initial"
-              :name="userData.name"
-            />
-            <div class="user-popup__name-email">
-              <div class="user-popup__name">
-                {{ userData.name }}
-              </div>
-              <div class="user-popup__email">
-                {{ userData.email }}
-              </div>
-            </div>
-          </div>
-          <div class="user-popup__item base-typography--b-14-16">
-            My account
-          </div>
-          <div class="user-popup__item base-typography--b-14-16">
-            Preferences
-          </div>
-          <div class="user-popup__workspace base-typography--b-14-16">
-            <div class="user-popup__workspace-title">
-              Workspace:
-            </div>
-            <div class="user-popup__workspace-info">
+        <template v-slot:content>
+          <div class="user-popup ">
+            <div class="user-popup__user-info base-typography--b-14-20">
               <BaseAvatar
-                class="user-popup__workspace-initial"
-                :name="currentWorkspace.name"
+                class="user-popup__initial"
+                :name="userData.name"
               />
-              <div class="user-popup__workspace-name">
-                {{ currentWorkspace.name }}
+              <div class="user-popup__name-email">
+                <div class="user-popup__name">
+                  {{ userData.name }}
+                </div>
+                <div class="user-popup__email">
+                  {{ userData.email }}
+                </div>
               </div>
-              <button
-                class="user-popup__change base-typography--b-14-16"
-                @click="$router.push('/select-workspace')"
-              >
-                Change
-              </button>
             </div>
-            <div class="user-popup__item">
-              Workspace settings
+            <div class="user-popup__item base-typography--b-14-16">
+              My account
             </div>
-            <div class="user-popup__item">
-              Members
+            <div class="user-popup__item base-typography--b-14-16">
+              Preferences
+            </div>
+            <div class="user-popup__workspace base-typography--b-14-16">
+              <div class="user-popup__workspace-title">
+                Workspace:
+              </div>
+              <div class="user-popup__workspace-info">
+                <BaseAvatar
+                  class="user-popup__workspace-initial"
+                  :name="currentWorkspace.name"
+                />
+                <div class="user-popup__workspace-name">
+                  {{ currentWorkspace.name }}
+                </div>
+                <button
+                  class="user-popup__change base-typography--b-14-16"
+                  @click="$router.push('/select-workspace')"
+                >
+                  Change
+                </button>
+              </div>
+              <div class="user-popup__item">
+                Workspace settings
+              </div>
+              <div class="user-popup__item">
+                Members
+              </div>
+            </div>
+            <div
+              class="user-popup__item base-typography--b-14-16"
+              @click="userSignout"
+            >
+              Sign out
             </div>
           </div>
-          <div
-            class="user-popup__item base-typography--b-14-16"
-            @click="userSignout"
-          >
-            Sign out
-          </div>
-        </div>
-      </template>
-    </BasePopup>
+        </template>
+      </BasePopup>
+    </div>
   </nav>
 </template>
 
@@ -140,10 +105,22 @@ export default {
 
 <style lang="scss" scoped>
 .navigation {
-  display: flex;
-  align-items: center;
   width: 100%;
-  padding: 12px 32px;
+  border-bottom: 1px solid $grey-200;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: $container;
+    padding: 8px 32px;
+    margin: 0 auto;
+  }
+
+  &__logo-container {
+    width: 200px;
+    margin-right: 8.54%;
+  }
 
   &__logo {
     display: flex;
@@ -163,47 +140,8 @@ export default {
     height: 26px;
   }
 
-  &__items {
-    display: flex;
-    margin-right: auto;
-    -webkit-user-drag: none;
-  }
-
-  &__item {
-    list-style: none;
-
-    &:not(:last-child) {
-      margin-right: 20px;
-    }
-  }
-
-  &__user {
-    display: flex;
-    align-items: center;
-    padding: 6px;
-    border: $stroke;
-    border-radius: 24px;
-  }
-
-  &__workspace-initial {
-    width: 28px !important;
-    height: 28px !important;
-    margin-right: 8px;
-    font-size: 14px !important;
-  }
-
   &__user-initial {
-    width: 36px !important;
-    height: 36px !important;
-  }
-
-  &__workspace-name {
-    margin-right: 16px;
-  }
-
-  &__expand {
-    width: 8px;
-    height: 4px;
+    cursor: pointer;
   }
 }
 
@@ -220,14 +158,6 @@ export default {
 
   &__initial {
     margin-right: 12px;
-  }
-
-  &__name-email{
-
-  }
-
-  &__name {
-
   }
 
   &__email {

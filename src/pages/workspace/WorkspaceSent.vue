@@ -31,7 +31,7 @@ export default {
       ...mapActions('feedback', ['setCurrentFeedback']),
       openFeedback(feedback) {
         this.setCurrentFeedback(feedback);
-        this.$router.push({ path: `/workspace/feedback/${feedback.id}` });
+        this.$router.push({ path: `/workspace/sent/feedback/${feedback.id}` });
       },
     },
   };

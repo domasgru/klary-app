@@ -6,7 +6,17 @@
       :icon="ITEM.icon"
       :text="ITEM.text"
       :to="ITEM.path"
-      :is-active="ITEM.path === $route.path"
+      :is-active="isActive(ITEM.path, $route.path)"
+      class="workspace-sidebar__button"
+    />
+    <div class="workspace-sidebar__separator" />
+    <WorkspaceSidebarButton
+      v-for="(ITEM, ITEM_ID) in $options.ACTIONS"
+      :key="ITEM_ID"
+      :icon="ITEM.icon"
+      :text="ITEM.text"
+      :to="ITEM.path"
+      :is-active="isActive(ITEM.path, $route.path)"
       class="workspace-sidebar__button"
     />
   </div>
@@ -19,7 +29,7 @@ const INBOX = {
   RECEIVED: {
     icon: 'received',
     text: 'Received',
-    path: '/workspace',
+    path: '/workspace/received',
   },
   SENT: {
     icon: 'sent',
@@ -60,6 +70,11 @@ export default {
   components: {
     WorkspaceSidebarButton,
   },
+  methods: {
+    isActive(path, currentRoute) {
+      return currentRoute.includes(path);
+    },
+  },
   INBOX,
   ACTIONS,
 };
@@ -71,6 +86,13 @@ export default {
     &:not(:last-child) {
       margin-bottom: 4px;
     }
+  }
+
+  &__separator {
+    width: 100%;
+    height: 1px;
+    margin: 16px 0;
+    background: $grey-200;
   }
 }
 </style>

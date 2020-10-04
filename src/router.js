@@ -94,6 +94,7 @@ const router = new Router({
     {
       path: '/workspace',
       component: Workspace,
+      redirect: '/workspace/received',
       meta: {
         requiresAuth: true,
       },
@@ -122,7 +123,7 @@ const router = new Router({
       },
       children: [
         {
-          path: '',
+          path: 'received',
           component: WorkspaceInbox,
         },
         {
@@ -160,7 +161,7 @@ const router = new Router({
           component: WorkspaceGive,
         },
         {
-          path: 'feedback/:id',
+          path: '*/feedback/:id',
           component: WorkspaceFeedbackView,
           beforeEnter: async (to, from, next) => {
             if (!store.state.feedback.currentFeedback) {

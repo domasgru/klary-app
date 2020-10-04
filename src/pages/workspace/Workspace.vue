@@ -56,7 +56,7 @@ export default {
   width: 100%;
   max-width: $container;
   height: 100%;
-  padding: 0 32px;
+  padding: $container-padding;
   padding-top: 80px;
   margin: auto;
 }

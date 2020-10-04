@@ -84,5 +84,10 @@ export default {
     width: 40px;
     height: 40px;
   }
+
+  &--lg {
+    width: 72px;
+    height: 72px;
+  }
 }
 </style>

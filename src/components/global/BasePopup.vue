@@ -56,6 +56,7 @@ export default {
 <style lang="scss" scoped>
 .base-popup {
   position: relative;
+  display: flex;
 
   &__trigger {
     cursor: pointer;
