@@ -15,6 +15,9 @@
         <p class="login-form__subtitle stagger">
           One email for everything. Sign up or login.
         </p>
+        <BaseButton @click="loginGoogle">
+          Google login
+        </BaseButton>
         <BaseInput
           ref="input"
           v-model="email"
@@ -81,7 +84,8 @@
 <script>
 import Header from '@/components/ui/HeaderAuth.vue';
 import { required, email } from 'vuelidate/lib/validators';
-import { login } from '@/firebase';
+import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
+import { login, loginWithGoogle } from '@/firebase';
 
 export default {
   components: {
@@ -113,6 +117,11 @@ export default {
 
       login(this.email, '/complete-auth');
       this.showForm = false;
+    },
+    async loginGoogle() {
+     const result = await loginWithGoogle();
+     const nextRoute = await handleLoginAndReturnRedirect(result);
+     this.$router.push(nextRoute);
     },
   },
 };

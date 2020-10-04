@@ -12,13 +12,14 @@
       </div>
     </div>
     <div class="card__author">
-      <BaseInitial
+      <BaseAvatar
         class="card__initial"
-        :name="!isSentFeedback ? feedbackData.author.name : feedbackData.receiver.name"
+        :name="user.name"
+        :picture="user.googlePicture || ''"
         size="sm"
       />
       <div class="card__name base-typography--b-14-20">
-        {{ !isSentFeedback ? feedbackData.author.name : feedbackData.receiver.name }}
+        {{ user.name }}
       </div>
     </div>
     <BaseTimestamp
@@ -34,6 +35,8 @@
 
 <script>
 import dayjs from 'dayjs';
+import { useGetUser } from '@/composables/useGetUser';
+import { mapState } from 'vuex';
 
 export default {
   props: {
@@ -45,6 +48,13 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  setup(props) {
+    const userId = props.isSentFeedback
+      ? props.feedbackData.receiverId
+      : props.feedbackData.authorId;
+    const user = useGetUser(userId);
+    return { user };
   },
   computed: {
     lastAction() {

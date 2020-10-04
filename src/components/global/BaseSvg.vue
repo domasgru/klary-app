@@ -1,6 +1,12 @@
 <template>
-  <svg class="base-svg">
-    <use :xlink:href="`#${this.name}`" />
+  <svg
+    class="base-svg"
+    :style="{
+      ...(strokeColor ? {stroke: strokeColor} : {}),
+      ...(fillColor ? {fill: fillColor} : {})
+    }"
+  >
+    <use :xlink:href="`#${name}`" />
   </svg>
 </template>
 
@@ -11,9 +17,14 @@ export default {
       type: String,
       required: true,
     },
-  },
-  created() {
-    // import(`@/assets/icons/${this.name}.svg`);
+    strokeColor: {
+      type: String,
+      default: '',
+    },
+    fillColor: {
+      type: String,
+      default: '',
+    },
   },
 };
 </script>

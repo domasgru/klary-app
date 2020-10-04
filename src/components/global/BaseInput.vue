@@ -50,7 +50,7 @@
           v-if="selectedValue.uid"
           class="base-input__single-select-selected"
         >
-          <BaseInitial
+          <BaseAvatar
             size="sm"
             class="base-input__single-select-initial"
             :name="selectedValue.name"
@@ -104,7 +104,7 @@
           :key="selectedValue.uid"
           class="base-input__multi-selected-item"
         >
-          <BaseInitial
+          <BaseAvatar
             class="base-input__initial"
             size="xs"
             :name="selectedValue.name"

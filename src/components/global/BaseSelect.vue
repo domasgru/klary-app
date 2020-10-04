@@ -36,7 +36,7 @@
         :class="{'base-select__result--active': index === activeResultIndex}"
         @click="select(user.item)"
       >
-        <BaseInitial
+        <BaseAvatar
           class="base-select__initial"
           size="xs"
           :name="user.item.name"

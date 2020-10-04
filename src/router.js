@@ -15,6 +15,9 @@ import WorkspaceGive from '@/pages/workspace/WorkspaceGive.vue';
 import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
 import SelectWorkspace from '@/pages/SelectWorkspace.vue';
 import PageNotFound from '@/pages/PageNotFound.vue';
+import ComingSoon from '@/pages/ComingSoon.vue';
+
+import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
 
 import {
   auth,
@@ -123,7 +126,7 @@ const router = new Router({
           component: WorkspaceInbox,
         },
         {
-          path: 'sent-feedbacks',
+          path: 'sent',
           component: WorkspaceSent,
           beforeEnter: async (to, from, next) => {
             if (!store.state.feedback.sentFeedbacks) {
@@ -137,8 +140,20 @@ const router = new Router({
           },
         },
         {
+          path: 'favorite',
+          component: ComingSoon,
+        },
+        {
+          path: 'highlights',
+          component: ComingSoon,
+        },
+        {
           path: 'request-feedback',
           component: WorkspaceRequest,
+        },
+        {
+          path: 'archived',
+          component: ComingSoon,
         },
         {
           path: 'give-feedback',
@@ -189,7 +204,7 @@ router.afterEach(async (to, from, next) => {
   store.commit('setLoading', false);
 });
 
-async function completeAuth(to, from, next) {
+export async function completeAuth(to, from, next) {
   if (auth.isSignInWithEmailLink(window.location.href)) {
     const email = window.localStorage.getItem('emailForSignIn');
     if (!email) {
@@ -199,25 +214,8 @@ async function completeAuth(to, from, next) {
     const result = await auth.signInWithEmailLink(email, window.location.href);
     window.localStorage.removeItem('emailForSignIn');
 
-    const { user } = result;
-    store.dispatch('user/setUserAuth', user);
-
-    // Create new user profile
-    if (result.additionalUserInfo.isNewUser) {
-      await createUserProfileDocument(user);
-      await store.dispatch('user/bindUser', user.uid);
-      store.dispatch('workspace/setAllWorkspaces', []);
-      return next('/create-name');
-    }
-
-    // Redirect to invites if present
-    const invitedWorkspaces = await getInvitedWorkspaces(user.email);
-    if (invitedWorkspaces.length) {
-      return next('/select-workspace');
-    }
-
-    await store.dispatch('user/bindUser', user.uid);
-    return next('/workspace');
+    const nextRoute = await handleLoginAndReturnRedirect(result);
+    next(nextRoute);
   }
   return next('/');
 }

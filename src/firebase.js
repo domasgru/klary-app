@@ -15,9 +15,12 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+
 export const auth = firebase.auth();
 export const db = firebase.firestore();
 export const { FieldValue } = firebase.firestore;
+export const loginWithGoogle = async () => auth.signInWithPopup(googleAuthProvider);
 export const login = (email, redirectToPage = '') => {
   const actionCodeSettings = {
     url: redirectToPage ? `${window.location.origin}${redirectToPage}` : window.location.href,

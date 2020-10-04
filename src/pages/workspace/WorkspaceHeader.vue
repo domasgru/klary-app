@@ -48,14 +48,14 @@
       <div
         class="navigation__user"
       >
-        <BaseInitial
+        <BaseAvatar
           class="navigation__workspace-initial"
           :name="currentWorkspace.name"
         />
         <div class="navigation__workspace-name base-typography--button2">
           {{ currentWorkspace.name }}
         </div>
-        <BaseInitial
+        <BaseAvatar
           class="navigation__user-initial"
           :name="userData.name"
         />
@@ -63,7 +63,7 @@
       <template v-slot:content>
         <div class="user-popup ">
           <div class="user-popup__user-info base-typography--b-14-20">
-            <BaseInitial
+            <BaseAvatar
               class="user-popup__initial"
               :name="userData.name"
             />
@@ -87,7 +87,7 @@
               Workspace:
             </div>
             <div class="user-popup__workspace-info">
-              <BaseInitial
+              <BaseAvatar
                 class="user-popup__workspace-initial"
                 :name="currentWorkspace.name"
               />

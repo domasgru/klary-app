@@ -4,6 +4,7 @@ $primary-300: #511fdc;
 $primary-400: #4817cf;
 $primary-500: #3f10c2;
 $primary-disabled: rgba($primary-300, 0.6);
+$primary-active: rgba($primary-300, 0.2);
 $primary: $primary-300;
 
 $secondary-100: #240a69;
@@ -36,3 +37,5 @@ $grey-900:  #2e2e33;
 $stroke: 1px solid $grey-200;
 
 $border-radius: 8px;
+
+$container: 1232px;

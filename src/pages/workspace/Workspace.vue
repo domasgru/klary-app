@@ -2,7 +2,8 @@
   <div class="workspace">
     <Header />
     <div class="container">
-      <router-view />
+      <Sidebar class="workspace__sidebar" />
+      <router-view class="workspace__main" />
     </div>
   </div>
 </template>
@@ -11,10 +12,12 @@
 import { mapState, mapActions } from 'vuex';
 import { logout } from '@/firebase';
 import Header from './WorkspaceHeader.vue';
+import Sidebar from './WorkspaceSidebar.vue';
 
 export default {
   components: {
     Header,
+    Sidebar,
   },
   computed: {
     ...mapState('workspace', ['currentWorkspace']),
@@ -37,11 +40,21 @@ export default {
   padding-bottom: 80px;
   overflow: hidden;
   background: $grey-100;
+
+  &__sidebar {
+    width: 200px;
+    margin-right: 8.54%;
+  }
+
+  &__main {
+    flex-grow: 1;
+  }
 }
 
 .container {
+  display: flex;
   width: 100%;
-  max-width: 1234px;
+  max-width: $container;
   height: 100%;
   padding: 0 32px;
   padding-top: 80px;

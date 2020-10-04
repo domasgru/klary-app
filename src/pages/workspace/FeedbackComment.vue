@@ -3,13 +3,14 @@
     <div class="feedback-comment__header">
       <div class="feedback-comment__line-top" />
       <div class="feedback-comment__author">
-        <BaseInitial
+        <BaseAvatar
           class="feedback-comment__initial"
-          :name="comment.author.name"
+          :name="commentAuthor.name"
+          :picture="commentAuthor.googlePicture || ''"
           size="sm"
         />
         <p class="feedback-comment__author-name base-typography--b-14-20">
-          {{ comment.author.name }}
+          {{ commentAuthor.name }}
         </p>
         <BaseTimestamp :timestamp="comment.createdAt.seconds" />
       </div>
@@ -22,33 +23,14 @@
       v-if="comment.replies && comment.replies.length"
       class="feedback-comment__replies"
     >
-      <div
+      <FeedbakCommentReply
         v-for="(reply, index) in comment.replies"
         :key="index"
-        class="comment-reply"
-      >
-        <div class="comment-reply__left">
-          <BaseInitial
-            size="sm"
-            :name="reply.author.name"
-          />
-          <div class="comment-reply__vertical-line" />
-        </div>
-        <div class="comment-reply__right">
-          <div class="comment-reply__name-and-time">
-            <p class="comment-reply__name base-typography--b-14-20">
-              {{ reply.author.name }}
-            </p>
-            <BaseTimestamp :timestamp="reply.createdAt.seconds" />
-          </div>
-          <div class="comment-reply__content">
-            {{ reply.content }}
-          </div>
-        </div>
-      </div>
+        :reply="reply"
+      />
     </div>
     <div class="feedback-comment__reply">
-      <BaseInitial
+      <BaseAvatar
         class="feedback-comment__reply-initial"
         :name="userData.name"
         size="sm"
@@ -74,13 +56,21 @@
 import { mapState } from 'vuex';
 import { addCommentReply } from '@/firebase';
 import { required } from 'vuelidate/lib/validators';
+import { useGetUser } from '@/composables/useGetUser';
+import FeedbakCommentReply from './FedbackCommentReply.vue';
 
 export default {
+  components: {
+    FeedbakCommentReply,
+  },
   props: {
     comment: {
       type: Object,
       required: true,
     },
+  },
+  setup(props) {
+    return { commentAuthor: useGetUser(props.comment.author.uid) };
   },
   data() {
     return {
@@ -149,6 +139,7 @@ export default {
 
   &__content {
     padding: 24px;
+    word-break: break-word;
     white-space: pre-line;
     background: $light;
     border: $stroke;
@@ -196,47 +187,6 @@ export default {
     border-right: $stroke;
     border-bottom: $stroke;
     border-left: $stroke;
-  }
-}
-
-.comment-reply {
-  display: flex;
-
-  &__left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  &__right {
-    flex-grow: 1;
-    justify-content: space-between;
-    padding-left: 16px;
-  }
-
-  &__name-and-time {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-
-  &__content {
-    white-space: pre-line;
-  }
-
-  &__name {
-    color: $grey-500;
-  }
-
-  &:not(:last-child) &__vertical-line {
-    flex-grow: 1;
-    width: 2px;
-    margin: 4px 0;
-    background: $grey-200;
-  }
-
-  &:not(:last-child) &__content {
-    margin-bottom: 32px;
   }
 }
 </style>
