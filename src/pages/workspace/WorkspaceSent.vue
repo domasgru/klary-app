@@ -1,5 +1,8 @@
 <template>
-  <div class="feedbacks">
+  <div
+    class="feedbacks"
+    :class="{'feedbacks--not-empty': sentFeedbacks.length}"
+  >
     <div
       v-for="(feedback, index) in sentFeedbacks"
       :key="`feedback-${index}`"
@@ -28,9 +31,7 @@ export default {
       ...mapState('feedback', ['sentFeedbacks']),
     },
     methods: {
-      ...mapActions('feedback', ['setCurrentFeedback']),
       openFeedback(feedback) {
-        this.setCurrentFeedback(feedback);
         this.$router.push({ path: `/workspace/sent/feedback/${feedback.id}` });
       },
     },
@@ -41,8 +42,11 @@ export default {
 .feedbacks {
   overflow: hidden;
   background: $light;
-  border: 1px solid $grey-200;
   border-radius: 8px;
+
+  &--not-empty {
+    border: 1px solid $grey-200;
+  }
 }
 
 .feedback {

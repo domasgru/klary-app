@@ -161,19 +161,36 @@ const router = new Router({
           component: WorkspaceGive,
         },
         {
-          path: '*/feedback/:id',
+          path: 'received/feedback/:id',
           component: WorkspaceFeedbackView,
           beforeEnter: async (to, from, next) => {
-            if (!store.state.feedback.currentFeedback) {
+            if (!store.state.feedback.receivedFeedbacks?.some((fb) => fb.id === to.params.id)) {
               try {
-                const feedback = await getFeedback(to.params.id);
-                store.dispatch('feedback/setCurrentFeedback', feedback);
+                await store.dispatch('feedback/bindCurrentFeedback', to.params.id);
               } catch (e) {
                 console.error(e);
               }
             }
             next();
           },
+          // eslint-disable-next-line max-len
+          props: (route) => ({ feedbackData: store.state.feedback.receivedFeedbacks?.find((fb) => fb.id === route.params.id) }),
+        },
+        {
+          path: 'sent/feedback/:id',
+          component: WorkspaceFeedbackView,
+          beforeEnter: async (to, from, next) => {
+            if (!store.state.feedback.sentFeedbacks?.some((fb) => fb.id === to.params.id)) {
+              try {
+                await store.dispatch('feedback/bindCurrentFeedback', to.params.id);
+              } catch (e) {
+                console.error(e);
+              }
+            }
+            next();
+          },
+          // eslint-disable-next-line max-len
+          props: (route) => ({ feedbackData: store.state.feedback.sentFeedbacks?.find((fb) => fb.id === route.params.id) }),
         },
       ],
     },
@@ -230,6 +247,17 @@ async function completeUser(to, from, next) {
     return next('/create-name');
   }
   return next();
+}
+
+async function beforeEnterFeedbackView(to, from, next) {
+  if (!store.state.feedback.receivedFeedbacks?.some((fb) => fb.id === to.params.id)) {
+    try {
+      await store.dispatch('feedback/bindCurrentFeedback', to.params.id);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  next();
 }
 
 async function isLoggedIn() {

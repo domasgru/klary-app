@@ -2,6 +2,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import shortId from 'shortid';
+import { FEEDBACK_ACTION_TYPES } from '@/constants';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAFS8RVfGHghmSagIJ3FDRVcYTWaPCGMMw',
@@ -20,6 +21,7 @@ const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 export const auth = firebase.auth();
 export const db = firebase.firestore();
 export const { FieldValue } = firebase.firestore;
+export const getTimeNow = () => firebase.firestore.Timestamp.fromDate(new Date());
 export const loginWithGoogle = async () => auth.signInWithPopup(googleAuthProvider);
 export const login = (email, redirectToPage = '') => {
   const actionCodeSettings = {
@@ -127,6 +129,15 @@ export const updateWorkspaceInvite = (id, data) => {
 export const updateWorkspaceTeam = (id, uid) => db.doc(`workspaces/${id}`).update({ team: firebase.firestore.FieldValue.arrayUnion(uid) });
 
 // Feedback
+export const updateFeedback = ({ feedbackId, path, value }) => db.collection('feedbacks').doc(feedbackId).update({ [path]: value });
+export const updateFeedbackLastAction = ({ userId, feedbackId, actionType }) => updateFeedback({
+    feedbackId,
+    path: `participants.${userId}.lastAction`,
+    value: {
+      createdAt: getTimeNow(),
+      type: actionType,
+    },
+  });
 export const getFeedback = async (id) => {
   const feedback = await db.doc(`feedbacks/${id}`).get();
   return { id: feedback.id, ...feedback.data() };
@@ -142,6 +153,9 @@ export const addComment = async (feedbackId, content, author) => {
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
   };
   const discussionRef = db.collection(`feedbacks/${feedbackId}/discussion`);
+  updateFeedbackLastAction(
+    { userId: author.uid, feedbackId, actionType: FEEDBACK_ACTION_TYPES.COMMENT },
+  );
   return discussionRef.add(comment);
 };
 
@@ -156,8 +170,13 @@ export const addCommentReply = async (feedbackId, commentId, content, author) =>
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
   };
   const commentRef = db.doc(`feedbacks/${feedbackId}/discussion/${commentId}`);
+  updateFeedbackLastAction(
+    { userId: author.uid, feedbackId, actionType: FEEDBACK_ACTION_TYPES.COMMENT },
+  );
   return commentRef.update({ replies: firebase.firestore.FieldValue.arrayUnion(reply) });
 };
+
+export const updateSeenAt = async (userId, feedbackId) => updateFeedback({ feedbackId, path: `participants.${userId}.seenAt`, value: getTimeNow() });
 
 export const createFeedbackRequest = async (requestData) => {
   const feedbackRequest = {
@@ -169,12 +188,9 @@ export const createFeedbackRequest = async (requestData) => {
 };
 
 export const createFeedback = async (feedbackData) => {
-  const timeNow = firebase.firestore.Timestamp.fromDate(new Date());
   const feedback = {
-    createdAt: timeNow,
+    createdAt: getTimeNow(),
     ...feedbackData,
-    author: { name: feedbackData.author.name, seenAt: timeNow, lastAction: { type: 'CREATE', createdAt: timeNow } },
-    receiver: { name: feedbackData.receiver.name, seenAt: null, lastAction: { type: '', createdAt: null } },
   };
   const feedbackRef = db.collection('feedbacks');
   return feedbackRef.add(feedback);

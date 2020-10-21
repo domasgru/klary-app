@@ -25,6 +25,7 @@
     >
       <FeedbakCommentReply
         v-for="(reply, index) in comment.replies"
+        :id="reply.id"
         :key="index"
         :reply="reply"
       />
@@ -33,6 +34,7 @@
       <BaseAvatar
         class="feedback-comment__reply-initial"
         :name="userData.name"
+        :picture="userData.googlePicture || ''"
         size="sm"
       />
       <div class="feedback-comment__reply-input-wrapper">
@@ -84,7 +86,6 @@ export default {
   },
   computed: {
     ...mapState('user', ['userData']),
-    ...mapState('feedback', ['currentFeedback']),
   },
   methods: {
     addReply(commentId) {
@@ -92,7 +93,7 @@ export default {
         return;
       }
 
-      addCommentReply(this.currentFeedback.id, commentId, this.replyContent, this.userData);
+      addCommentReply(this.$route.params.id, commentId, this.replyContent, this.userData);
       this.replyContent = '';
     },
   },

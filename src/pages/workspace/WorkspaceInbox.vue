@@ -1,7 +1,10 @@
 <template>
-  <div class="feedbacks">
+  <div
+    class="feedbacks"
+    :class="{'feedbacks--not-empty': receivedFeedbacks.length}"
+  >
     <div
-      v-for="(feedback, index) in feedbacks"
+      v-for="(feedback, index) in receivedFeedbacks"
       :key="`feedback-${index}`"
       class="feedback"
       @click="openFeedback(feedback)"
@@ -24,16 +27,15 @@ export default {
     },
     computed: {
       ...mapState('user', ['userData']),
-      ...mapState('feedback', ['feedbacks']),
+      ...mapState('feedback', ['receivedFeedbacks']),
     },
     async beforeRouteEnter(to, from, next) {
       // await this.bindFeedbacks(this.userData.uid);
       next();
     },
     methods: {
-      ...mapActions('feedback', ['bindFeedbacks', 'setCurrentFeedback']),
+      ...mapActions('feedback', ['bindFeedbacks']),
       openFeedback(feedback) {
-        this.setCurrentFeedback(feedback);
         this.$router.push({ path: `/workspace/received/feedback/${feedback.id}` });
       },
     },
@@ -44,8 +46,11 @@ export default {
 .feedbacks {
   overflow: hidden;
   background: $light;
-  border: 1px solid $grey-200;
   border-radius: 8px;
+
+  &--not-empty {
+    border: 1px solid $grey-200;
+  }
 }
 
 .feedback {

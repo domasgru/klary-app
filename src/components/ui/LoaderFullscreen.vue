@@ -1,10 +1,6 @@
 <template>
   <div class="loader">
     <div class="loader__animation">
-      <LottiePlayer
-        :src="animationJSON"
-        :options="{autoplay: true, loop: true, width: '176px', height: '176px'}"
-      />
       <BaseSvg
         class="loader__logo"
         name="logo"
@@ -12,18 +8,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import animationJSON from '@/assets/lottie/loader.json';
-
-export default {
-  data() {
-    return {
-      animationJSON,
-    };
-  },
-};
-</script>
 
 <style lang="scss" scoped>
 .loader {

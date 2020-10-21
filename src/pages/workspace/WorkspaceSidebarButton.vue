@@ -75,7 +75,6 @@ export default {
   &__icon {
     width: 16px;
     height: 16px;
-    padding: 2px;
     margin-right: 8px;
   }
 }

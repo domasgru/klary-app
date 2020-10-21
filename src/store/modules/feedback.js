@@ -3,7 +3,7 @@ import { db } from '@/firebase';
 
 export default {
   state: {
-    feedbacks: null,
+    receivedFeedbacks: null,
     sentFeedbacks: null,
     currentFeedback: null,
     currentFeedbackComments: null,
@@ -17,9 +17,12 @@ export default {
     setCurrentFeedback({ commit }, value) {
       commit('setCurrentFeedback', value);
     },
+    bindCurrentFeedback: firestoreAction(({ bindFirestoreRef }, feedbackId) => (
+      bindFirestoreRef('currentFeedback', db.collection('feedbacks').doc(feedbackId))
+    )),
     bindFeedbacks: firestoreAction(({ bindFirestoreRef }, { receiverId, workspaceId }) => (
       bindFirestoreRef(
-        'feedbacks',
+        'receivedFeedbacks',
         db.collection('feedbacks')
           .where('receiverId', '==', receiverId)
           .where('workspaceId', '==', workspaceId)

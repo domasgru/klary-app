@@ -48,6 +48,7 @@ export default {
 
   &__main {
     flex-grow: 1;
+    align-self: flex-start;
   }
 }
 
@@ -57,7 +58,7 @@ export default {
   max-width: $container;
   height: 100%;
   padding: $container-padding;
-  padding-top: 80px;
+  padding-top: 40px;
   margin: auto;
 }
 </style>

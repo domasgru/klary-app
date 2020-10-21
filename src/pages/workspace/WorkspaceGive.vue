@@ -39,7 +39,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import { createFeedback } from '@/firebase';
+import { createFeedback, getTimeNow } from '@/firebase';
+import { FEEDBACK_ACTION_TYPES } from '@/constants';
 import WorkspaceSelectTeamate from './WorkspaceSelectTeamate.vue';
 
 export default {
@@ -71,12 +72,31 @@ export default {
       this.userInput = '';
     },
     sendFeedback() {
+      const timeNow = getTimeNow();
       createFeedback({
         authorId: this.userData.uid,
         receiverId: this.selectedUser.uid,
         workspaceId: this.currentWorkspace.id,
-        author: this.userData,
-        receiver: this.selectedUser,
+        participants: {
+          [this.userData.uid]: {
+            name: this.userData.name,
+            googlePicture: this.userData.googlePicture,
+            lastAction: {
+              createdAt: timeNow,
+              type: FEEDBACK_ACTION_TYPES.CREATE,
+            },
+            seenAt: timeNow,
+          },
+          [this.selectedUser.uid]: {
+            name: this.selectedUser.name,
+            googlePicture: this.selectedUser.googlePicture,
+            lastAction: {
+              createdAt: null,
+              type: '',
+            },
+            seenAt: null,
+          },
+        },
         title: this.title,
         content: this.content,
       });

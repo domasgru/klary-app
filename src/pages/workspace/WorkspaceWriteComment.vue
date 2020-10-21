@@ -45,14 +45,13 @@ export default {
   },
   computed: {
     ...mapState('user', ['userData']),
-    ...mapState('feedback', ['currentFeedback']),
   },
   methods: {
     addComment() {
       if (this.$v.comment.$invalid) {
         return;
       }
-      addComment(this.currentFeedback.id, this.comment, this.userData);
+      addComment(this.$route.params.id, this.comment, this.userData);
       this.comment = '';
     },
   },

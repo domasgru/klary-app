@@ -1,5 +1,12 @@
 <template>
-  <div class="card">
+  <div
+    class="card"
+    :class="{'card--seen': isSeen}"
+  >
+    <div
+      v-show="!isSeen"
+      class="card__seen-indicator"
+    />
     <div class="card__description">
       <div class="card__title base-typography--b-16-24">
         {{ feedbackData.title }}
@@ -16,7 +23,7 @@
         class="card__initial"
         :name="user.name"
         :picture="user.googlePicture || ''"
-        size="sm"
+        size="xs"
       />
       <div class="card__name base-typography--b-14-20">
         {{ user.name }}
@@ -35,8 +42,12 @@
 
 <script>
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { useGetUser } from '@/composables/useGetUser';
 import { mapState } from 'vuex';
+import { FEEDBACK_ACTION_TYPES } from '@/constants';
+
+dayjs.extend(relativeTime);
 
 export default {
   props: {
@@ -57,8 +68,55 @@ export default {
     return { user };
   },
   computed: {
+    ...mapState('user', ['userData']),
     lastAction() {
+      const { lastAction, name } = Object.values(this.feedbackData.participants)
+      .reduce((max, participant) => {
+        if (!participant.lastAction.createdAt) {
+          return max;
+        }
+
+        return max.lastAction.createdAt?.seconds > participant.lastAction.createdAt?.seconds
+        ? max : participant;
+      });
+
+      if (!lastAction.type || !lastAction.createdAt) {
+        return '';
+      }
+
+      const lastActionRelativeTime = dayjs(lastAction.createdAt.seconds * 1000).fromNow();
+
+      if (lastAction.type === FEEDBACK_ACTION_TYPES.COMMENT) {
+        return `${name} commented ${lastActionRelativeTime}`;
+      } if (lastAction.type === FEEDBACK_ACTION_TYPES.CREATE) {
+        return `${name} created a feedback ${lastActionRelativeTime}`;
+      }
       return '';
+    },
+    isSeen() {
+      const { participants } = this.feedbackData;
+      const currentUser = participants[this.userData.uid];
+
+      // User didn't see feedback at all
+      if (!currentUser.seenAt) {
+        return false;
+      }
+
+      const { lastAction, name } = Object.entries(participants)
+        .filter(([id, participant]) => id !== this.userData.uid)
+        .map(([id, value]) => value)
+        .reduce((max, participant) => (
+          max.lastAction.createdAt.seconds > participant.lastAction.createdAt.seconds
+          ? max
+          : participant
+        ));
+
+      // No actions from other users
+      if (!lastAction.createdAt) {
+        return true;
+      }
+
+      return currentUser.seenAt.seconds > lastAction.createdAt.seconds;
     },
   },
 };
@@ -66,18 +124,34 @@ export default {
 
 <style lang="scss" scoped>
 .card {
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
   height: 88px;
-  padding: 24px 36px 24px 32px;
+  padding: 24px 36px 24px 40px;
   color: $dark;
   user-select: none;
+  background: $light;
   //transition: background 0.2s;
 
   &:hover {
     cursor: pointer;
     background: rgba($grey-100, 0.4);
+  }
+
+  &--seen {
+    background: $grey-50;
+  }
+
+  &__seen-indicator {
+    position: absolute;
+    top: 42px;
+    left: 16px;
+    width: 8px;
+    height: 8px;
+    background: $primary;
+    border-radius: 50%;
   }
 
   &__description {
