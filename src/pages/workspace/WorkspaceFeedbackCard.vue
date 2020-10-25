@@ -116,7 +116,7 @@ export default {
         return true;
       }
 
-      return currentUser.seenAt.seconds > lastAction.createdAt.seconds;
+      return currentUser.seenAt.seconds >= lastAction.createdAt.seconds;
     },
   },
 };

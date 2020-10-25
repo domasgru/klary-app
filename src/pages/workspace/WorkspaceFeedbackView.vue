@@ -28,6 +28,7 @@
       :key="index"
       :ref="comment.id"
       :comment="comment"
+      :unseen-comments="unseenComments"
     />
     <WorkspaceWriteComment />
   </div>
@@ -61,14 +62,17 @@ export default {
     const currentUser = computed(() => $store.state.user.userData);
     const author = useGetUser(props.feedbackData.authorId);
     const unseenComments = ref([]);
-    const commentObserver = new IntersectionObserver((entries, observer) => {
-      console.log('VEIKIU', entries[0]);
-        if (!entries[0].isIntersecting) {
-          return;
-        }
-        console.log('fiksuoju');
+    const updateUnseenComments = (id) => {
+      // console.log(unseenComments.value.filter((comment) => comment.id !== id));
+      setTimeout(() => {
+        console.log(unseenComments.value, id);
+        unseenComments.value = unseenComments.value.filter((comment) => comment.id !== id);
+        }, 2000);
+    };
+    const commentObserver = new IntersectionObserver(([entry], observer) => {
         updateSeenAt(currentUser.value.uid, props.feedbackData.id);
-        commentObserver.unobserve(entries[0].target);
+        updateUnseenComments(entry.target.id);
+        commentObserver.unobserve(entry.target);
       }, {
         threshold: 1.0,
     });
@@ -106,6 +110,7 @@ export default {
       });
     });
     return {
+      unseenComments,
       currentFeedbackComments,
       author,
     };

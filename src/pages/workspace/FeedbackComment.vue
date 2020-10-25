@@ -16,7 +16,10 @@
       </div>
       <div class="feedback-comment__line-bottom" />
     </div>
-    <div class="feedback-comment__content base-typography--b-16-24">
+    <div
+      class="feedback-comment__content base-typography--b-16-24"
+      :class="{'feedback-comment__content--unseen': unseenComments.some(unseenComment => unseenComment.id === comment.id)}"
+    >
       {{ comment.content }}
     </div>
     <div
@@ -27,6 +30,7 @@
         v-for="(reply, index) in comment.replies"
         :id="reply.id"
         :key="index"
+        :class="{'comment-reply--unseen': unseenComments.some(unseenComment => unseenComment.id === reply.id)}"
         :reply="reply"
       />
     </div>
@@ -68,6 +72,10 @@ export default {
   props: {
     comment: {
       type: Object,
+      required: true,
+    },
+    unseenComments: {
+      type: Array,
       required: true,
     },
   },
@@ -146,6 +154,11 @@ export default {
     border: $stroke;
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
+    transition: background 0.3s;
+
+    &--unseen {
+      background: $primary-active;
+    }
   }
 
   &__reply {
@@ -184,7 +197,7 @@ export default {
   }
 
   &__replies {
-    padding: 24px;
+    padding: 24px 0;
     border-right: $stroke;
     border-bottom: $stroke;
     border-left: $stroke;

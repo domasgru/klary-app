@@ -41,6 +41,13 @@ export default {
 <style lang="scss" scoped>
 .comment-reply {
   display: flex;
+  padding: 0 24px;
+  transition: background 0.3s;
+
+  // Comes from upper component
+  &--unseen {
+    background: $primary-active;
+  }
 
   &__left {
     display: flex;
