@@ -20,20 +20,20 @@ export default {
     bindCurrentFeedback: firestoreAction(({ bindFirestoreRef }, feedbackId) => (
       bindFirestoreRef('currentFeedback', db.collection('feedbacks').doc(feedbackId))
     )),
-    bindFeedbacks: firestoreAction(({ bindFirestoreRef }, { receiverId, workspaceId }) => (
+    bindReceivedFeedbacks: firestoreAction(({ bindFirestoreRef }, { userId, workspaceId }) => (
       bindFirestoreRef(
         'receivedFeedbacks',
         db.collection('feedbacks')
-          .where('receiverId', '==', receiverId)
+          .where('receiverId', '==', userId)
           .where('workspaceId', '==', workspaceId)
           .orderBy('createdAt', 'desc'),
       )
     )),
-    bindSentFeedbacks: firestoreAction(({ bindFirestoreRef }, { authorId, workspaceId }) => (
+    bindSentFeedbacks: firestoreAction(({ bindFirestoreRef }, { userId, workspaceId }) => (
       bindFirestoreRef(
         'sentFeedbacks',
         db.collection('feedbacks')
-          .where('authorId', '==', authorId)
+          .where('authorId', '==', userId)
           .where('workspaceId', '==', workspaceId)
           .orderBy('createdAt', 'desc'),
       )

@@ -40,7 +40,7 @@
 <script>
 import { mapState } from 'vuex';
 import { createFeedback, getTimeNow } from '@/firebase';
-import { FEEDBACK_ACTION_TYPES } from '@/constants';
+import { FEEDBACK_ACTION_TYPES, FEEDBACK_STATUSES } from '@/constants';
 import WorkspaceSelectTeamate from './WorkspaceSelectTeamate.vue';
 
 export default {
@@ -99,6 +99,7 @@ export default {
         },
         title: this.title,
         content: this.content,
+        status: FEEDBACK_STATUSES.ACTIVE,
       });
     },
   },

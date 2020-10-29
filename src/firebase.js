@@ -86,7 +86,8 @@ export const updateUserProfileDocument = (uid, userData) => db.collection('users
 export const getUserWorkspaces = async (userId) => (await db.collection('workspaces').where('team', 'array-contains', userId).get())
   .docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-export const getInvitedWorkspaces = async (userEmail) => (await db.collection('workspaceInvites').where('email', '==', userEmail).where('status', '==', 'PENDING').get())
+export const getInvitedWorkspaces = async (userEmail) => (
+  await db.collection('workspaceInvites').where('email', '==', userEmail).where('status', '==', 'PENDING').get())
   .docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
 export const createWorkspace = async (userId, workspaceName) => {
@@ -176,7 +177,9 @@ export const addCommentReply = async (feedbackId, commentId, content, author) =>
   return commentRef.update({ replies: firebase.firestore.FieldValue.arrayUnion(reply) });
 };
 
-export const updateSeenAt = async (userId, feedbackId) => updateFeedback({ feedbackId, path: `participants.${userId}.seenAt`, value: getTimeNow() });
+export const updateSeenAt = async (userId, feedbackId) => updateFeedback(
+  { feedbackId, path: `participants.${userId}.seenAt`, value: getTimeNow() },
+);
 
 export const createFeedbackRequest = async (requestData) => {
   const feedbackRequest = {

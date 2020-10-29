@@ -1,60 +1,23 @@
 <template>
-  <div
-    class="feedbacks"
-    :class="{'feedbacks--not-empty': sentFeedbacks.length}"
-  >
-    <div
-      v-for="(feedback, index) in sentFeedbacks"
-      :key="`feedback-${index}`"
-      class="feedback"
-      @click="openFeedback(feedback)"
-    >
-      <WorkspaceFeedbackCard
-        :feedback-data="feedback"
-        :is-sent-feedback="true"
-      />
-      <div class="feedback__separator" />
-    </div>
-  </div>
+  <WorkspaceFeedbackList
+    v-if="!isLoading"
+    :feedbacks="feedbacks"
+    @open="openFeedback"
+  />
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import WorkspaceFeedbackCard from './WorkspaceFeedbackCard.vue';
+import { useFeedbackList } from '@/composables/useFeedback';
+import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
 
 export default {
-    components: {
-      WorkspaceFeedbackCard,
-    },
-    computed: {
-      ...mapState('user', ['userData']),
-      ...mapState('feedback', ['sentFeedbacks']),
-    },
-    methods: {
-      openFeedback(feedback) {
-        this.$router.push({ path: `/workspace/sent/feedback/${feedback.id}` });
-      },
-    },
-  };
+  components: {
+    WorkspaceFeedbackList,
+  },
+  setup() {
+    const { feedbacks, isLoading, openFeedback } = useFeedbackList('sent');
+    return { feedbacks, isLoading, openFeedback };
+  },
+};
 </script>
-
-<style lang="scss" scoped>
-.feedbacks {
-  overflow: hidden;
-  background: $light;
-  border-radius: 8px;
-
-  &--not-empty {
-    border: 1px solid $grey-200;
-  }
-}
-
-.feedback {
-  &__separator {
-    width: 94%;
-    height: 1px;
-    margin: auto;
-    background: $grey-100;
-  }
-}
-</style>

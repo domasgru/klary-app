@@ -22,11 +22,9 @@ import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
 import {
   auth,
   getCurrentUser,
-  createUserProfileDocument,
   getWorkspace,
   getUserWorkspaces,
   getInvitedWorkspaces,
-  getFeedback,
 } from '@/firebase';
 
 Vue.use(Router);
@@ -103,12 +101,8 @@ const router = new Router({
         if (currentWorkspace) {
           const workspace = await getWorkspace(currentWorkspace);
           await Promise.all([
-            store.dispatch('feedback/bindFeedbacks', { receiverId: uid, workspaceId: currentWorkspace }),
+            store.dispatch('feedback/bindReceivedFeedbacks', { userId: uid, workspaceId: currentWorkspace }),
             store.dispatch('workspace/setTeam', currentWorkspace),
-            store.dispatch('feedback/bindSentFeedbacks', {
-              authorId: uid,
-              workspaceId: currentWorkspace,
-            }),
           ]);
           store.dispatch('workspace/setCurrentWorkspace', workspace);
           return next();
@@ -129,16 +123,6 @@ const router = new Router({
         {
           path: 'sent',
           component: WorkspaceSent,
-          beforeEnter: async (to, from, next) => {
-            if (!store.state.feedback.sentFeedbacks) {
-              await store.dispatch('feedback/bindSentFeedbacks', {
-                authorId: store.state.user.userData.uid,
-                workspaceId: store.state.workspace.currentWorkspace.id,
-              });
-              return next();
-            }
-            return next();
-          },
         },
         {
           path: 'favorite',
