@@ -1,10 +1,8 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Vuelidate from 'vuelidate';
-import VueFuse from 'vue-fuse';
+import VueRouter from 'vue-router'; // https://github.com/vuejs/vue-router-next
+import Vuelidate from 'vuelidate'; // https://github.com/vuelidate/vuelidate/tree/next
 import VueShortKey from 'vue-shortkey';
 import VueCompositionAPI from '@vue/composition-api';
-import { firestorePlugin } from 'vuefire';
 import ClickOutside from 'v-click-outside';
 import App from './App.vue';
 import router from './router';
@@ -13,9 +11,7 @@ import './firebase';
 import './scss/global/global.scss';
 
 Vue.use(VueRouter);
-Vue.use(firestorePlugin);
 Vue.use(Vuelidate);
-Vue.use(VueFuse);
 Vue.use(VueShortKey);
 Vue.use(VueCompositionAPI);
 Vue.directive('click-outside', ClickOutside.directive);

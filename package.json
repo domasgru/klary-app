@@ -100,7 +100,11 @@
       "template-curly-spacing": "off",
       "indent": "off",
       "max-len": [
-        "error", {"code": 140}
+        "error",
+        {
+          "code": 140,
+          "ignoreStrings": true
+        }
       ]
     }
   },

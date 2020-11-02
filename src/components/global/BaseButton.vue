@@ -10,12 +10,10 @@
 </template>
 
 <script>
+const VALID_BUTTON_TYPES = ['sm', 'md', 'lg', 'xlg'];
+
 export default {
   props: {
-    text: {
-      type: String,
-      default: '',
-    },
     disabled: {
       type: Boolean,
       default: false,
@@ -28,22 +26,29 @@ export default {
       type: Boolean,
       default: false,
     },
+    size: {
+      type: String,
+      default: 'md',
+      validator: (value) => VALID_BUTTON_TYPES.includes(value),
+    },
   },
   computed: {
-    computedClasses() {
-      return {
-        'button--disabled': this.disabled,
-        'button--fluid': this.fluid,
-        'button--inverse': this.inverse,
-      };
-    },
+    computedClasses: ({
+      disabled, fluid, inverse, size,
+    }) => (
+      {
+        'button--disabled': disabled,
+        'button--fluid': fluid,
+        'button--inverse': inverse,
+        [`button--${size}`]: size,
+      }
+    ),
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .button {
-  padding: 16px 24px;
   color: white;
   background: $primary;
   border: none;
@@ -54,6 +59,22 @@ export default {
   &:hover {
     cursor: pointer;
     background: $primary-400;
+  }
+
+  &--sm {
+    padding: 6px 16px;
+  }
+
+  &--md {
+    padding: 10px 20px;
+  }
+
+  &--lg {
+    padding: 12px 20px;
+  }
+
+  &--xlg {
+    padding: 16px 24px;
   }
 
   &--disabled {

@@ -9,10 +9,6 @@ import GetStartedCreateTeam from '@/pages/GetStartedCreateTeam.vue';
 import GetStartedInviteTeam from '@/pages/GetStartedInviteTeam.vue';
 import Workspace from '@/pages/workspace/Workspace.vue';
 import WorkspaceInbox from '@/pages/workspace/WorkspaceInbox.vue';
-import WorkspaceSent from '@/pages/workspace/WorkspaceSent.vue';
-import WorkspaceRequest from '@/pages/workspace/WorkspaceRequest.vue';
-import WorkspaceGive from '@/pages/workspace/WorkspaceGive.vue';
-import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
 import SelectWorkspace from '@/pages/SelectWorkspace.vue';
 import PageNotFound from '@/pages/PageNotFound.vue';
 import ComingSoon from '@/pages/ComingSoon.vue';
@@ -26,6 +22,11 @@ import {
   getUserWorkspaces,
   getInvitedWorkspaces,
 } from '@/firebase';
+
+const WorkspaceSent = () => import('@/pages/workspace/WorkspaceSent.vue');
+const WorkspaceGive = () => import('@/pages/workspace/WorkspaceGive.vue');
+const WorkspaceRequest = () => import('@/pages/workspace/WorkspaceRequest.vue');
+const WorkspaceFeedbackView = () => import('@/pages/workspace/WorkspaceFeedbackView.vue');
 
 Vue.use(Router);
 
