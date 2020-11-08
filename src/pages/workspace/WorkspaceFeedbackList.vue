@@ -22,6 +22,7 @@
 import WorkspaceFeedbackReceivedCard from './WorkspaceFeedbackReceivedCard.vue';
 
 export default {
+  emits: ['open'],
   components: {
     WorkspaceFeedbackReceivedCard,
   },

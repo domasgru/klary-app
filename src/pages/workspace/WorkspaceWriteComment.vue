@@ -6,10 +6,8 @@
     <div class="comment__main">
       <BaseTextarea
         v-model="comment"
-        v-shortkey="['ctrl', 'enter']"
         class="comment__textarea"
         rows="5"
-        @shortkey.native="addComment"
       />
       <BaseButton
         class="comment__button"

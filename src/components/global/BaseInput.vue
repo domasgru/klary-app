@@ -10,7 +10,7 @@
   >
     <label
       v-if="label"
-      :for="`input${_uid}`"
+      :for="`input${$.uid}`"
       class="base-input__label base-typography--caption"
     >
       {{ label }}
@@ -24,26 +24,24 @@
       <!-- INPUT -->
       <input
         v-if="type === 'input'"
-        :id="`input${_uid}`"
+        :id="`input${$.uid}`"
         ref="input"
         type="text"
         class="base-input__input base-typography--b-16-24"
         spellcheck="false"
-        :value="value"
+        :value="modelValue"
         :placeholder="placeholder"
         :autofocus="autofocus"
         :autocomplete="autocomplete ? null : 'off'"
-        v-on="{
-          ...$listeners,
-          input: event => $emit('input', event.target.value)
-        }"
+        v-bind="$attrs"
+        @input="$emit('update:modelValue', $event.target.value)"
         @keydown.enter="handleSubmitKeyDown"
         @keydown.esc="blur"
       >
       <!-- SINGLE SELECT INPUT -->
       <div
         v-if="type==='single-select'"
-        :id="`singleInput-${_uid}`"
+        :id="`singleInput-${$.uid}`"
         class="base-input__input base-input__single-select base-typography--b-16-24"
       >
         <div
@@ -70,19 +68,17 @@
         </div>
         <input
           v-else
-          :id="`input${_uid}`"
+          :id="`input${$.uid}`"
           ref="input"
           class="base-input__single-select-input base-typography--b-16-24"
           spellcheck="false"
           type="text"
-          :value="value"
+          :value="modelValue"
           :placeholder="placeholder"
           :autofocus="autofocus"
           :autocomplete="autocomplete ? null : 'off'"
-          v-on="{
-            ...$listeners,
-            input: event => $emit('input', event.target.value)
-          }"
+          v-bind="$attrs"
+          @input="$emit('update:modelValue', $event.target.value)"
           @keydown.enter="handleSubmitKeyDown"
           @keydown.esc="blur"
         >
@@ -91,11 +87,11 @@
       <div
         ref="multiInputMeasurer"
         class="base-input__multi-input-measurer base-typography--b-16-24"
-        v-text="value"
+        v-text="modelValue"
       />
       <div
         v-if="type=== 'multi-select'"
-        :id="`multiInput-${_uid}`"
+        :id="`multiInput-${$.uid}`"
         class="base-input__multi base-input__input base-typography--b-16-24"
         @mousedown="handleMultiInputMousedown"
       >
@@ -121,20 +117,18 @@
           </button>
         </div>
         <input
-          :id="`input${_uid}`"
+          :id="`input${$.uid}`"
           ref="input"
           class="base-input__multi-input base-typography--b-16-24"
           spellcheck="false"
           type="text"
-          :value="value"
+          :value="modelValue"
           :placeholder="!selectedValues.length ? placeholder : ''"
           :autofocus="autofocus"
           :autocomplete="autocomplete ? null : 'off'"
           :style="{width: multiSelectWidth}"
-          v-on="{
-            ...$listeners,
-            input: event => $emit('input', event.target.value)
-          }"
+          v-bind="$attrs"
+          @input="$emit('update:modelValue', $event.target.value)"
           @keydown.enter="handleSubmitKeyDown"
           @keydown.esc="blur"
         >
@@ -142,16 +136,14 @@
       <!-- TEXTAREA INPUT -->
       <textarea
         v-if="type === 'textarea'"
-        :id="`input${_uid}`"
+        :id="`input${$.uid}`"
         ref="input"
         class="base-input__input base-typography--b-16-24"
         :placeholder="placeholder"
-        :value="value"
+        :value="modelValue"
         :rows="rows"
-        v-on="{
-          ...$listeners,
-          input: event => $emit('input', event.target.value)
-        }"
+        v-bind="$attrs"
+        @input="$emit('update:modelValue', $event.target.value)"
         @keydown.enter="handleSubmitKeyDown"
         @keydown.esc="blur"
       />
@@ -168,12 +160,13 @@ import autosize from 'autosize';
 
 export default {
   inheritAttrs: false,
+  emits: ['focus', 'update:modelValue'],
   props: {
     type: {
       type: String,
       default: 'input',
     },
-    value: {
+    modelValue: {
       type: String,
       default: '',
     },
@@ -297,8 +290,8 @@ export default {
     },
     handleMultiInputMousedown(e) {
       const { input } = this.$refs;
-      const clickingAroundInput = e.target.closest(`#multiInput-${this._uid}`);
-      const clickingInput = e.target.closest(`#input${this._uid}`);
+      const clickingAroundInput = e.target.closest(`#multiInput-${this.$.uid}`);
+      const clickingInput = e.target.closest(`#input${this.$.uid}`);
       if (clickingInput) {
         input.focus();
       } else if (clickingAroundInput) {

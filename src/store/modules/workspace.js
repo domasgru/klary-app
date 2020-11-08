@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import { db, getUserDocument } from '@/firebase';
 import { diff } from 'fast-array-diff';
 
@@ -24,11 +23,7 @@ export default {
       state.teamIds = value;
     },
     setTeamMember(state, { id, value }) {
-      // state.team[id] = value;
-      Vue.set(state.team, [id], value);
-    },
-    deleteTeamMember(state, id) {
-      Vue.delete(state.team, id);
+      state.team[id] = value;
     },
   },
   actions: {

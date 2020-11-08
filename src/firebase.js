@@ -26,7 +26,7 @@ export const getTimeNow = () => firebase.firestore.Timestamp.fromDate(new Date()
 export const loginWithGoogle = async () => auth.signInWithPopup(googleAuthProvider);
 export const login = (email, redirectToPage = '') => {
   const actionCodeSettings = {
-    url: redirectToPage ? `${window.location.origin}${redirectToPage}` : window.location.href,
+    url: redirectToPage ? `${window?.location.origin}${redirectToPage}` : window?.location.href,
     handleCodeInApp: true,
   };
 

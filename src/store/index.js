@@ -1,11 +1,12 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import { vuexfireMutations } from 'vuexfire';
+import { createStore, createLogger } from 'vuex';
+import { vuexfireMutations, firestoreOptions } from 'vuexfire';
 import modules from './modules';
 
-Vue.use(Vuex);
+firestoreOptions.wait = true;
+const isProduction = process.env.NODE_ENV === 'production';
 
-export default new Vuex.Store({
+// eslint-disable-next-line import/prefer-default-export
+export const store = createStore({
   state: {
     loading: false,
   },
@@ -16,4 +17,8 @@ export default new Vuex.Store({
     ...vuexfireMutations,
   },
   modules,
+  plugins: [
+    ...(!isProduction ? [createLogger()] : []),
+  ],
+  strict: !isProduction,
 });

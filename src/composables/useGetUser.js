@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
-import { getCurrentInstance } from '@vue/composition-api';
+import { useStore } from 'vuex';
 
 export const useGetUser = (id) => {
-  const { $store } = getCurrentInstance();
-  return $store.state.workspace.team[id];
+  const store = useStore();
+  return store.state.workspace.team[id];
 };

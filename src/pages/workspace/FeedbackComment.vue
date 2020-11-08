@@ -44,9 +44,7 @@
       <div class="feedback-comment__reply-input-wrapper">
         <BaseTextarea
           v-model="replyContent"
-          v-shortkey="['ctrl', 'enter']"
           class="feedback-comment__reply-input base-typography--b-16-24"
-          @shortkey.native="addReply(comment.id)"
         />
         <BaseSvg
           class="feedback-comment__send-icon"

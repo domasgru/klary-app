@@ -10,18 +10,19 @@
       ref="input"
       :type="type"
       v-bind="$attrs"
+      :model-value="modelValue"
       :autocomplete="false"
       :autofocus="autofocus"
       :placeholder="placeholder"
       :selected-value="selectedValue"
       :selected-values="selectedValues"
       @remove="$emit('remove', $event)"
-      @input="$emit('input', $event), search($event)"
+      @update:modelValue="$emit('update:modelValue', $event), search($event)"
       @keydown.up.prevent="handleArrowSelect('up')"
       @keydown.down.prevent="handleArrowSelect('down')"
       @keydown="openResultsIfClosed"
       @keydown.enter="select()"
-      @focus="isOpen = true"
+      @focus="handleFocus"
       @keydown.esc="isOpen = false"
     />
     <div
@@ -53,7 +54,12 @@
 import Fuse from 'fuse.js';
 
 export default {
+  // emits: ['remove', 'update:modelValue'],
   props: {
+    modelValue: {
+      type: String,
+      required: true,
+    },
     type: {
       type: String,
       required: true,
@@ -112,6 +118,7 @@ export default {
       );
     },
     async search(value) {
+      // debugger;
       this.results = await this.fuseSearcher.search(value);
     },
     handleArrowSelect(direction) {
@@ -142,6 +149,10 @@ export default {
         return;
       }
 
+      this.isOpen = true;
+    },
+    handleFocus() {
+      debugger;
       this.isOpen = true;
     },
   },

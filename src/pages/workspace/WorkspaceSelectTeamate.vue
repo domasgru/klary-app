@@ -1,7 +1,7 @@
 <template>
   <BaseSelect
     :type="type"
-    :value="value"
+    :model-value="modelValue"
     :label="label"
     :list="usersArray"
     :search-keys="['name']"
@@ -9,7 +9,7 @@
     :selected-value="selectedUser"
     :selected-values="selectedUsers"
     :placeholder="`Type the person's name`"
-    @input="$emit('input', $event)"
+    @update:modelValue="$emit('update:modelValue', $event)"
     @select="$emit('select', $event)"
     @remove="$emit('remove', $event)"
   />
@@ -19,12 +19,13 @@
 import { mapState } from 'vuex';
 
 export default {
+  // emits: ['select', 'remove', 'update:modelValue'],
   props: {
     type: {
       type: String,
       required: true,
     },
-    value: {
+    modelValue: {
       type: String,
       required: true,
     },

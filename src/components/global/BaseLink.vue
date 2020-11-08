@@ -7,7 +7,6 @@
       'base-link--bold': bold,
     }"
     :to="to"
-    v-on="$listeners"
   >
     <slot />
   </component>

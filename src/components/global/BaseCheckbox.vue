@@ -1,12 +1,12 @@
 <template>
   <div class="base-checkbox">
     <input
-      :id="_uid"
+      :id="$.uid"
       class="base-checkbox__input"
       type="checkbox"
     >
     <label
-      :for="_uid"
+      :for="$.uid"
       class="base-checkbox__title base-typography--body2"
     >
       {{ title }}
@@ -21,6 +21,9 @@ export default {
       type: String,
       default: '',
     },
+  },
+  created() {
+    debugger;
   },
 };
 </script>

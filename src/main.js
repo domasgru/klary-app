@@ -1,20 +1,38 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router'; // https://github.com/vuejs/vue-router-next
-import Vuelidate from 'vuelidate'; // https://github.com/vuelidate/vuelidate/tree/next
-import VueShortKey from 'vue-shortkey';
-import VueCompositionAPI from '@vue/composition-api';
-import ClickOutside from 'v-click-outside';
+/* eslint-disable no-underscore-dangle */
+import { createApp } from 'vue';
+import { VuelidatePlugin } from '@vuelidate/core'; // https://github.com/vuelidate/vuelidate/tree/next
 import App from './App.vue';
-import router from './router';
-import store from './store';
+import { router } from './router';
+import { store } from './store';
 import './firebase';
 import './scss/global/global.scss';
 
-Vue.use(VueRouter);
-Vue.use(Vuelidate);
-Vue.use(VueShortKey);
-Vue.use(VueCompositionAPI);
-Vue.directive('click-outside', ClickOutside.directive);
+const app = createApp(App);
+app.use(router);
+app.use(store);
+app.use(VuelidatePlugin);
+
+app.directive('click-outside', {
+  beforeMount(el, binding) {
+      // Define ourClickEventHandler
+      const ourClickEventHandler = (event) => {
+          if (!el.contains(event.target) && el !== event.target) {
+              // as we are attaching an click event listern to the document (below)
+              // ensure the events target is outside the element or a child of it
+              binding.value(event); // before binding it
+          }
+      };
+      // attached the handler to the element so we can remove it later easily
+      el.__vueClickEventHandler__ = ourClickEventHandler;
+
+      // attaching ourClickEventHandler to a listener on the document here
+      document.addEventListener('click', ourClickEventHandler);
+  },
+  unmounted(el) {
+      // Remove Event Listener
+      document.removeEventListener('click', el.__vueClickEventHandler__);
+  },
+});
 
 const globalComponents = require.context('./components/global', false, /Base[A-Z]\w+\.(vue|js)$/);
 globalComponents.keys().forEach((fileName) => {
@@ -22,16 +40,7 @@ globalComponents.keys().forEach((fileName) => {
     .split('/')
     .pop()
     .replace(/\.\w+$/, '');
-  Vue.component(componentName, globalComponents(fileName).default);
+  app.component(componentName, globalComponents(fileName).default);
 });
 
-Vue.config.productionTip = false;
-
-// const svgModules = require.context('./assets/icons', false, /\.svg$/);
-// svgModules.keys().forEach(svgModules);
-
-new Vue({
-  store,
-  router,
-  render: (h) => h(App),
-}).$mount('#app');
+const vm = app.mount('#app');

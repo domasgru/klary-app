@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
-import Vue from 'vue';
-import Router from 'vue-router';
-import store from '@/store';
+import { defineAsyncComponent } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import { store } from '@/store';
 import Home from '@/pages/Home.vue';
 import Login from '@/pages/get-started/Login.vue';
 import GetStartedCreateName from '@/pages/GetStartedCreateName.vue';
@@ -10,7 +10,6 @@ import GetStartedInviteTeam from '@/pages/GetStartedInviteTeam.vue';
 import Workspace from '@/pages/workspace/Workspace.vue';
 import WorkspaceInbox from '@/pages/workspace/WorkspaceInbox.vue';
 import SelectWorkspace from '@/pages/SelectWorkspace.vue';
-import PageNotFound from '@/pages/PageNotFound.vue';
 import ComingSoon from '@/pages/ComingSoon.vue';
 
 import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
@@ -23,15 +22,13 @@ import {
   getInvitedWorkspaces,
 } from '@/firebase';
 
-const WorkspaceSent = () => import('@/pages/workspace/WorkspaceSent.vue');
-const WorkspaceGive = () => import('@/pages/workspace/WorkspaceGive.vue');
-const WorkspaceRequest = () => import('@/pages/workspace/WorkspaceRequest.vue');
-const WorkspaceFeedbackView = () => import('@/pages/workspace/WorkspaceFeedbackView.vue');
+const WorkspaceSent = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceSent.vue'));
+const WorkspaceGive = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceGive.vue'));
+const WorkspaceRequest = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceRequest.vue'));
+const WorkspaceFeedbackView = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceFeedbackView.vue'));
 
-Vue.use(Router);
-
-const router = new Router({
-  mode: 'history',
+export const router = createRouter({
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
@@ -179,10 +176,6 @@ const router = new Router({
         },
       ],
     },
-    {
-      path: '*',
-      component: PageNotFound,
-    },
   ],
 });
 
@@ -208,13 +201,13 @@ router.afterEach(async (to, from, next) => {
 });
 
 export async function completeAuth(to, from, next) {
-  if (auth.isSignInWithEmailLink(window.location.href)) {
+  if (auth.isSignInWithEmailLink(window?.location.href)) {
     const email = window.localStorage.getItem('emailForSignIn');
     if (!email) {
       return next('/login');
     }
 
-    const result = await auth.signInWithEmailLink(email, window.location.href);
+    const result = await auth.signInWithEmailLink(email, window?.location.href);
     window.localStorage.removeItem('emailForSignIn');
 
     const nextRoute = await handleLoginAndReturnRedirect(result);
@@ -232,17 +225,6 @@ async function completeUser(to, from, next) {
     return next('/create-name');
   }
   return next();
-}
-
-async function beforeEnterFeedbackView(to, from, next) {
-  if (!store.state.feedback.receivedFeedbacks?.some((fb) => fb.id === to.params.id)) {
-    try {
-      await store.dispatch('feedback/bindCurrentFeedback', to.params.id);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-  next();
 }
 
 async function isLoggedIn() {
@@ -265,5 +247,3 @@ async function isUserAccountComplete(userData) {
   }
   return true;
 }
-
-export default router;

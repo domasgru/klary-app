@@ -1,6 +1,9 @@
 <template>
   <div class="container--md">
     <div class="feedback">
+      <button @click="test">
+        push nx
+      </button>
       <div class="feedback__title base-typography--h6">
         {{ feedbackData.title }}
       </div>
@@ -23,10 +26,9 @@
       </div>
     </div>
     <FeedbackComment
-      v-for="(comment, index) in currentFeedbackComments"
+      v-for="comment in currentFeedbackComments"
       :id="comment.id"
-      :key="index"
-      :ref="comment.id"
+      :key="comment.id"
       :comment="comment"
       :unseen-comments="unseenComments"
     />
@@ -35,10 +37,9 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-import {
- getCurrentInstance, ref, computed, watch,
-} from '@vue/composition-api';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import { ref, computed, watch } from 'vue';
 import { useGetUser } from '@/composables/useGetUser';
 import { updateSeenAt } from '@/firebase';
 import { FEEDBACK_ACTION_TYPES } from '@/constants';
@@ -57,9 +58,10 @@ export default {
     },
   },
   setup(props) {
-    const { $store, $refs, $route } = getCurrentInstance();
-    const currentFeedbackComments = computed(() => $store.state.feedback.currentFeedbackComments);
-    const currentUser = computed(() => $store.state.user.userData);
+    const store = useStore();
+    const router = useRouter();
+    const currentFeedbackComments = computed(() => store.state.feedback.currentFeedbackComments);
+    const currentUser = computed(() => store.state.user.userData);
     const author = useGetUser(props.feedbackData.authorId);
     const unseenComments = ref([]);
     const updateUnseenComments = (id) => {
@@ -76,7 +78,7 @@ export default {
       }, {
         threshold: 1.0,
     });
-    $store.dispatch('feedback/bindCurrentFeedbackComments', props.feedbackData.id);
+    store.dispatch('feedback/bindCurrentFeedbackComments', props.feedbackData.id);
 
     const otherParticipantsLastAction = computed(() => {
        const { lastAction, name } = Object.entries(props.feedbackData.participants)
@@ -96,6 +98,7 @@ export default {
     }
 
     watch(currentFeedbackComments, (newValue) => {
+      console.log(newValue);
       unseenComments.value = newValue
         .map((comment) => [comment, ...(comment.replies ? comment.replies : [])])
         .flat()
@@ -113,6 +116,7 @@ export default {
       unseenComments,
       currentFeedbackComments,
       author,
+      test: () => { store.commit('feedback/test'); },
     };
   },
 };

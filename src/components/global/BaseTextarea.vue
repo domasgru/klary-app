@@ -2,21 +2,18 @@
   <div class="base-textarea">
     <label
       v-if="label"
-      :for="_uid"
+      :for="id"
       class="base-textarea__label base-typography--caption"
     >{{ label }}</label>
     <textarea
-      :id="_uid"
+      :id="id"
       ref="textarea"
       class="base-textarea__textarea base-typography--b-16-24"
       :class="{'base-textarea__textarea--enlarged': textareaEnlarged}"
       :placeholder="placeholder"
-      :value="value"
+      :value="modelValue"
       :rows="rows"
-      v-on="{
-        ...$listeners,
-        input: event => $emit('input', event.target.value)
-      }"
+      @input="$emit('update:modelValue', $event.target.value)"
     />
     <span
       v-if="!noHint"
@@ -29,10 +26,12 @@
 
 <script>
 import autosize from 'autosize';
+import shortId from 'shortid';
 
 export default {
+  emits: ['update:modelValue'],
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: '',
     },
@@ -70,8 +69,11 @@ export default {
       textareaEnlarged: false,
     };
   },
+  computed: {
+    id: () => shortId.generate(),
+  },
   watch: {
-    async value(newValue) {
+    async modelValue(newValue) {
       if (newValue === '') {
         await this.$nextTick();
         autosize.update(this.$refs.textarea);
