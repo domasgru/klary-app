@@ -4,7 +4,9 @@
     <div class="workspace__main">
       <WorkspaceTopbar />
       <div class="workspace__content-container">
-        <router-view class="workspace__content" />
+        <div class="workspace__content">
+          <router-view />
+        </div>
       </div>
     </div>
   </div>
@@ -62,6 +64,8 @@ export default {
   }
 
   &__content {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 900px;
   }

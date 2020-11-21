@@ -29,7 +29,6 @@ import autosize from 'autosize';
 import shortId from 'shortid';
 
 export default {
-  emits: ['update:modelValue'],
   props: {
     modelValue: {
       type: String,
@@ -64,6 +63,7 @@ export default {
       default: true,
     },
   },
+  emits: ['update:modelValue'],
   data() {
     return {
       textareaEnlarged: false,

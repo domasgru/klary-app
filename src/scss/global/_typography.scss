@@ -5,53 +5,41 @@ body {
 
 h1,
 .base-typography--h1 {
-  font-size: 80px;
-  font-weight: bold;
-  line-height: 96px;
-}
-
-h2,
-.base-typography--h2 {
-  font-size: 72px;
-  font-weight: bold;
-  line-height: 88px;
-}
-
-h3,
-.base-typography--h3 {
   font-size: 64px;
   font-weight: bold;
   line-height: 76px;
 }
 
-h4,
-.base-typography--h4 {
-  font-size: 56px;
-  font-weight: bold;
-  line-height: 68px;
-}
-
-h5,
-.base-typography--h5 {
+h2,
+.base-typography--h2 {
   font-size: 48px;
   font-weight: bold;
   line-height: 60px;
 }
 
-h6,
-.base-typography--h6 {
+h3,
+.base-typography--h3 {
+  font-size: 40px;
+  font-weight: bold;
+  line-height: 48px;
+}
+
+h4,
+.base-typography--h4 {
   font-size: 32px;
   font-weight: bold;
   line-height: 40px;
 }
 
-.base-typography--h7 {
+h5,
+.base-typography--h5 {
   font-size: 24px;
   font-weight: bold;
   line-height: 28px;
 }
 
-.base-typography--h8 {
+h6,
+.base-typography--h6 {
   font-size: 20px;
   font-weight: bold;
   line-height: 24px;

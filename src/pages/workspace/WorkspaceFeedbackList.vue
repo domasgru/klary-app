@@ -22,7 +22,6 @@
 import WorkspaceFeedbackCard from './WorkspaceFeedbackCard.vue';
 
 export default {
-  emits: ['open'],
   components: {
     WorkspaceFeedbackCard,
   },
@@ -36,6 +35,7 @@ export default {
       default: false,
     },
   },
+  emits: ['open'],
 };
 </script>
 

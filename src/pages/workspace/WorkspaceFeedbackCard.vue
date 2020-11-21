@@ -9,6 +9,12 @@
         class="card__unseen-indicator"
       />
     </div>
+    <div
+      v-if="isSentFeedback"
+      class="card__to base-typography--b-14-20"
+    >
+      To:
+    </div>
     <BaseAvatar
       class="card__initial"
       :name="user.name"
@@ -173,6 +179,11 @@ export default {
     margin-right: 12.7%;
   }
 
+  &__to {
+    margin-right: 0.9237%;
+    color: $grey-600;
+  }
+
   &__initial {
     margin-right: 0.923%;
   }
@@ -185,7 +196,7 @@ export default {
 
   &__title {
     width: 100%;
-    max-width: 47%;
+    max-width: 38%;
     margin-right: auto;
   }
 

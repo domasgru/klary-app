@@ -160,7 +160,6 @@ import autosize from 'autosize';
 
 export default {
   inheritAttrs: false,
-  emits: ['focus', 'update:modelValue'],
   props: {
     type: {
       type: String,
@@ -214,6 +213,7 @@ export default {
       default: () => ([]),
     },
   },
+  emits: ['focus', 'update:modelValue'],
   data() {
     return {
       animateLiftUp: false,

@@ -24,7 +24,7 @@
           size="sm"
           :picture="userData.googlePicture || ''"
         />
-        <template v-slot:content>
+        <template #content>
           <div class="user-popup ">
             <div class="user-popup__user-info base-typography--b-14-20">
               <BaseAvatar
