@@ -10,7 +10,7 @@
     <BaseSvg
       v-if="icon"
       :name="icon"
-      :stroke-color="isActive ? '#6c3bf5' : '#46464D'"
+      :stroke-color="isActive ? '#511FDC' : '#17171A'"
       class="sidebar-button__icon"
     />
     <div v-if="text">
@@ -53,8 +53,8 @@ export default {
 
   display: flex;
   align-items: center;
-  padding: 8px;
-  color: $grey-800;
+  padding: 6px 8px;
+  color: $dark;
   cursor: pointer;
   border-radius: 6px;
   transition: all 0.2s;

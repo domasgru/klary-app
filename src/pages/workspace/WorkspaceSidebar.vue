@@ -1,28 +1,40 @@
 <template>
   <div class="workspace-sidebar">
-    <WorkspaceSidebarButton
-      v-for="(ITEM, ITEM_ID) in $options.INBOX"
-      :key="ITEM_ID"
-      :icon="ITEM.icon"
-      :text="ITEM.text"
-      :to="ITEM.path"
-      :is-active="isActive(ITEM.path, $route.path)"
-      class="workspace-sidebar__button"
-    />
-    <div class="workspace-sidebar__separator" />
-    <WorkspaceSidebarButton
-      v-for="(ITEM, ITEM_ID) in $options.ACTIONS"
-      :key="ITEM_ID"
-      :icon="ITEM.icon"
-      :text="ITEM.text"
-      :to="ITEM.path"
-      :is-active="isActive(ITEM.path, $route.path)"
-      class="workspace-sidebar__button"
+    <div class="workspace-sidebar__user base-typography--b-14-20">
+      <BaseAvatar
+        size="sm"
+        :name="userData.name"
+        :picture="userData.googlePicture || ''"
+        class="workspace-sidebar__user-avatar"
+      />
+      {{ userData.name }}
+      <BaseSvg
+        name="arrow-down"
+        class="workspace-sidebar__user-icon"
+      />
+    </div>
+    <div class="workspace-sidebar__buttons">
+      <WorkspaceSidebarButton
+        v-for="(ITEM, ITEM_ID) in $options.INBOX"
+        :key="ITEM_ID"
+        :icon="ITEM.icon"
+        :text="ITEM.text"
+        :to="ITEM.path"
+        :is-active="isActive(ITEM.path, $route.path)"
+        class="workspace-sidebar__button"
+      />
+    </div>
+    <BaseButton
+      size="md"
+      fluid
+      to="/workspace/request-feedback"
+      v-text="'Request feedback'"
     />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import WorkspaceSidebarButton from './WorkspaceSidebarButton.vue';
 
 const INBOX = {
@@ -70,6 +82,9 @@ export default {
   components: {
     WorkspaceSidebarButton,
   },
+  computed: {
+    ...mapState('user', ['userData']),
+  },
   methods: {
     isActive(path, currentRoute) {
       return currentRoute.includes(path);
@@ -82,17 +97,33 @@ export default {
 
 <style lang="scss" scoped>
 .workspace-sidebar {
+  padding: 12px;
+
+  &__user {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  &__user-icon {
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+    margin-left: auto;
+  }
+
+  &__user-avatar {
+    margin-right: 8px;
+  }
+
+  &__buttons {
+    margin-bottom: 24px;
+  }
+
   &__button {
     &:not(:last-child) {
       margin-bottom: 4px;
     }
-  }
-
-  &__separator {
-    width: 100%;
-    height: 1px;
-    margin: 16px 0;
-    background: $grey-200;
   }
 }
 </style>

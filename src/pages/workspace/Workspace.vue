@@ -1,9 +1,11 @@
 <template>
   <div class="workspace">
-    <Header />
-    <div class="container">
-      <Sidebar class="workspace__sidebar" />
-      <router-view class="workspace__main" />
+    <Sidebar class="workspace__sidebar" />
+    <div class="workspace__main">
+      <WorkspaceTopbar />
+      <div class="workspace__content-container">
+        <router-view class="workspace__content" />
+      </div>
     </div>
   </div>
 </template>
@@ -11,13 +13,13 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import { logout } from '@/firebase';
-import Header from './WorkspaceHeader.vue';
 import Sidebar from './WorkspaceSidebar.vue';
+import WorkspaceTopbar from './WorkspaceTopbar.vue';
 
 export default {
   components: {
-    Header,
     Sidebar,
+    WorkspaceTopbar,
   },
   computed: {
     ...mapState('workspace', ['currentWorkspace']),
@@ -35,30 +37,33 @@ export default {
 </script>
 <style lang="scss" scoped>
 .workspace {
+  display: flex;
   width: 100%;
-  min-height: 100%;
-  padding-bottom: 80px;
+  height: 100%;
   overflow: hidden;
   background: $grey-100;
 
   &__sidebar {
-    width: 200px;
-    margin-right: 8.54%;
+    width: 240px;
+    height: 100%;
+    background: $light;
+    border-right: 1px solid $grey-200;
   }
 
   &__main {
     flex-grow: 1;
     align-self: flex-start;
   }
-}
 
-.container {
-  display: flex;
-  width: 100%;
-  max-width: $container;
-  height: 100%;
-  padding: $container-padding;
-  padding-top: 40px;
-  margin: auto;
+  &__content-container {
+    display: flex;
+    justify-content: center;
+    padding: 48px 48px 0 48px;
+  }
+
+  &__content {
+    width: 100%;
+    max-width: 900px;
+  }
 }
 </style>

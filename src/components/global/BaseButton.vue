@@ -1,11 +1,17 @@
 <template>
-  <button
-    class="button base-typography--bold-button1"
-    :class="computedClasses"
+  <component
+    :is="tag"
+    :to="to"
+    class="button"
+    :class="{
+      ...computedClasses,
+      'base-typography--bold-button1': ['xlg', 'lg'].includes(size),
+      'base-typography--button2': ['sm', 'md'].includes(size)
+    }"
     :disabled="disabled"
   >
     <slot />
-  </button>
+  </component>
 </template>
 
 <script>
@@ -30,8 +36,13 @@ export default {
       default: 'md',
       validator: (value) => VALID_BUTTON_TYPES.includes(value),
     },
+    to: {
+      type: String,
+      default: null,
+    },
   },
   computed: {
+    tag: ({ to }) => (to ? 'router-link' : 'button'),
     computedClasses: ({
       disabled, fluid, inverse, size,
     }) => (
@@ -48,7 +59,9 @@ export default {
 
 <style lang="scss" scoped>
 .button {
+  display: block;
   color: white;
+  text-align: center;
   background: $primary;
   border: none;
   border-radius: 10px;

@@ -1,8 +1,7 @@
 <template>
-  <div id="app">
-    <router-view />
-    <LoaderFullscreen v-if="loading" />
-  </div>
+  <router-view />
+  <!-- eslint-disable -->
+  <LoaderFullscreen v-if="loading" />
 </template>
 
 <script>

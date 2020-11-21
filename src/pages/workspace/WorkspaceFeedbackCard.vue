@@ -1,37 +1,45 @@
 <template>
   <div
     class="card"
-    :class="{'card--seen': isSeen}"
+    :class="{'card--unseen': !isSeen}"
   >
-    <div
-      v-show="!isSeen"
-      class="card__seen-indicator"
-    />
-    <div class="card__description">
-      <div class="card__title base-typography--b-16-24">
-        {{ feedbackData.title }}
-      </div>
+    <div class="card__unseen-indicator-container">
       <div
-        v-if="lastAction"
-        class="card__last-action base-typography--b-14-20"
-      >
-        {{ lastAction }}
-      </div>
-    </div>
-    <div class="card__author">
-      <BaseAvatar
-        class="card__initial"
-        :name="user.name"
-        :picture="user.googlePicture || ''"
-        size="xs"
+        v-show="!isSeen"
+        class="card__unseen-indicator"
       />
-      <div class="card__name base-typography--b-14-20">
-        {{ user.name }}
-      </div>
+    </div>
+    <BaseAvatar
+      class="card__initial"
+      :name="user.name"
+      :picture="user.googlePicture || ''"
+      size="xs"
+    />
+    <div
+      class="card__name"
+      :class="{
+        'base-typography--b-14-20': isSeen,
+        'base-typography--bold-b-14-20': !isSeen
+      }"
+    >
+      {{ user.name }}
+    </div>
+    <div
+      class="card__title"
+      :class="{
+        'base-typography--b-14-20': isSeen,
+        'base-typography--bold-b-14-20': !isSeen
+      }"
+    >
+      {{ feedbackData.title }}
     </div>
     <BaseTimestamp
       class="card__time"
       :timestamp="feedbackData.createdAt.seconds"
+    />
+    <BaseSvg
+      name="favorite"
+      class="card__favorite"
     />
     <BaseSvg
       class="card__more"
@@ -128,11 +136,10 @@ export default {
   display: flex;
   align-items: center;
   width: 100%;
-  height: 88px;
-  padding: 24px 36px 24px 40px;
+  padding: 28px 32px 28px 0;
   color: $dark;
   user-select: none;
-  background: $light;
+  background: $grey-100;
   //transition: background 0.2s;
 
   &:hover {
@@ -140,14 +147,18 @@ export default {
     background: rgba($grey-100, 0.4);
   }
 
-  &--seen {
-    background: $grey-50;
+  &--unseen {
+    background: $light;
   }
 
-  &__seen-indicator {
-    position: absolute;
-    top: 42px;
-    left: 16px;
+  &__unseen-indicator-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+  }
+
+  &__unseen-indicator {
     width: 8px;
     height: 8px;
     background: $primary;
@@ -162,33 +173,40 @@ export default {
     margin-right: 12.7%;
   }
 
-  &__title {
-    margin-bottom: 4px;
+  &__initial {
+    margin-right: 0.923%;
   }
 
-  &__last-action {
-    color: $grey-500;
-  }
-
-  &__author {
-    display: flex;
-    align-items: center;
+  &__name {
     width: 100%;
-    max-width: 21%;
+    max-width: 18.7066%;
+    margin-right: 3.6951%;
+  }
+
+  &__title {
+    width: 100%;
+    max-width: 47%;
     margin-right: auto;
   }
 
-  &__initial {
-    margin-right: 12px;
+  &__time {
+    width: 100%;
+    max-width: 7.6212%;
+    margin-right: 1.8475%;
+    text-align: right;
   }
 
-  &__time {
-    margin-right: 36px;
+  &__favorite {
+    width: 24px;
+    height: 24px;
+    padding: 2px;
+    margin-right: 1.8475%;
   }
 
   &__more {
     width: 24px;
     height: 24px;
+    padding: 2px;
   }
 }
 </style>

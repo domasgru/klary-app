@@ -8,7 +8,7 @@ import GetStartedCreateName from '@/pages/GetStartedCreateName.vue';
 import GetStartedCreateTeam from '@/pages/GetStartedCreateTeam.vue';
 import GetStartedInviteTeam from '@/pages/GetStartedInviteTeam.vue';
 import Workspace from '@/pages/workspace/Workspace.vue';
-import WorkspaceInbox from '@/pages/workspace/WorkspaceInbox.vue';
+import WorkspaceReceived from '@/pages/workspace/WorkspaceReceived.vue';
 import SelectWorkspace from '@/pages/SelectWorkspace.vue';
 import ComingSoon from '@/pages/ComingSoon.vue';
 
@@ -117,7 +117,7 @@ export const router = createRouter({
       children: [
         {
           path: 'received',
-          component: WorkspaceInbox,
+          component: WorkspaceReceived,
         },
         {
           path: 'sent',

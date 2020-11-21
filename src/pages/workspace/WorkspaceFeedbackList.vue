@@ -9,7 +9,7 @@
       class="feedback"
       @click="$emit('open', feedback.id)"
     >
-      <WorkspaceFeedbackReceivedCard
+      <WorkspaceFeedbackCard
         :feedback-data="feedback"
         :is-sent-feedback="isSentFeedback"
       />
@@ -19,12 +19,12 @@
 </template>
 
 <script>
-import WorkspaceFeedbackReceivedCard from './WorkspaceFeedbackReceivedCard.vue';
+import WorkspaceFeedbackCard from './WorkspaceFeedbackCard.vue';
 
 export default {
   emits: ['open'],
   components: {
-    WorkspaceFeedbackReceivedCard,
+    WorkspaceFeedbackCard,
   },
   props: {
     feedbacks: {
@@ -52,10 +52,9 @@ export default {
 
 .feedback {
   &__separator {
-    width: 94%;
+    width: 100%;
     height: 1px;
-    margin: auto;
-    background: $grey-100;
+    background: $grey-200;
   }
 }
 </style>

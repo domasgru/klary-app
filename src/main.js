@@ -43,4 +43,4 @@ globalComponents.keys().forEach((fileName) => {
   app.component(componentName, globalComponents(fileName).default);
 });
 
-const vm = app.mount('#app');
+app.mount('#app');
