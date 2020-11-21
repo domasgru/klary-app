@@ -108,7 +108,7 @@ export default {
   &__user-icon {
     width: 24px;
     height: 24px;
-    padding: 4px;
+    padding: 6px;
     margin-left: auto;
   }
 
