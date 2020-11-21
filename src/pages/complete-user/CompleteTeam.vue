@@ -30,7 +30,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { required } from 'vuelidate/lib/validators';
+import { required } from '@vuelidate/validators';
 import { db, updateUserProfileDocument, FieldValue } from '@/firebase';
 
 export default {
@@ -40,10 +40,12 @@ export default {
       error: '',
     };
   },
-  validations: {
-    emails: {
-      required,
-    },
+  validations() {
+    return {
+      emails: {
+        required,
+      },
+    };
   },
   computed: {
     ...mapState('user', ['userData']),

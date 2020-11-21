@@ -83,7 +83,7 @@
 
 <script>
 import Header from '@/components/ui/HeaderAuth.vue';
-import { required, email } from 'vuelidate/lib/validators';
+import { required, email } from '@vuelidate/validators';
 import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
 import { login, loginWithGoogle } from '@/firebase';
 
@@ -98,19 +98,23 @@ export default {
       showForm: true,
     };
   },
-  validations: {
-    email: {
-      required,
-      email,
-    },
+  validations() {
+    return {
+      email: {
+        required,
+        email,
+      },
+    };
   },
   methods: {
     showHint() {
+      this.$v.$touch();
       if (!this.$v.email.email) {
         this.error = 'Email is invalid.';
       }
     },
     async submit() {
+      this.$v.$touch();
       if (this.$v.email.$invalid) {
         return;
       }

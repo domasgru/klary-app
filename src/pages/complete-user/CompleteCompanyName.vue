@@ -27,7 +27,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { required, alphaNum } from 'vuelidate/lib/validators';
+import { required, alphaNum } from '@vuelidate/validators';
 import { db, updateUserProfileDocument, getWorkspace } from '@/firebase';
 
 export default {
@@ -37,11 +37,13 @@ export default {
       error: '',
     };
   },
-  validations: {
-    name: {
-      required,
-      alphaNum,
-    },
+  validations() {
+    return {
+      name: {
+        required,
+        alphaNum,
+      },
+    };
   },
   computed: {
     ...mapState('user', ['userAuth']),
@@ -49,6 +51,7 @@ export default {
   methods: {
     ...mapActions('workspace', ['setAllWorkspaces', 'setCurrentWorkspace']),
     async createWorkspace() {
+      this.$v.$touch();
       if (this.$v.name.$invalid) {
         this.error = 'This name is invalid, use only alphanumeric characters';
         return;

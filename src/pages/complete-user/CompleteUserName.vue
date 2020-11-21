@@ -34,7 +34,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { required, alpha } from 'vuelidate/lib/validators';
+import { required, alpha } from '@vuelidate/validators';
 import { updateUserProfileDocument } from '@/firebase';
 
 export default {
@@ -44,17 +44,20 @@ export default {
       error: '',
     };
   },
-  validations: {
-    name: {
-      required,
-      alpha,
-    },
+  validations() {
+    return {
+      name: {
+        required,
+        alpha,
+      },
+    };
   },
   computed: {
     ...mapState('user', ['userAuth']),
   },
   methods: {
     async setName() {
+      this.$v.$touch();
       if (this.$v.name.$invalid) {
         this.error = 'This name is invalid, use only alphabet characters';
         return;

@@ -22,7 +22,7 @@
 <script>
 import { addComment } from '@/firebase';
 import { mapState } from 'vuex';
-import { required } from 'vuelidate/lib/validators';
+import { required } from '@vuelidate/validators';
 
 export default {
   props: {
@@ -36,16 +36,19 @@ export default {
       comment: '',
     };
   },
-  validations: {
-    comment: {
-      required,
-    },
+  validations() {
+    return {
+      comment: {
+        required,
+      },
+    };
   },
   computed: {
     ...mapState('user', ['userData']),
   },
   methods: {
     addComment() {
+      this.$v.$touch();
       if (this.$v.comment.$invalid) {
         return;
       }

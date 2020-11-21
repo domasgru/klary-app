@@ -36,7 +36,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { required, alpha } from 'vuelidate/lib/validators';
+import { required, alpha } from '@vuelidate/validators';
 import { updateUserProfileDocument, getInvitedWorkspaces } from '@/firebase';
 import GetStartedLayout from '@/pages/GetStartedLayout.vue';
 
@@ -51,11 +51,13 @@ export default {
       hasInvitaions: false,
     };
   },
-  validations: {
-    name: {
-      required,
-      alpha,
-    },
+  validations() {
+    return {
+      name: {
+        required,
+        alpha,
+      },
+    };
   },
   computed: {
     ...mapState('user', ['userAuth', 'userData']),
@@ -71,6 +73,7 @@ export default {
   methods: {
     ...mapActions('workspace', ['setInvitedWorkspaces']),
     async createName() {
+      this.$v.$touch();
       if (this.$v.name.$invalid) {
         this.error = 'This name is invalid, use only alphabet characters';
         return;

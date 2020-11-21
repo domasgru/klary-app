@@ -49,7 +49,7 @@
         <BaseSvg
           class="feedback-comment__send-icon"
           name="send-arrow"
-          @click.native="addReply(comment.id)"
+          @click="addReply(comment.id)"
         />
       </div>
     </div>
@@ -59,7 +59,7 @@
 <script>
 import { mapState } from 'vuex';
 import { addCommentReply } from '@/firebase';
-import { required } from 'vuelidate/lib/validators';
+import { required } from '@vuelidate/validators';
 import { useGetUser } from '@/composables/useGetUser';
 import FeedbakCommentReply from './FedbackCommentReply.vue';
 
@@ -85,16 +85,19 @@ export default {
       replyContent: '',
     };
   },
-  validations: {
-    replyContent: {
-      required,
-    },
+  validations() {
+    return {
+      replyContent: {
+        required,
+      },
+    };
   },
   computed: {
     ...mapState('user', ['userData']),
   },
   methods: {
     addReply(commentId) {
+      this.$v.$touch();
       if (this.$v.replyContent.$invalid) {
         return;
       }
