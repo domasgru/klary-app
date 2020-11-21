@@ -19,5 +19,6 @@ export default {
   width: 100%;
   padding: 12px;
   background: $light;
+  border-bottom: 1px solid $grey-200;
 }
 </style>

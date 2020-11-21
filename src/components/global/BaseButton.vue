@@ -6,7 +6,7 @@
     :class="{
       ...computedClasses,
       'base-typography--bold-button1': ['xlg', 'lg'].includes(size),
-      'base-typography--button2': ['sm', 'md'].includes(size)
+      'base-typography--bold-button2': ['sm', 'md'].includes(size)
     }"
     :disabled="disabled"
   >

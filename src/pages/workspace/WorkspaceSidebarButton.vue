@@ -61,7 +61,7 @@ export default {
 
   &--is-active {
     color: $primary-100 !important;
-    background: #e5e0f4 !important;
+    background: rgba($primary, 0.1) !important;
   }
 
   &:hover {

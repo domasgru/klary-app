@@ -37,7 +37,7 @@
   &__icon {
     width: 20px;
     height: 20px;
-    padding: 4px;
+    padding: 2px;
     margin-right: 8px;
   }
 
