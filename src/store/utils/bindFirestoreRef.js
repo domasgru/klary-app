@@ -1,32 +1,52 @@
 const bindings = {};
 
-export const pureSpliceArrayStateMutation = (
-  state,
-  {
-    stateKey, index, removeValues, value,
+export const bindFirestoreArrayRefMutations = {
+  bindEmptyArray: (state, stateKey) => { state[stateKey] = []; },
+  pureSpliceArrayStateMutation: (
+    state,
+    {
+      stateKey, index, removeValues, value,
+    },
+  ) => {
+    const stateArray = state[stateKey] || [];
+    if (value) {
+      stateArray.splice(index, removeValues, value);
+    } else {
+      stateArray.splice(index, removeValues);
+    }
+    state[stateKey] = stateArray;
   },
-) => {
-  const stateArray = state[stateKey] || [];
-      if (value) {
-        stateArray.splice(index, removeValues, value);
-      } else {
-        stateArray.splice(index, removeValues);
-      }
-      state[stateKey] = stateArray;
 };
 
-export const bindFirestoreArrayRefAction = (commit, stateKey, firestoreRef) => {
-  const unsubscribe = firestoreRef
+export const unbindFirestoreRef = (stateKey) => {
+  if (!bindings[stateKey]) {
+    return Promise.resolve('done');
+  }
+  console.log(typeof bindings[stateKey]);
+  return bindings[stateKey]();
+};
+
+export const bindFirestoreArrayRefAction = async (commit, stateKey, firestoreRef) => {
+  unbindFirestoreRef(stateKey);
+  commit('bindEmptyArray', stateKey);
+
+  let unbind;
+  const promise = new Promise((resolve, reject) => {
+    unbind = firestoreRef
     .onSnapshot((snapshot) => {
+      if (!snapshot.docChanges().length) {
+        commit('bindEmptyArray', stateKey);
+      }
       snapshot.docChanges().forEach(({
         type, newIndex, oldIndex, doc,
-    }) => {
+      }) => {
+        const value = { id: doc.id, ...doc.data() };
         if (type === 'added') {
           commit('pureSpliceArrayStateMutation', {
             stateKey,
             index: newIndex,
             removeValues: 0,
-            value: doc.data(),
+            value,
           });
         }
         if (type === 'modified') {
@@ -34,7 +54,7 @@ export const bindFirestoreArrayRefAction = (commit, stateKey, firestoreRef) => {
             stateKey,
             index: newIndex,
             removeValues: 1,
-            value: doc.data(),
+            value,
           });
         }
         if (type === 'removed') {
@@ -44,14 +64,10 @@ export const bindFirestoreArrayRefAction = (commit, stateKey, firestoreRef) => {
             removeValues: 1,
           });
         }
+        resolve(doc);
       });
+    }, reject);
   });
-  bindings[stateKey] = unsubscribe;
-};
-
-export const unbindFirestoreRef = (stateKey) => {
-  if (!bindings[stateKey]) {
-    return Promise.resolve();
-  }
-  return bindings[stateKey]();
+  bindings[stateKey] = unbind;
+  return promise;
 };

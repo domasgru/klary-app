@@ -118,7 +118,6 @@ export default {
       );
     },
     async search(value) {
-      // debugger;
       this.results = await this.fuseSearcher.search(value);
     },
     handleArrowSelect(direction) {
@@ -152,7 +151,6 @@ export default {
       this.isOpen = true;
     },
     handleFocus() {
-      debugger;
       this.isOpen = true;
     },
   },

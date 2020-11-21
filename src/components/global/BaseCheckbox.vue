@@ -22,9 +22,6 @@ export default {
       default: '',
     },
   },
-  created() {
-    debugger;
-  },
 };
 </script>
 

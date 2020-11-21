@@ -49,6 +49,7 @@ export default {
       if (this.$v.comment.$invalid) {
         return;
       }
+
       addComment(this.$route.params.id, this.comment, this.userData);
       this.comment = '';
     },

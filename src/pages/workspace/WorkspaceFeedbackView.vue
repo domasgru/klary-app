@@ -1,9 +1,6 @@
 <template>
   <div class="container--md">
     <div class="feedback">
-      <button @click="test">
-        push nx
-      </button>
       <div class="feedback__title base-typography--h6">
         {{ feedbackData.title }}
       </div>
@@ -39,7 +36,9 @@
 <script>
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { ref, computed, watch } from 'vue';
+import {
+ ref, computed, watch, nextTick,
+} from 'vue';
 import { useGetUser } from '@/composables/useGetUser';
 import { updateSeenAt } from '@/firebase';
 import { FEEDBACK_ACTION_TYPES } from '@/constants';
@@ -65,9 +64,7 @@ export default {
     const author = useGetUser(props.feedbackData.authorId);
     const unseenComments = ref([]);
     const updateUnseenComments = (id) => {
-      // console.log(unseenComments.value.filter((comment) => comment.id !== id));
       setTimeout(() => {
-        console.log(unseenComments.value, id);
         unseenComments.value = unseenComments.value.filter((comment) => comment.id !== id);
         }, 2000);
     };
@@ -93,12 +90,15 @@ export default {
       return lastAction;
     });
 
-    if (otherParticipantsLastAction.value.type === FEEDBACK_ACTION_TYPES.CREATE) {
+    if (!props.feedbackData.participants[currentUser.value.uid].seenAt?.seconds
+    || (otherParticipantsLastAction.value.type === FEEDBACK_ACTION_TYPES.CREATE
+    && otherParticipantsLastAction.value.createdAt.seconds > props.feedbackData.participants[currentUser.value.uid].seenAt?.seconds)) {
       updateSeenAt(currentUser.value.uid, props.feedbackData.id);
     }
 
-    watch(currentFeedbackComments, (newValue) => {
-      console.log(newValue);
+    watch(currentFeedbackComments.value, async (newValue) => {
+      await nextTick();
+
       unseenComments.value = newValue
         .map((comment) => [comment, ...(comment.replies ? comment.replies : [])])
         .flat()
@@ -108,7 +108,6 @@ export default {
             && comment.author.uid !== currentUser.value.uid
         ));
       unseenComments.value.forEach((unseenComment) => {
-        console.log(document.getElementById(unseenComment.id));
         commentObserver.observe(document.getElementById(unseenComment.id));
       });
     });
@@ -116,7 +115,6 @@ export default {
       unseenComments,
       currentFeedbackComments,
       author,
-      test: () => { store.commit('feedback/test'); },
     };
   },
 };

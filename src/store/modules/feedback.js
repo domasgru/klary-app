@@ -1,6 +1,6 @@
 import { firestoreAction } from 'vuexfire';
 import { db } from '@/firebase';
-import { pureSpliceArrayStateMutation, bindFirestoreArrayRefAction } from '../utils/bindFirestoreRef';
+import { bindFirestoreArrayRefMutations, bindFirestoreArrayRefAction } from '../utils/bindFirestoreRef';
 
 export default {
   state: {
@@ -13,7 +13,7 @@ export default {
     setCurrentFeedback(state, value) {
       state.currentFeedback = value;
     },
-    pureSpliceArrayStateMutation,
+    ...bindFirestoreArrayRefMutations,
   },
   actions: {
     setCurrentFeedback({ commit }, value) {
@@ -21,15 +21,6 @@ export default {
     },
     bindCurrentFeedback: firestoreAction(({ bindFirestoreRef }, feedbackId) => (
       bindFirestoreRef('currentFeedback', db.collection('feedbacks').doc(feedbackId))
-    )),
-    bindReceivedFeedbacks1: firestoreAction(({ bindFirestoreRef }, { userId, workspaceId }) => (
-      bindFirestoreRef(
-        'receivedFeedbacks',
-        db.collection('feedbacks')
-          .where('receiverId', '==', userId)
-          .where('workspaceId', '==', workspaceId)
-          .orderBy('createdAt', 'desc'),
-      )
     )),
     bindReceivedFeedbacks({ commit }, { userId, workspaceId }) {
       bindFirestoreArrayRefAction(
@@ -41,17 +32,26 @@ export default {
           .orderBy('createdAt', 'desc'),
       );
     },
-    bindSentFeedbacks: firestoreAction(({ bindFirestoreRef }, { userId, workspaceId }) => (
-      bindFirestoreRef(
-        'sentFeedbacks',
+    bindSentFeedbacks({ commit }, { userId, workspaceId }) {
+      bindFirestoreArrayRefAction(
+        commit,
+       'sentFeedbacks',
         db.collection('feedbacks')
           .where('authorId', '==', userId)
           .where('workspaceId', '==', workspaceId)
           .orderBy('createdAt', 'desc'),
-      )
-    )),
-    bindCurrentFeedbackComments: firestoreAction(({ bindFirestoreRef }, id) => (
+      );
+    },
+    bindCurrentFeedbackComments2: firestoreAction(({ bindFirestoreRef }, id) => (
       bindFirestoreRef('currentFeedbackComments', db.collection(`feedbacks/${id}/discussion`).orderBy('createdAt', 'asc'))
     )),
+    bindCurrentFeedbackComments({ commit }, id) {
+      return bindFirestoreArrayRefAction(
+        commit,
+        'currentFeedbackComments',
+        db.collection(`feedbacks/${id}/discussion`)
+        .orderBy('createdAt', 'asc'),
+      );
+    },
   },
 };

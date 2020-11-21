@@ -100,6 +100,7 @@ export const router = createRouter({
           const workspace = await getWorkspace(currentWorkspace);
           await Promise.all([
             store.dispatch('feedback/bindReceivedFeedbacks', { userId: uid, workspaceId: currentWorkspace }),
+            store.dispatch('feedback/bindSentFeedbacks', { userId: uid, workspaceId: currentWorkspace }),
             store.dispatch('workspace/setTeam', currentWorkspace),
           ]);
           store.dispatch('workspace/setCurrentWorkspace', workspace);

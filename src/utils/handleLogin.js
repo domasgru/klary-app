@@ -1,10 +1,10 @@
 /* eslint-disable import/prefer-default-export */
-import store from '@/store';
+import { store } from '@/store';
 import { createUserProfileDocument, updateUserProfileDocument, getInvitedWorkspaces } from '@/firebase';
 
 export const handleLoginAndReturnRedirect = async (authResult) => {
     const { user, additionalUserInfo } = authResult;
-    store.dispatch('user/setUserAuth', user);
+    store.dispatch('user/setUserAuth', { email: user.email, uid: user.uid });
 
     const profilePicture = additionalUserInfo.profile?.picture
         ? { googlePicture: additionalUserInfo.profile?.picture } : {};
@@ -26,5 +26,5 @@ export const handleLoginAndReturnRedirect = async (authResult) => {
     }
 
     await store.dispatch('user/bindUser', user.uid);
-    return '/workspace';
+    return Promise.resolve('/workspace');
 };
