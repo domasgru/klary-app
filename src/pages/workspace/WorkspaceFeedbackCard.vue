@@ -60,6 +60,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { useGetUser } from '@/composables/useGetUser';
 import { mapState } from 'vuex';
 import { FEEDBACK_ACTION_TYPES } from '@/constants';
+import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 
 dayjs.extend(relativeTime);
 
@@ -108,29 +109,7 @@ export default {
       return '';
     },
     isSeen() {
-      const { participants } = this.feedbackData;
-      const currentUser = participants[this.userData.uid];
-
-      // User didn't see feedback at all
-      if (!currentUser.seenAt) {
-        return false;
-      }
-
-      const { lastAction, name } = Object.entries(participants)
-        .filter(([id, participant]) => id !== this.userData.uid)
-        .map(([id, value]) => value)
-        .reduce((max, participant) => (
-          max.lastAction.createdAt.seconds > participant.lastAction.createdAt.seconds
-          ? max
-          : participant
-        ));
-
-      // No actions from other users
-      if (!lastAction.createdAt) {
-        return true;
-      }
-
-      return currentUser.seenAt.seconds >= lastAction.createdAt.seconds;
+      return isFeedbackSeen(this.feedbackData, this.userData.uid);
     },
   },
 };
@@ -202,7 +181,7 @@ export default {
 
   &__time {
     width: 100%;
-    max-width: 7.6212%;
+    max-width: 8.6212%;
     margin-right: 1.8475%;
     text-align: right;
   }

@@ -1,56 +1,85 @@
 import { firestoreAction } from 'vuexfire';
 import { db } from '@/firebase';
+import { FEEDBACKS_COLLECTION, ACTIVE_STATE } from '@/constants/feedback';
+import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import { bindFirestoreArrayRefMutations, bindFirestoreArrayRefAction } from '../utils/bindFirestoreRef';
 
 export default {
   state: {
+    // Sent and received has to have separate state, as firestore does not have logical OR opretator
     receivedFeedbacks: null,
     sentFeedbacks: null,
+    archivedFeedbacks: null,
     currentFeedback: null,
     currentFeedbackComments: null,
   },
-  mutations: {
-    setCurrentFeedback(state, value) {
-      state.currentFeedback = value;
+  getters: {
+    allFeedbacks(state) {
+      if (!state.receivedFeedbacks || !state.sentFeedbacks) {
+        return null;
+      }
+
+      return [...state.receivedFeedbacks, ...state.sentFeedbacks];
     },
+    receivedFeedbacks(state) {
+      return state.receivedFeedbacks;
+    },
+    sentFeedbacks(state) {
+      return state.sentFeedbacks;
+    },
+    favoriteFeedbacks(state, getters) {
+      return getters.allFeedbacks;
+    },
+    archivedFeedbacks(state, getters) {
+      return getters.archivedFeedbacks;
+    },
+  },
+  mutations: {
     ...bindFirestoreArrayRefMutations,
   },
   actions: {
-    setCurrentFeedback({ commit }, value) {
-      commit('setCurrentFeedback', value);
-    },
     bindCurrentFeedback: firestoreAction(({ bindFirestoreRef }, feedbackId) => (
-      bindFirestoreRef('currentFeedback', db.collection('feedbacks').doc(feedbackId))
+      bindFirestoreRef('currentFeedback', db.collection(FEEDBACKS_COLLECTION).doc(feedbackId))
     )),
     bindReceivedFeedbacks({ commit }, { userId, workspaceId }) {
-      bindFirestoreArrayRefAction(
+      return bindFirestoreArrayRefAction(
         commit,
        'receivedFeedbacks',
-        db.collection('feedbacks')
+        db.collection(FEEDBACKS_COLLECTION)
           .where('receiverId', '==', userId)
-          .where('workspaceId', '==', workspaceId)
-          .orderBy('createdAt', 'desc'),
+          .where(`participants.${userId}.feedbackState`, '==', ACTIVE_STATE),
       );
     },
     bindSentFeedbacks({ commit }, { userId, workspaceId }) {
-      bindFirestoreArrayRefAction(
+      return bindFirestoreArrayRefAction(
         commit,
        'sentFeedbacks',
-        db.collection('feedbacks')
+        db.collection(FEEDBACKS_COLLECTION)
           .where('authorId', '==', userId)
-          .where('workspaceId', '==', workspaceId)
-          .orderBy('createdAt', 'desc'),
+          .where(`participants.${userId}.feedbackState`, '==', ACTIVE_STATE),
       );
     },
-    bindCurrentFeedbackComments2: firestoreAction(({ bindFirestoreRef }, id) => (
-      bindFirestoreRef('currentFeedbackComments', db.collection(`feedbacks/${id}/discussion`).orderBy('createdAt', 'asc'))
-    )),
+    bindAllFeedbacks({ dispatch }, { userId, workspaceId }) {
+      return Promise.all([
+        dispatch('bindReceivedFeedbacks', { userId, workspaceId }),
+        dispatch('bindSentFeedbacks', { userId, workspaceId }),
+      ]);
+    },
     bindCurrentFeedbackComments({ commit }, id) {
       return bindFirestoreArrayRefAction(
         commit,
         'currentFeedbackComments',
-        db.collection(`feedbacks/${id}/discussion`)
+        db.collection(`${FEEDBACKS_COLLECTION}/${id}/discussion`)
         .orderBy('createdAt', 'asc'),
+      );
+    },
+    // Separate handling for archived feedabcks
+    bindArchivedFeedbacks({ commit }, { userId, workspaceId }) {
+      return bindFirestoreArrayRefAction(
+        commit,
+        'archivedFeedbacks',
+        db.collection(FEEDBACKS_COLLECTION)
+          .where(`participants.${userId}.feedbackState`, '==', 'ARCHIVED'),
       );
     },
   },

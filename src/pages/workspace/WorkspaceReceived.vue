@@ -2,35 +2,68 @@
   <h4 class="title">
     Received
   </h4>
-  <h6 class="subtitle">
-    Active
-  </h6>
-  <WorkspaceFeedbackList
-    v-if="!isLoading"
-    :feedbacks="feedbacks"
-    class="active-feedback-list"
-    @open="openFeedback"
-  />
-  <h6 class="subtitle">
-    Closed
-  </h6>
-  <div class="closed-empty-state base-typography--b-14-20">
-    Once you close the feedback you received, it will be moved here.
-  </div>
+  <template v-if="isLoading || activeFeedbacks.length || closedFeedbacks.length">
+    <WorkspaceFeedbackList
+      v-if="!isLoading"
+      :feedbacks="activeFeedbacks"
+      label="Active"
+      empty-state-text="All your given feedbacks are closed."
+      class="feedback-list"
+      @open="openFeedback"
+    />
+    <WorkspaceFeedbackList
+      v-if="!isLoading"
+      :feedbacks="closedFeedbacks"
+      label="Closed "
+      empty-state-text="Once you close the feedback you received, it will be moved here."
+      @open="openFeedback"
+    />
+  </template>
+  <WorkspaceInboxEmptyState
+    v-else
+    title="Get your first feedback"
+    description="It can be about anything, quarterly or yearly review or just ask others how you align with company values."
+  >
+    <BaseButton
+      @click="$router.push('/workspace/request-feedback')"
+      v-text="'Request first feedback'"
+    />
+  </WorkspaceInboxEmptyState>
 </template>
 
 <script>
+import { computed } from 'vue';
 import { mapState, mapActions } from 'vuex';
 import { useFeedbackList } from '@/composables/useFeedback';
+import { FEEDBACK_STATUSES } from '@/constants';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
+import WorkspaceInboxEmptyState from './WorkspaceInboxEmptyState.vue';
 
 export default {
   components: {
     WorkspaceFeedbackList,
+    WorkspaceInboxEmptyState,
   },
   setup() {
-    const { feedbacks, isLoading, openFeedback } = useFeedbackList('received');
-    return { feedbacks, isLoading, openFeedback };
+    const { isLoading, openFeedback, getFilteredAndSortedFeedbacks } = useFeedbackList('received');
+
+    const activeFeedbacks = getFilteredAndSortedFeedbacks({
+      filterBy: 'status',
+      filterValue: FEEDBACK_STATUSES.ACTIVE,
+      sortReverse: true,
+    });
+    const closedFeedbacks = getFilteredAndSortedFeedbacks({
+      filterBy: 'status',
+      filterValue: FEEDBACK_STATUSES.CLOSED,
+      sortReverse: true,
+    });
+
+    return {
+      activeFeedbacks,
+      closedFeedbacks,
+      isLoading,
+      openFeedback,
+    };
   },
 };
 </script>
@@ -40,19 +73,7 @@ export default {
   margin-bottom: 32px;
 }
 
-.subtitle {
-  margin-bottom: 16px;
-}
-
-.active-feedback-list {
+.feedback-list {
   margin-bottom: 32px;
-}
-
-.closed-empty-state {
-  width: 100%;
-  padding: 29px 40px;
-  color: $grey-600;
-  border: 1px solid $grey-200;
-  border-radius: $border-radius;
 }
 </style>

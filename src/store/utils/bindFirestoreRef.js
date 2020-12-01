@@ -36,6 +36,7 @@ export const bindFirestoreArrayRefAction = async (commit, stateKey, firestoreRef
     .onSnapshot((snapshot) => {
       if (!snapshot.docChanges().length) {
         commit('bindEmptyArray', stateKey);
+        resolve([]);
       }
       snapshot.docChanges().forEach(({
         type, newIndex, oldIndex, doc,

@@ -41,6 +41,7 @@
 import { mapState } from 'vuex';
 import { createFeedback, getTimeNow } from '@/firebase';
 import { FEEDBACK_ACTION_TYPES, FEEDBACK_STATUSES } from '@/constants';
+import { ACTIVE_STATE } from '@/constants/feedback';
 import WorkspaceSelectTeamate from './WorkspaceSelectTeamate.vue';
 
 export default {
@@ -79,6 +80,8 @@ export default {
         workspaceId: this.currentWorkspace.id,
         participants: {
           [this.userData.uid]: {
+            feedbackState: ACTIVE_STATE,
+            flags: [],
             name: this.userData.name,
             googlePicture: this.userData.googlePicture,
             lastAction: {
@@ -88,6 +91,8 @@ export default {
             seenAt: timeNow,
           },
           [this.selectedUser.uid]: {
+            feedbackState: ACTIVE_STATE,
+            flags: [],
             name: this.selectedUser.name,
             googlePicture: this.selectedUser.googlePicture,
             lastAction: {

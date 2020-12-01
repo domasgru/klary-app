@@ -21,6 +21,7 @@
         :text="ITEM.text"
         :to="ITEM.path"
         :is-active="isActive(ITEM.path, $route.path)"
+        :notifications-count="getNotificationsCount(ITEM)"
         class="workspace-sidebar__button"
       />
     </div>
@@ -34,18 +35,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
+import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import WorkspaceSidebarButton from './WorkspaceSidebarButton.vue';
 
 const INBOX = {
   RECEIVED: {
     icon: 'received',
     text: 'Received',
+    storeState: 'receivedFeedbacks',
     path: '/workspace/received',
   },
   SENT: {
     icon: 'sent',
     text: 'Sent',
+    storeState: 'sentFeedbacks',
     path: '/workspace/sent',
   },
   FAVORITES: {
@@ -84,10 +88,16 @@ export default {
   },
   computed: {
     ...mapState('user', ['userData']),
+    ...mapGetters('feedback', ['receivedFeedbacks', 'sentFeedbacks']),
   },
   methods: {
     isActive(path, currentRoute) {
       return currentRoute.includes(path);
+    },
+    getNotificationsCount({ storeState: feedbacksType }) {
+      return feedbacksType
+      ? this[feedbacksType].filter((feedback) => !isFeedbackSeen(feedback, this.userData.uid)).length
+      : 0;
     },
   },
   INBOX,

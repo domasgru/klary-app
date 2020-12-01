@@ -14,7 +14,7 @@
       class="sidebar-button__icon"
     />
     <div v-if="text">
-      {{ text }}
+      {{ text }} {{ notificationsCount ? `(${notificationsCount})` : '' }}
     </div>
     <slot />
   </router-link>
@@ -42,6 +42,10 @@ export default {
     isActive: {
       type: Boolean,
       default: false,
+    },
+    notificationsCount: {
+      type: Number,
+      default: 0,
     },
   },
 };

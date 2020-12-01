@@ -1,7 +1,8 @@
 <template>
-  <div class="base-timestamp base-typography--b-14-20">
-    {{ time }}
-  </div>
+  <div
+    class="base-timestamp base-typography--b-14-20"
+    v-text="time"
+  />
 </template>
 
 <script>

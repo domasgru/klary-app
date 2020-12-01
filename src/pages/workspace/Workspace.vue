@@ -56,11 +56,13 @@ export default {
     flex-direction: column;
     flex-grow: 1;
     align-self: flex-start;
+    height: 100%;
     max-height: 100%;
   }
 
   &__content-container {
     display: flex;
+    flex-grow: 1;
     justify-content: center;
     padding: 48px 48px 0 48px;
     overflow-y: auto;

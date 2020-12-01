@@ -99,11 +99,11 @@ export const router = createRouter({
         if (currentWorkspace) {
           const workspace = await getWorkspace(currentWorkspace);
           await Promise.all([
-            store.dispatch('feedback/bindReceivedFeedbacks', { userId: uid, workspaceId: currentWorkspace }),
-            store.dispatch('feedback/bindSentFeedbacks', { userId: uid, workspaceId: currentWorkspace }),
+            store.dispatch('feedback/bindAllFeedbacks', { userId: uid, workspaceId: currentWorkspace }),
             store.dispatch('workspace/setTeam', currentWorkspace),
           ]);
           store.dispatch('workspace/setCurrentWorkspace', workspace);
+
           return next();
         }
 
@@ -182,7 +182,7 @@ export const router = createRouter({
 
 // REQUIRES AUTH
 router.beforeEach(async (to, from, next) => {
-  store.commit('setLoading', true);
+  // store.commit('setLoading', true);
   if (to.matched.some((route) => route.meta.requiresAuth)) {
     const user = await isLoggedIn();
     if (!user) {

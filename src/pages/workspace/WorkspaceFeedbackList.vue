@@ -1,19 +1,31 @@
 <template>
-  <div
-    class="feedbacks"
-    :class="{'feedbacks--not-empty': feedbacks.length}"
-  >
+  <div class="feedback-list">
+    <h6
+      v-if="label"
+      class="feedback-list__label"
+      v-text="label"
+    />
     <div
-      v-for="(feedback, index) in feedbacks"
-      :key="`feedback-${index}`"
-      class="feedback"
-      @click="$emit('open', feedback.id)"
+      class="feedbacks"
+      :class="{'feedbacks--empty': !feedbacks.length}"
     >
-      <WorkspaceFeedbackCard
-        :feedback-data="feedback"
-        :is-sent-feedback="isSentFeedback"
+      <p
+        v-if="!feedbacks.length"
+        class="base-typography--b-14-20"
+        v-text="emptyStateText"
       />
-      <div class="feedback__separator" />
+      <div
+        v-for="(feedback, index) in feedbacks"
+        :key="`feedback-${index}`"
+        class="feedback"
+        @click="$emit('open', feedback.id)"
+      >
+        <WorkspaceFeedbackCard
+          :feedback-data="feedback"
+          :is-sent-feedback="isSentFeedback"
+        />
+        <div class="feedback__separator" />
+      </div>
     </div>
   </div>
 </template>
@@ -26,6 +38,10 @@ export default {
     WorkspaceFeedbackCard,
   },
   props: {
+    label: {
+      type: String,
+      default: '',
+    },
     feedbacks: {
       type: Array,
       required: true,
@@ -34,19 +50,32 @@ export default {
       type: Boolean,
       default: false,
     },
+    emptyStateText: {
+      type: String,
+      default: '',
+    },
   },
   emits: ['open'],
 };
 </script>
 
 <style lang="scss" scoped>
+.feedback-list {
+  &__label {
+    margin-bottom: 16px;
+  }
+}
+
 .feedbacks {
   overflow: hidden;
   background: $light;
-  border-radius: 8px;
+  border: 1px solid $grey-200;
+  border-radius: $border-radius;
 
-  &--not-empty {
-    border: 1px solid $grey-200;
+  &--empty {
+    padding: 30px 40px;
+    color: $grey-600;
+    background: $grey-100;
   }
 }
 
@@ -56,5 +85,9 @@ export default {
     height: 1px;
     background: $grey-200;
   }
+}
+
+.feedback:last-child .feedback__separator {
+  display: none;
 }
 </style>
