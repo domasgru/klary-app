@@ -55,7 +55,7 @@ const INBOX = {
   FAVORITES: {
     icon: 'favorites',
     text: 'Favorites',
-    path: '/workspace/favorite',
+    path: '/workspace/favorites',
   },
   HIGHLIGHTS: {
     icon: 'highlights',

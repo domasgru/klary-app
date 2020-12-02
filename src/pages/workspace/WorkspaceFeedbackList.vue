@@ -18,11 +18,11 @@
         v-for="(feedback, index) in feedbacks"
         :key="`feedback-${index}`"
         class="feedback"
-        @click="$emit('open', feedback.id)"
       >
         <WorkspaceFeedbackCard
           :feedback-data="feedback"
           :is-sent-feedback="isSentFeedback"
+          @click="$emit('open', feedback.id)"
         />
         <div class="feedback__separator" />
       </div>

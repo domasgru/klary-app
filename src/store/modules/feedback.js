@@ -27,7 +27,7 @@ export default {
     sentFeedbacks(state) {
       return state.sentFeedbacks;
     },
-    favoriteFeedbacks(state, getters) {
+    favoritesFeedbacks(state, getters) {
       return getters.allFeedbacks;
     },
     archivedFeedbacks(state, getters) {

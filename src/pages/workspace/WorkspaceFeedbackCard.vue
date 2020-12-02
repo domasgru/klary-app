@@ -46,6 +46,8 @@
     <BaseSvg
       name="favorite"
       class="card__favorite"
+      :class="{'card__favorite--active': isFavorite}"
+      @click.stop="toggleFavorite"
     />
     <BaseSvg
       class="card__more"
@@ -61,8 +63,10 @@ import { useGetUser } from '@/composables/useGetUser';
 import { mapState } from 'vuex';
 import { FEEDBACK_ACTION_TYPES } from '@/constants';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
+import { updateFeedback } from '@/firebase';
 
 dayjs.extend(relativeTime);
+const favoriteFlag = 'favorite';
 
 export default {
   props: {
@@ -110,6 +114,25 @@ export default {
     },
     isSeen() {
       return isFeedbackSeen(this.feedbackData, this.userData.uid);
+    },
+    feedbackFlags() {
+      return this.feedbackData.participants[this.userData.uid]?.flags;
+    },
+    isFavorite() {
+      return this.feedbackFlags.includes(favoriteFlag);
+    },
+  },
+  methods: {
+    toggleFavorite() {
+      const updatedFlags = this.feedbackFlags.includes(favoriteFlag)
+        ? this.feedbackFlags.filter((flag) => flag !== favoriteFlag)
+        : [...this.feedbackFlags, favoriteFlag];
+
+      updateFeedback({
+        feedbackId: this.feedbackData.id,
+        path: `participants.${this.userData.uid}.flags`,
+        value: updatedFlags,
+      });
     },
   },
 };
@@ -191,6 +214,12 @@ export default {
     height: 24px;
     padding: 2px;
     margin-right: 1.8475%;
+    stroke: $grey-600;
+    transition: stroke 0.2s ease;
+
+    &--active {
+      stroke: #ffc800;
+    }
   }
 
   &__more {

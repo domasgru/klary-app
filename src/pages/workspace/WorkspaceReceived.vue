@@ -50,12 +50,10 @@ export default {
     const activeFeedbacks = getFilteredAndSortedFeedbacks({
       filterBy: 'status',
       filterValue: FEEDBACK_STATUSES.ACTIVE,
-      sortReverse: true,
     });
     const closedFeedbacks = getFilteredAndSortedFeedbacks({
       filterBy: 'status',
       filterValue: FEEDBACK_STATUSES.CLOSED,
-      sortReverse: true,
     });
 
     return {

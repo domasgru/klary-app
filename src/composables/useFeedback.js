@@ -67,7 +67,14 @@ export const useFeedbackList = (type) => {
     let preparedFeedbacks = null;
 
     if (filterBy && filterValue) {
-      preparedFeedbacks = feedbacks.value.filter((feedback) => feedback[filterBy] === filterValue);
+      preparedFeedbacks = feedbacks.value.filter((feedback) => {
+        const valueToFilter = getObjectValue(feedback, filterBy);
+        if (Array.isArray(valueToFilter)) {
+          return valueToFilter.includes(filterValue);
+        }
+
+        return valueToFilter === filterValue;
+      });
     }
     if (sortBy) {
       preparedFeedbacks = arraySort(preparedFeedbacks, compare('isSeen'), compare(sortBy));

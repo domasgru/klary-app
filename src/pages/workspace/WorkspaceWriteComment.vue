@@ -48,9 +48,13 @@ export default {
   },
   methods: {
     addComment() {
-      this.$v.$touch();
-      if (this.$v.comment.$invalid) {
-        return;
+      try {
+        this.$v.$touch();
+        if (this.$v.comment.$invalid) {
+          return;
+        }
+      } catch (e) {
+        console.log(e);
       }
 
       addComment(this.$route.params.id, this.comment, this.userData);

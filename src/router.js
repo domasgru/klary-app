@@ -23,6 +23,7 @@ import {
 } from '@/firebase';
 
 const WorkspaceSent = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceSent.vue'));
+const WorkspaceFavorites = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceFavorites.vue'));
 const WorkspaceGive = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceGive.vue'));
 const WorkspaceRequest = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceRequest.vue'));
 const WorkspaceFeedbackView = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceFeedbackView.vue'));
@@ -124,8 +125,8 @@ export const router = createRouter({
           component: WorkspaceSent,
         },
         {
-          path: 'favorite',
-          component: ComingSoon,
+          path: 'favorites',
+          component: WorkspaceFavorites,
         },
         {
           path: 'highlights',
@@ -144,12 +145,13 @@ export const router = createRouter({
           component: WorkspaceGive,
         },
         {
-          path: 'received/feedback/:id',
+          path: ':type/feedback/:id',
           component: WorkspaceFeedbackView,
           beforeEnter: async (to, from, next) => {
-            if (!store.state.feedback.receivedFeedbacks?.some((fb) => fb.id === to.params.id)) {
+            const { type, id } = to.params;
+            if (!store.getters[`feedback/${type}Feedbacks`]?.some((fb) => fb.id === id)) {
               try {
-                await store.dispatch('feedback/bindCurrentFeedback', to.params.id);
+                await store.dispatch('feedback/bindCurrentFeedback', id);
               } catch (e) {
                 console.error(e);
               }
@@ -157,23 +159,7 @@ export const router = createRouter({
             next();
           },
           // eslint-disable-next-line max-len
-          props: (route) => ({ feedbackData: store.state.feedback.receivedFeedbacks?.find((fb) => fb.id === route.params.id) }),
-        },
-        {
-          path: 'sent/feedback/:id',
-          component: WorkspaceFeedbackView,
-          beforeEnter: async (to, from, next) => {
-            if (!store.state.feedback.sentFeedbacks?.some((fb) => fb.id === to.params.id)) {
-              try {
-                await store.dispatch('feedback/bindCurrentFeedback', to.params.id);
-              } catch (e) {
-                console.error(e);
-              }
-            }
-            next();
-          },
-          // eslint-disable-next-line max-len
-          props: (route) => ({ feedbackData: store.state.feedback.sentFeedbacks?.find((fb) => fb.id === route.params.id) }),
+          props: (route) => ({ feedbackData: store.getters[`feedback/${route.params.type}Feedbacks`]?.find((fb) => fb.id === route.params.id) }),
         },
       ],
     },
