@@ -1,6 +1,6 @@
 import { firestoreAction } from 'vuexfire';
 import { db } from '@/firebase';
-import { FEEDBACKS_COLLECTION, ACTIVE_STATE } from '@/constants/feedback';
+import { FEEDBACKS_COLLECTION, ACTIVE_STATE, ARCHIVED_STATE } from '@/constants/feedback';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import { bindFirestoreArrayRefMutations, bindFirestoreArrayRefAction } from '../utils/bindFirestoreRef';
 
@@ -31,7 +31,7 @@ export default {
       return getters.allFeedbacks;
     },
     archivedFeedbacks(state, getters) {
-      return getters.archivedFeedbacks;
+      return state.archivedFeedbacks;
     },
   },
   mutations: {
@@ -50,7 +50,7 @@ export default {
           .where(`participants.${userId}.feedbackState`, '==', ACTIVE_STATE),
       );
     },
-    bindSentFeedbacks({ commit }, { userId, workspaceId }) {
+    bindSentFeedbacks({ commit }, { userId }) {
       return bindFirestoreArrayRefAction(
         commit,
        'sentFeedbacks',
@@ -74,12 +74,12 @@ export default {
       );
     },
     // Separate handling for archived feedabcks
-    bindArchivedFeedbacks({ commit }, { userId, workspaceId }) {
+    bindArchivedFeedbacks({ commit }, { userId }) {
       return bindFirestoreArrayRefAction(
         commit,
         'archivedFeedbacks',
         db.collection(FEEDBACKS_COLLECTION)
-          .where(`participants.${userId}.feedbackState`, '==', 'ARCHIVED'),
+          .where(`participants.${userId}.feedbackState`, '==', ARCHIVED_STATE),
       );
     },
   },

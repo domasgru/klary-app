@@ -1,17 +1,8 @@
 <template>
-  <div
-    v-click-outside="hide"
-    class="base-popup"
-  >
-    <button
-      class="base-popup__trigger"
-      @click="isOpen = !isOpen"
-    >
-      <slot />
-    </button>
+  <div class="base-popup">
+    <slot />
     <BaseBackgroundWrapper
       v-if="isOpen"
-
       class="base-popup__content"
       :style="{top, right, bottom, left}"
     >
@@ -23,6 +14,10 @@
 <script>
 export default {
   props: {
+    isOpen: {
+      type: Boolean,
+      required: true,
+    },
     top: {
       type: [String, Number],
       default: 'auto',
@@ -40,16 +35,6 @@ export default {
       default: 'auto',
     },
   },
-  data() {
-    return {
-      isOpen: false,
-    };
-  },
-  methods: {
-    hide(e) {
-      this.isOpen = false;
-    },
-  },
 };
 </script>
 
@@ -65,6 +50,7 @@ export default {
   &__content {
     position: absolute;
     z-index: 100;
+    padding: 4px;
     transform: translateY(100%);
   }
 }

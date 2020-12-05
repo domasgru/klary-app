@@ -24,6 +24,7 @@ import {
 
 const WorkspaceSent = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceSent.vue'));
 const WorkspaceFavorites = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceFavorites.vue'));
+const WorkspaceArchived = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceArchived.vue'));
 const WorkspaceGive = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceGive.vue'));
 const WorkspaceRequest = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceRequest.vue'));
 const WorkspaceFeedbackView = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceFeedbackView.vue'));
@@ -138,7 +139,7 @@ export const router = createRouter({
         },
         {
           path: 'archived',
-          component: ComingSoon,
+          component: WorkspaceArchived,
         },
         {
           path: 'give-feedback',

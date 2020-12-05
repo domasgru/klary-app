@@ -21,7 +21,7 @@
       >
         <WorkspaceFeedbackCard
           :feedback-data="feedback"
-          :is-sent-feedback="isSentFeedback"
+          :is-sent-feedback="isSentFeedback(feedback)"
           @click="$emit('open', feedback.id)"
         />
         <div class="feedback__separator" />
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import WorkspaceFeedbackCard from './WorkspaceFeedbackCard.vue';
 
 export default {
@@ -46,16 +47,20 @@ export default {
       type: Array,
       required: true,
     },
-    isSentFeedback: {
-      type: Boolean,
-      default: false,
-    },
     emptyStateText: {
       type: String,
       default: '',
     },
   },
   emits: ['open'],
+  computed: {
+    ...mapState('user', ['userData']),
+  },
+  methods: {
+    isSentFeedback(feedback) {
+      return feedback.authorId === this.userData.uid;
+    },
+  },
 };
 </script>
 
@@ -67,7 +72,6 @@ export default {
 }
 
 .feedbacks {
-  overflow: hidden;
   background: $light;
   border: 1px solid $grey-200;
   border-radius: $border-radius;

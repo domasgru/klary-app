@@ -3,56 +3,72 @@
     class="card"
     :class="{'card--unseen': !isSeen}"
   >
-    <div class="card__unseen-indicator-container">
+    <div class="card__clickable-area-wrapper">
+      <div class="card__unseen-indicator-container">
+        <div
+          v-show="!isSeen"
+          class="card__unseen-indicator"
+        />
+      </div>
       <div
-        v-show="!isSeen"
-        class="card__unseen-indicator"
+        v-if="isSentFeedback"
+        class="card__to base-typography--b-14-20"
+      >
+        To:
+      </div>
+      <BaseAvatar
+        class="card__initial"
+        :name="user.name"
+        :picture="user.googlePicture || ''"
+        size="xs"
+      />
+      <div
+        class="card__name"
+        :class="{
+          'base-typography--b-14-20': isSeen,
+          'base-typography--bold-b-14-20': !isSeen
+        }"
+      >
+        {{ user.name }}
+      </div>
+      <div
+        class="card__title"
+        :class="{
+          'base-typography--b-14-20': isSeen,
+          'base-typography--bold-b-14-20': !isSeen
+        }"
+      >
+        {{ feedbackData.title }}
+      </div>
+      <BaseTimestamp
+        class="card__time"
+        :timestamp="feedbackData.createdAt.seconds"
       />
     </div>
-    <div
-      v-if="isSentFeedback"
-      class="card__to base-typography--b-14-20"
-    >
-      To:
-    </div>
-    <BaseAvatar
-      class="card__initial"
-      :name="user.name"
-      :picture="user.googlePicture || ''"
-      size="xs"
-    />
-    <div
-      class="card__name"
-      :class="{
-        'base-typography--b-14-20': isSeen,
-        'base-typography--bold-b-14-20': !isSeen
-      }"
-    >
-      {{ user.name }}
-    </div>
-    <div
-      class="card__title"
-      :class="{
-        'base-typography--b-14-20': isSeen,
-        'base-typography--bold-b-14-20': !isSeen
-      }"
-    >
-      {{ feedbackData.title }}
-    </div>
-    <BaseTimestamp
-      class="card__time"
-      :timestamp="feedbackData.createdAt.seconds"
-    />
     <BaseSvg
       name="favorite"
       class="card__favorite"
       :class="{'card__favorite--active': isFavorite}"
       @click.stop="toggleFavorite"
     />
-    <BaseSvg
-      class="card__more"
-      name="more-horizontal"
-    />
+    <BaseDropdown
+      v-click-outside="{
+        handler: () => showOptions = false,
+        events: ['mousedown']
+      }"
+      :is-open="showOptions"
+      :items="optionsItems"
+      @click.stop
+      @archive="archiveFeedback"
+      @unarchive="unarchiveFeedback"
+      @delete="deleteFeedback"
+    >
+      <BaseSvg
+        class="card__more"
+        name="more-horizontal"
+        @click.stop="showOptions = !showOptions"
+      />
+    </BaseDropdown>
   </div>
 </template>
 
@@ -62,6 +78,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { useGetUser } from '@/composables/useGetUser';
 import { mapState } from 'vuex';
 import { FEEDBACK_ACTION_TYPES } from '@/constants';
+import { ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE } from '@/constants/feedback';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import { updateFeedback } from '@/firebase';
 
@@ -84,7 +101,14 @@ export default {
       ? props.feedbackData.receiverId
       : props.feedbackData.authorId;
     const user = useGetUser(userId);
-    return { user };
+    return {
+      user,
+    };
+  },
+  data() {
+    return {
+      showOptions: false,
+    };
   },
   computed: {
     ...mapState('user', ['userData']),
@@ -112,6 +136,19 @@ export default {
       }
       return '';
     },
+    optionsItems() {
+      const optionsArchiveItem = this.feedbackData.participants[this.userData.uid].feedbackState === ARCHIVED_STATE
+      ? { name: 'Unarchive', action: 'unarchive', icon: 'archive' }
+      : { name: 'Archive', action: 'archive', icon: 'archive' };
+      const optionsDeleteItem = {
+        name: 'Delete', action: 'delete', icon: 'delete', theme: 'alarm',
+      };
+
+      return [
+        optionsArchiveItem,
+        optionsDeleteItem,
+      ];
+    },
     isSeen() {
       return isFeedbackSeen(this.feedbackData, this.userData.uid);
     },
@@ -132,6 +169,27 @@ export default {
         feedbackId: this.feedbackData.id,
         path: `participants.${this.userData.uid}.flags`,
         value: updatedFlags,
+      });
+    },
+    archiveFeedback() {
+      updateFeedback({
+        feedbackId: this.feedbackData.id,
+        path: `participants.${this.userData.uid}.feedbackState`,
+        value: ARCHIVED_STATE,
+      });
+    },
+    unarchiveFeedback() {
+      updateFeedback({
+        feedbackId: this.feedbackData.id,
+        path: `participants.${this.userData.uid}.feedbackState`,
+        value: ACTIVE_STATE,
+      });
+    },
+    deleteFeedback() {
+      updateFeedback({
+        feedbackId: this.feedbackData.id,
+        path: `participants.${this.userData.uid}.feedbackState`,
+        value: DELETED_STATE,
       });
     },
   },
@@ -157,6 +215,12 @@ export default {
 
   &--unseen {
     background: $light;
+  }
+
+  &__clickable-area-wrapper {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
   }
 
   &__unseen-indicator-container {

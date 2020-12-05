@@ -29,6 +29,10 @@ export const useFeedbackList = (type) => {
       'feedback/bindAllFeedbacks',
       { userId: store.state.user.userData.uid, workspaceId: store.state.workspace.currentWorkspace.id },
     );
+
+    if (type === ARCHIVED_STATE) {
+      await store.dispatch('feedback/bindArchivedFeedbacks', { userId: store.state.user.userData.uid });
+    }
     isLoading.value = false;
   };
 
