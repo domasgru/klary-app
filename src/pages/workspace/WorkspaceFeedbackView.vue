@@ -77,7 +77,7 @@ export default {
 
     const otherParticipantsLastAction = computed(() => {
        const { lastAction, name } = Object.entries(props.feedbackData.participants)
-        // .filter(([id, participant]) => id !== currentUser.value.uid)
+        .filter(([id, participant]) => id !== currentUser.value.uid)
         .map(([id, value]) => value)
         .reduce((max, participant) => (
           max.lastAction.createdAt.seconds > participant.lastAction.createdAt.seconds
@@ -103,7 +103,7 @@ export default {
         .filter((comment) => (
           comment.createdAt.seconds
             > props.feedbackData.participants[currentUser.value.uid].seenAt?.seconds
-            // && comment.author.uid !== currentUser.value.uid
+            && comment.author.uid !== currentUser.value.uid
         ));
       unseenComments.value.forEach((unseenComment) => {
         commentObserver.observe(document.getElementById(unseenComment.id));
