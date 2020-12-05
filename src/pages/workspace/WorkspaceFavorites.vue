@@ -4,7 +4,7 @@
   </h4>
   <WorkspaceFeedbackList
     v-if="!isLoading"
-    :feedbacks="favoritesFeedbacks"
+    :feedbacks="favoriteFeedbacks"
     empty-state-text="You have no favorite feedbacks"
     @open="openFeedback"
   />
@@ -13,6 +13,7 @@
 <script>
 import { useFeedbackList } from '@/composables/useFeedback';
 import { useStore } from 'vuex';
+import { FAVORITE_TYPE } from '@/constants/feedback';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
 
 export default {
@@ -21,14 +22,14 @@ export default {
   },
   setup() {
     const store = useStore();
-    const { isLoading, openFeedback, getFilteredAndSortedFeedbacks } = useFeedbackList('favorites');
+    const { isLoading, openFeedback, getFilteredAndSortedFeedbacks } = useFeedbackList(FAVORITE_TYPE);
 
-    const favoritesFeedbacks = getFilteredAndSortedFeedbacks({
+    const favoriteFeedbacks = getFilteredAndSortedFeedbacks({
       filterBy: `participants.${store.state.user.userData.uid}.flags`,
-      filterValue: 'favorite',
+      filterValue: FAVORITE_TYPE,
     });
 
-    return { favoritesFeedbacks, isLoading, openFeedback };
+    return { favoriteFeedbacks, isLoading, openFeedback };
   },
 };
 </script>

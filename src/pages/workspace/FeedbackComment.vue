@@ -59,7 +59,6 @@
 <script>
 import { mapState } from 'vuex';
 import { addCommentReply } from '@/firebase';
-import { required } from '@vuelidate/validators';
 import { useGetUser } from '@/composables/useGetUser';
 import FeedbakCommentReply from './FedbackCommentReply.vue';
 
@@ -85,20 +84,12 @@ export default {
       replyContent: '',
     };
   },
-  validations() {
-    return {
-      replyContent: {
-        required,
-      },
-    };
-  },
   computed: {
     ...mapState('user', ['userData']),
   },
   methods: {
     addReply(commentId) {
-      this.$v.$touch();
-      if (this.$v.replyContent.$invalid) {
+      if (!this.replyContent) {
         return;
       }
 

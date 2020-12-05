@@ -20,7 +20,7 @@ export const useFeedbackList = (type) => {
   const isValidType = validTypes.includes(type);
   const currentUser = store.state.user.userData;
   const feedbacks = isValidType
-    ? computed(() => store.getters[`feedback/${type}Feedbacks`])
+    ? computed(() => store.getters[`feedback/${type.toLowerCase()}Feedbacks`])
     : computed(() => store.getters.allFeedbacks);
 
   const getFeedbackList = async () => {
@@ -86,7 +86,7 @@ export const useFeedbackList = (type) => {
 
     return preparedFeedbacks;
   });
-  const openFeedback = (id) => router.push({ path: `/workspace/${type}/feedback/${id}` });
+  const openFeedback = (id) => router.push({ path: `/workspace/${type.toLowerCase()}/feedback/${id}` });
 
   return {
     feedbacks, isLoading, getFilteredAndSortedFeedbacks, openFeedback,

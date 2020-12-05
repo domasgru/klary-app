@@ -8,7 +8,7 @@ export const isFeedbackSeen = (feedbackData, userId) => {
   }
 
   const { lastAction, name } = Object.entries(participants)
-    .filter(([id, participant]) => id !== userId)
+    // .filter(([id, participant]) => id !== userId)
     .map(([id, value]) => value)
     .reduce((max, participant) => (
       max.lastAction.createdAt.seconds > participant.lastAction.createdAt.seconds

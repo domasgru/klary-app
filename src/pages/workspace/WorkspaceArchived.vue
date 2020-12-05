@@ -22,7 +22,7 @@ export default {
   },
   setup() {
     const store = useStore();
-    const { isLoading, openFeedback, getFilteredAndSortedFeedbacks } = useFeedbackList('archived');
+    const { isLoading, openFeedback, getFilteredAndSortedFeedbacks } = useFeedbackList(ARCHIVED_STATE);
 
     const archivedFeedbacks = getFilteredAndSortedFeedbacks({
       filterBy: `participants.${store.state.user.userData.uid}.feedbackState`,

@@ -78,12 +78,13 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { useGetUser } from '@/composables/useGetUser';
 import { mapState } from 'vuex';
 import { FEEDBACK_ACTION_TYPES } from '@/constants';
-import { ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE } from '@/constants/feedback';
+import {
+ FAVORITE_TYPE, ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE,
+} from '@/constants/feedback';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import { updateFeedback } from '@/firebase';
 
 dayjs.extend(relativeTime);
-const favoriteFlag = 'favorite';
 
 export default {
   props: {
@@ -156,14 +157,14 @@ export default {
       return this.feedbackData.participants[this.userData.uid]?.flags;
     },
     isFavorite() {
-      return this.feedbackFlags.includes(favoriteFlag);
+      return this.feedbackFlags.includes(FAVORITE_TYPE);
     },
   },
   methods: {
     toggleFavorite() {
-      const updatedFlags = this.feedbackFlags.includes(favoriteFlag)
-        ? this.feedbackFlags.filter((flag) => flag !== favoriteFlag)
-        : [...this.feedbackFlags, favoriteFlag];
+      const updatedFlags = this.feedbackFlags.includes(FAVORITE_TYPE)
+        ? this.feedbackFlags.filter((flag) => flag !== FAVORITE_TYPE)
+        : [...this.feedbackFlags, FAVORITE_TYPE];
 
       updateFeedback({
         feedbackId: this.feedbackData.id,
