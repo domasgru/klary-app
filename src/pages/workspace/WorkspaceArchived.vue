@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import { useFeedbackList } from '@/composables/useFeedback';
 import { useStore } from 'vuex';
+import { useFeedbackList } from '@/composables/useFeedback';
 import { ARCHIVED_STATE } from '@/constants/feedback';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
 
@@ -35,5 +35,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-//
+.title {
+  margin-bottom: 32px;
+}
 </style>

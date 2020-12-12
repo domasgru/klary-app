@@ -41,7 +41,7 @@ import {
 } from 'vue';
 import { useGetUser } from '@/composables/useGetUser';
 import { updateSeenAt } from '@/firebase';
-import { FEEDBACK_ACTION_TYPES } from '@/constants';
+import { CREATE_ACTION } from '@/constants';
 import WorkspaceWriteComment from './WorkspaceWriteComment.vue';
 import FeedbackComment from './FeedbackComment.vue';
 
@@ -89,7 +89,7 @@ export default {
     });
 
     if (!props.feedbackData.participants[currentUser.value.uid].seenAt?.seconds
-    || (otherParticipantsLastAction.value.type === FEEDBACK_ACTION_TYPES.CREATE
+    || (otherParticipantsLastAction.value.type === CREATE_ACTION
     && otherParticipantsLastAction.value.createdAt.seconds > props.feedbackData.participants[currentUser.value.uid].seenAt?.seconds)) {
       updateSeenAt(currentUser.value.uid, props.feedbackData.id);
     }

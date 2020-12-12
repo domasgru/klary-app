@@ -20,6 +20,7 @@
         class="feedback"
       >
         <WorkspaceFeedbackCard
+          class="feedback__card"
           :feedback-data="feedback"
           :is-sent-feedback="isSentFeedback(feedback)"
           @click="$emit('open', feedback.id)"
@@ -88,6 +89,16 @@ export default {
     width: 100%;
     height: 1px;
     background: $grey-200;
+  }
+
+  &:first-child &__card {
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+  }
+
+  &:last-child &__card {
+    border-bottom-right-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
   }
 }
 

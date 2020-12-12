@@ -45,7 +45,8 @@ export default {
   background: $grey-100;
 
   &__sidebar {
-    width: 240px;
+    flex-basis: 240px;
+    flex-shrink: 0;
     height: 100%;
     background: $light;
     border-right: 1px solid $grey-200;
@@ -58,6 +59,7 @@ export default {
     align-self: flex-start;
     height: 100%;
     max-height: 100%;
+    overflow: hidden;
   }
 
   &__content-container {

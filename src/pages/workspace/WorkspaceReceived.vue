@@ -35,8 +35,7 @@
 import { computed } from 'vue';
 import { mapState, mapActions } from 'vuex';
 import { useFeedbackList } from '@/composables/useFeedback';
-import { FEEDBACK_STATUSES } from '@/constants';
-import { RECEIVED_TYPE } from '@/constants/feedback';
+import { RECEIVED_TYPE, ACTIVE_STATUS, CLOSED_STATUS } from '@/constants/feedback';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
 import WorkspaceInboxEmptyState from './WorkspaceInboxEmptyState.vue';
 
@@ -50,11 +49,11 @@ export default {
 
     const activeFeedbacks = getFilteredAndSortedFeedbacks({
       filterBy: 'status',
-      filterValue: FEEDBACK_STATUSES.ACTIVE,
+      filterValue: ACTIVE_STATUS,
     });
     const closedFeedbacks = getFilteredAndSortedFeedbacks({
       filterBy: 'status',
-      filterValue: FEEDBACK_STATUSES.CLOSED,
+      filterValue: CLOSED_STATUS,
     });
 
     return {

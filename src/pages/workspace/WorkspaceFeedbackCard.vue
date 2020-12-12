@@ -10,36 +10,43 @@
           class="card__unseen-indicator"
         />
       </div>
-      <div
+      <p
         v-if="isSentFeedback"
         class="card__to base-typography--b-14-20"
-      >
-        To:
-      </div>
+        v-text="'To:'"
+      />
       <BaseAvatar
         class="card__initial"
         :name="user.name"
         :picture="user.googlePicture || ''"
         size="xs"
       />
-      <div
+      <p
         class="card__name"
         :class="{
           'base-typography--b-14-20': isSeen,
           'base-typography--bold-b-14-20': !isSeen
         }"
-      >
-        {{ user.name }}
-      </div>
+        v-text="user.name"
+      />
       <div
+        v-if="isClosed"
+        class="card__label"
+      >
+        <BaseSvg
+          class="card__label-icon"
+          name="check"
+        />
+        Closed
+      </div>
+      <p
         class="card__title"
         :class="{
           'base-typography--b-14-20': isSeen,
           'base-typography--bold-b-14-20': !isSeen
         }"
-      >
-        {{ feedbackData.title }}
-      </div>
+        v-text="feedbackData.title"
+      />
       <BaseTimestamp
         class="card__time"
         :timestamp="feedbackData.createdAt.seconds"
@@ -77,9 +84,9 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useGetUser } from '@/composables/useGetUser';
 import { mapState } from 'vuex';
-import { FEEDBACK_ACTION_TYPES } from '@/constants';
+import { CREATE_ACTION, COMMENT_ACTION } from '@/constants';
 import {
- FAVORITE_TYPE, ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE,
+ FAVORITE_TYPE, ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE, CLOSED_STATUS,
 } from '@/constants/feedback';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import { updateFeedback } from '@/firebase';
@@ -129,10 +136,10 @@ export default {
       }
 
       const lastActionRelativeTime = dayjs(lastAction.createdAt.seconds * 1000).fromNow();
-
-      if (lastAction.type === FEEDBACK_ACTION_TYPES.COMMENT) {
+      debugger;
+      if (lastAction.type === COMMENT_ACTION) {
         return `${name} commented ${lastActionRelativeTime}`;
-      } if (lastAction.type === FEEDBACK_ACTION_TYPES.CREATE) {
+      } if (lastAction.type === CREATE_ACTION) {
         return `${name} created a feedback ${lastActionRelativeTime}`;
       }
       return '';
@@ -140,9 +147,9 @@ export default {
     optionsItems() {
       const optionsArchiveItem = this.feedbackData.participants[this.userData.uid].feedbackState === ARCHIVED_STATE
       ? { name: 'Unarchive', action: 'unarchive', icon: 'archive' }
-      : { name: 'Archive', action: 'archive', icon: 'archive' };
+      : { name: 'Archive for you', action: 'archive', icon: 'archive' };
       const optionsDeleteItem = {
-        name: 'Delete', action: 'delete', icon: 'delete', theme: 'alarm',
+        name: 'Delete for you', action: 'delete', icon: 'delete', theme: 'alarm',
       };
 
       return [
@@ -152,6 +159,9 @@ export default {
     },
     isSeen() {
       return isFeedbackSeen(this.feedbackData, this.userData.uid);
+    },
+    isClosed() {
+      return this.feedbackData.status === CLOSED_STATUS;
     },
     feedbackFlags() {
       return this.feedbackData.participants[this.userData.uid]?.flags;
@@ -211,7 +221,7 @@ export default {
 
   &:hover {
     cursor: pointer;
-    background: rgba($grey-100, 0.4);
+    background: $grey-150;
   }
 
   &--unseen {
@@ -226,6 +236,7 @@ export default {
 
   &__unseen-indicator-container {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
     width: 40px;
@@ -238,39 +249,59 @@ export default {
     border-radius: 50%;
   }
 
-  &__description {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 44.4%;
-    margin-right: 12.7%;
-  }
-
   &__to {
+    flex-shrink: 0;
     margin-right: 0.9237%;
     color: $grey-600;
   }
 
   &__initial {
-    margin-right: 0.923%;
+    flex-shrink: 0;
+    width: 24px;
+    margin-right: 8px;
   }
 
   &__name {
+    flex-shrink: 0;
     width: 100%;
-    max-width: 18.7066%;
-    margin-right: 3.6951%;
+    max-width: 162px;
+    margin-right: 32px;
+  }
+
+  &__label {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    padding: 2px 8px;
+    margin-right: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    color: $light;
+    text-transform: uppercase;
+    background: $grey-500;
+    border-radius: 14px;
+  }
+
+  &__label-icon {
+    width: 12px;
+    height: 12px;
+    padding: 2px;
+    margin-right: 6px;
   }
 
   &__title {
-    width: 100%;
-    max-width: 38%;
-    margin-right: auto;
+    @include text-overflow-ellipsis;
+
+    flex-grow: 1;
+    flex-shrink: 1000;
+    width: 200px;
   }
 
   &__time {
     width: 100%;
-    max-width: 8.6212%;
-    margin-right: 1.8475%;
+    max-width: 80px;
+    margin-right: 16px;
     text-align: right;
   }
 
@@ -278,7 +309,7 @@ export default {
     width: 24px;
     height: 24px;
     padding: 2px;
-    margin-right: 1.8475%;
+    margin-right: 16px;
     stroke: $grey-600;
     transition: stroke 0.2s ease;
 

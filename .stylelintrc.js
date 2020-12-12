@@ -4,4 +4,7 @@ module.exports = {
     'stylelint-config-standard',
     'stylelint-config-recess-order',
   ],
+  rules: {
+    'at-rule-no-unknown': null
+  }
 };

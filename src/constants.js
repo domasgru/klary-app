@@ -4,7 +4,5 @@ export const FEEDBACK_ACTION_TYPES = {
   COMMENT: 'COMMENT',
 };
 
-export const FEEDBACK_STATUSES = {
-  ACTIVE: 'ACTIVE',
-  CLOSED: 'CLOSED',
-};
+export const CREATE_ACTION = 'CREATE';
+export const COMMENT_ACTION = 'COMMENT';

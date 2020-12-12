@@ -11,7 +11,12 @@ import Workspace from '@/pages/workspace/Workspace.vue';
 import WorkspaceReceived from '@/pages/workspace/WorkspaceReceived.vue';
 import SelectWorkspace from '@/pages/SelectWorkspace.vue';
 import ComingSoon from '@/pages/ComingSoon.vue';
-
+import WorkspaceSent from '@/pages/workspace/WorkspaceSent.vue';
+import WorkspaceFavorites from '@/pages/workspace/WorkspaceFavorites.vue';
+import WorkspaceArchived from '@/pages/workspace/WorkspaceArchived.vue';
+import WorkspaceGive from '@/pages/workspace/WorkspaceGive.vue';
+import WorkspaceRequest from '@/pages/workspace/WorkspaceRequest.vue';
+import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
 import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
 
 import {
@@ -21,13 +26,6 @@ import {
   getUserWorkspaces,
   getInvitedWorkspaces,
 } from '@/firebase';
-
-const WorkspaceSent = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceSent.vue'));
-const WorkspaceFavorites = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceFavorites.vue'));
-const WorkspaceArchived = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceArchived.vue'));
-const WorkspaceGive = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceGive.vue'));
-const WorkspaceRequest = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceRequest.vue'));
-const WorkspaceFeedbackView = defineAsyncComponent(() => import('@/pages/workspace/WorkspaceFeedbackView.vue'));
 
 export const router = createRouter({
   history: createWebHistory(),

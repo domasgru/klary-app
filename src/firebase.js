@@ -2,7 +2,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import shortId from 'shortid';
-import { FEEDBACK_ACTION_TYPES } from '@/constants';
+import { COMMENT_ACTION } from '@/constants';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAFS8RVfGHghmSagIJ3FDRVcYTWaPCGMMw',
@@ -156,7 +156,7 @@ export const addComment = async (feedbackId, content, author) => {
   };
   const discussionRef = db.collection(`feedbacks/${feedbackId}/discussion`);
   updateFeedbackLastAction(
-    { userId: author.uid, feedbackId, actionType: FEEDBACK_ACTION_TYPES.COMMENT },
+    { userId: author.uid, feedbackId, actionType: COMMENT_ACTION },
   );
   return discussionRef.add(comment);
 };
@@ -173,7 +173,7 @@ export const addCommentReply = async (feedbackId, commentId, content, author) =>
   };
   const commentRef = db.doc(`feedbacks/${feedbackId}/discussion/${commentId}`);
   updateFeedbackLastAction(
-    { userId: author.uid, feedbackId, actionType: FEEDBACK_ACTION_TYPES.COMMENT },
+    { userId: author.uid, feedbackId, actionType: COMMENT_ACTION },
   );
   return commentRef.update({ replies: firebase.firestore.FieldValue.arrayUnion(reply) });
 };

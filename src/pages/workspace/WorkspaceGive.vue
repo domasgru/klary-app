@@ -40,8 +40,8 @@
 <script>
 import { mapState } from 'vuex';
 import { createFeedback, getTimeNow } from '@/firebase';
-import { FEEDBACK_ACTION_TYPES, FEEDBACK_STATUSES } from '@/constants';
-import { ACTIVE_STATE } from '@/constants/feedback';
+import { CREATE_ACTION } from '@/constants';
+import { ACTIVE_STATE, ACTIVE_STATUS } from '@/constants/feedback';
 import WorkspaceSelectTeamate from './WorkspaceSelectTeamate.vue';
 
 export default {
@@ -86,7 +86,7 @@ export default {
             googlePicture: this.userData.googlePicture,
             lastAction: {
               createdAt: timeNow,
-              type: FEEDBACK_ACTION_TYPES.CREATE,
+              type: CREATE_ACTION,
             },
             seenAt: timeNow,
           },
@@ -104,7 +104,7 @@ export default {
         },
         title: this.title,
         content: this.content,
-        status: FEEDBACK_STATUSES.ACTIVE,
+        status: ACTIVE_STATUS,
       });
     },
   },
