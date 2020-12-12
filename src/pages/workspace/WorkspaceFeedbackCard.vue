@@ -120,30 +120,6 @@ export default {
   },
   computed: {
     ...mapState('user', ['userData']),
-    lastAction() {
-      const { lastAction, name } = Object.values(this.feedbackData.participants)
-      .reduce((max, participant) => {
-        if (!participant.lastAction.createdAt) {
-          return max;
-        }
-
-        return max.lastAction.createdAt?.seconds > participant.lastAction.createdAt?.seconds
-        ? max : participant;
-      });
-
-      if (!lastAction.type || !lastAction.createdAt) {
-        return '';
-      }
-
-      const lastActionRelativeTime = dayjs(lastAction.createdAt.seconds * 1000).fromNow();
-      debugger;
-      if (lastAction.type === COMMENT_ACTION) {
-        return `${name} commented ${lastActionRelativeTime}`;
-      } if (lastAction.type === CREATE_ACTION) {
-        return `${name} created a feedback ${lastActionRelativeTime}`;
-      }
-      return '';
-    },
     optionsItems() {
       const optionsArchiveItem = this.feedbackData.participants[this.userData.uid].feedbackState === ARCHIVED_STATE
       ? { name: 'Unarchive', action: 'unarchive', icon: 'archive' }
