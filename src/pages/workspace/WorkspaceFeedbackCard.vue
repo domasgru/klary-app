@@ -86,7 +86,7 @@ import { useGetUser } from '@/composables/useGetUser';
 import { mapState } from 'vuex';
 import { CREATE_ACTION, COMMENT_ACTION } from '@/constants';
 import {
- FAVORITE_TYPE, ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE, CLOSED_STATUS,
+  FAVORITE_TYPE, ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE, CLOSED_STATUS,
 } from '@/constants/feedback';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import { updateFeedback } from '@/firebase';

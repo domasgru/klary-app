@@ -1,28 +1,43 @@
 <template>
-  <BasePopup :is-open="isOpen">
+  <BasePopup
+    :is-open="isOpen"
+    :side="side"
+    :margin-top="marginTop"
+    :margin-left="marginLeft"
+    :width="width"
+  >
     <slot />
     <template #content>
-      <button
-        v-for="{name, action, icon, theme} in items"
+      <div
+        v-for="{name, action, icon, theme, separator} in items"
         :key="name"
-        class="dropdown__item base-typography--button2"
-        :class="{
-          'dropdown__item--alarm': theme === 'alarm'
-        }"
-        @click="$emit(action)"
+        class="dropdown__item-wrapper"
       >
-        <BaseSvg
-          v-if="icon"
-          :name="icon"
-          class="dropdown__item-icon"
+        <button
+          class="dropdown__item base-typography--button2"
+          :class="{
+            'dropdown__item--alarm': theme === 'alarm'
+          }"
+          @click="$emit(action)"
+        >
+          <BaseSvg
+            v-if="icon"
+            :name="icon"
+            class="dropdown__item-icon"
+          />
+          {{ name }}
+        </button>
+        <div
+          v-if="separator"
+          class="dropdown__separator"
         />
-        {{ name }}
-      </button>
+      </div>
     </template>
   </BasePopup>
 </template>
 
 <script>
+const SIZES = ['sm', 'md'];
 
 export default {
   props: {
@@ -34,6 +49,22 @@ export default {
       type: Boolean,
       require: true,
     },
+    side: {
+      type: String,
+      default: 'right',
+    },
+     marginTop: {
+      type: String,
+      default: '0',
+    },
+    marginLeft: {
+      type: String,
+      default: '0',
+    },
+    width: {
+      type: String,
+      default: 'auto',
+    },
   },
 };
 </script>
@@ -43,6 +74,7 @@ export default {
   &__item {
     display: flex;
     align-items: center;
+    width: 100%;
     min-width: 152px;
     padding: 6px 8px;
     color: $dark;
@@ -61,6 +93,12 @@ export default {
         background: $error-light;
       }
     }
+  }
+
+  &__separator {
+    height: 1px;
+    margin: 3px 4px;
+    background: $grey-200;
   }
 
   &__item-icon {

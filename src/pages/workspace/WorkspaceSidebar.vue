@@ -1,18 +1,35 @@
 <template>
   <div class="workspace-sidebar">
-    <div class="workspace-sidebar__user base-typography--b-14-20">
-      <BaseAvatar
-        size="sm"
-        :name="userData.name"
-        :picture="userData.googlePicture || ''"
-        class="workspace-sidebar__user-avatar"
-      />
-      {{ userData.name }}
-      <BaseSvg
-        name="arrow-down"
-        class="workspace-sidebar__user-icon"
-      />
-    </div>
+    <BaseDropdown
+      v-click-outside="{
+        handler: () => showUserDropdown = false,
+        events: ['mousedown']
+      }"
+      :is-open="showUserDropdown"
+      :items="$options.userDropdownItems"
+      side="left"
+      margin-top="-12"
+      width="256px"
+      @open-settings="openSettings"
+      @logout="logoutAndRedirectToHomepage"
+    >
+      <button
+        class="workspace-sidebar__user base-typography--b-14-20"
+        @click="showUserDropdown = !showUserDropdown"
+      >
+        <BaseAvatar
+          size="sm"
+          :name="userData.name"
+          :picture="userData.googlePicture || ''"
+          class="workspace-sidebar__user-avatar"
+        />
+        {{ userData.name }}
+        <BaseSvg
+          name="arrow-down"
+          class="workspace-sidebar__user-icon"
+        />
+      </button>
+    </BaseDropdown>
     <div class="workspace-sidebar__buttons">
       <WorkspaceSidebarButton
         v-for="(ITEM, ITEM_ID) in $options.INBOX"
@@ -37,6 +54,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
+import { logout } from '@/firebase';
 import WorkspaceSidebarButton from './WorkspaceSidebarButton.vue';
 
 const INBOX = {
@@ -82,9 +100,28 @@ const ACTIONS = {
   },
 };
 
+const userDropdownItems = [
+  {
+    name: 'Account settings',
+    action: 'open-settings',
+    icon: 'profile',
+    separator: true,
+  },
+  {
+    name: 'Sign out',
+    action: 'logout',
+    icon: 'logout',
+  },
+];
+
 export default {
   components: {
     WorkspaceSidebarButton,
+  },
+  data() {
+    return {
+      showUserDropdown: false,
+    };
   },
   computed: {
     ...mapState('user', ['userData']),
@@ -99,20 +136,35 @@ export default {
       ? this[feedbacksType].filter((feedback) => !isFeedbackSeen(feedback, this.userData.uid)).length
       : 0;
     },
+    openSettings() {},
+    logoutAndRedirectToHomepage() {
+      logout();
+      window.location.replace(window.location.origin);
+    },
   },
   INBOX,
   ACTIONS,
+  userDropdownItems,
 };
 </script>
 
 <style lang="scss" scoped>
 .workspace-sidebar {
-  padding: 12px;
+  padding: 8px 12px;
 
   &__user {
     display: flex;
     align-items: center;
-    margin-bottom: 24px;
+    width: 100%;
+    padding: 4px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+
+    &:hover {
+      cursor: pointer;
+      background: $grey-100;
+    }
   }
 
   &__user-icon {
@@ -124,6 +176,7 @@ export default {
 
   &__user-avatar {
     margin-right: 8px;
+    cursor: pointer;
   }
 
   &__buttons {

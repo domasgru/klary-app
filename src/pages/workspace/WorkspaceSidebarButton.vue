@@ -69,7 +69,7 @@ export default {
   }
 
   &:hover {
-    background: #ebebee;
+    background: $grey-100;
   }
 
   &--is-fluid {

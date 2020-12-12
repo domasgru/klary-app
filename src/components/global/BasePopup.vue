@@ -4,7 +4,7 @@
     <BaseBackgroundWrapper
       v-if="isOpen"
       class="base-popup__content"
-      :style="{top, right, bottom, left}"
+      :style="popupStyles"
     >
       <slot name="content" />
     </BaseBackgroundWrapper>
@@ -18,21 +18,31 @@ export default {
       type: Boolean,
       required: true,
     },
-    top: {
-      type: [String, Number],
-      default: 'auto',
+    side: {
+      type: String,
+      default: 'right',
     },
-    right: {
-       type: [String, Number],
+    marginTop: {
+      type: String,
       default: '0',
     },
-    bottom: {
-       type: [String, Number],
+    marginLeft: {
+      type: String,
       default: '0',
     },
-    left: {
-       type: [String, Number],
+    width: {
+      type: String,
       default: 'auto',
+    },
+  },
+  computed: {
+    popupStyles() {
+      return {
+        right: this.side === 'right' ? '0' : 'auto',
+        left: this.side === 'left' ? `${-parseInt(this.marginLeft, 10)}px` : 'auto',
+        bottom: `${-parseInt(this.marginTop, 10)}px`,
+        width: this.width,
+      };
     },
   },
 };
