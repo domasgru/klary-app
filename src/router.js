@@ -1,5 +1,4 @@
 /* eslint-disable no-use-before-define */
-import { defineAsyncComponent } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import { store } from '@/store';
 import Home from '@/pages/Home.vue';

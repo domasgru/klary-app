@@ -5,11 +5,10 @@
   "scripts": {
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "vue-cli-service serve"
+    "start": "vue-cli-service serve --port 4000"
   },
   "dependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@vue/composition-api": "^1.0.0-beta.14",
     "@vuelidate/core": "^2.0.0-alpha.7",
     "@vuelidate/validators": "^2.0.0-alpha.5",
     "animejs": "^3.2.0",
@@ -23,20 +22,14 @@
     "get-value": "^3.0.1",
     "gsap": "^3.5.1",
     "lodash.difference": "^4.5.0",
-    "lottie-player-vue": "0.0.14",
-    "lottie-vuejs": "0.3.5",
     "node-sass": "^4.14.0",
     "sass-loader": "^8.0.2",
     "shortid": "^2.2.15",
     "svg-sprite-loader": "^5.0.0",
-    "v-click-outside": "^3.0.1",
-    "vue": "^3.0.2",
-    "vue-click-outside": "^1.1.0",
+    "vue": "^3.0.4",
     "vue-fuse": "^2.2.1",
     "vue-router": "^4.0.0-rc.1",
-    "vue-shortkey": "^3.1.7",
     "vuefire": "^2.2.2",
-    "vuelidate": "^0.7.5",
     "vuex": "^4.0.0-rc.1",
     "vuexfire": "^3.2.4"
   },
