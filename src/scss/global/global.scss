@@ -2,10 +2,6 @@
 @import 'typography';
 @import 'mixins';
 
-html {
-  overflow-y: scroll;
-}
-
 .container--md {
   width: 100%;
   max-width: 770px;

@@ -25,7 +25,7 @@
   max-width: 248px;
   padding: 10px 8px;
   color: $grey-500;
-  background: $light;
+  background: transparent;
   border-radius: 8px;
   transition: background 0.2s ease;
 

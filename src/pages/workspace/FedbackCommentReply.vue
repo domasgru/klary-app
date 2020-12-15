@@ -1,16 +1,13 @@
 <template>
   <div class="comment-reply">
-    <div class="comment-reply__left">
-      <BaseAvatar
-        size="sm"
-        :name="author.name"
-        :picture="author.googlePicture || ''"
-      />
-      <div class="comment-reply__vertical-line" />
-    </div>
-    <div class="comment-reply__right">
+    <BaseAvatar
+      size="md"
+      :name="author.name"
+      :picture="author.googlePicture || ''"
+    />
+    <div class="comment-reply__main">
       <div class="comment-reply__name-and-time">
-        <p class="comment-reply__name base-typography--b-14-20">
+        <p class="comment-reply__name base-typography--bold-button1">
           {{ author.name }}
         </p>
         <BaseTimestamp :timestamp="reply.createdAt.seconds" />
@@ -41,21 +38,23 @@ export default {
 <style lang="scss" scoped>
 .comment-reply {
   display: flex;
-  padding: 0 24px;
+  padding: 10px 24px 10px 24px;
   transition: background 0.3s;
+
+  &:first-child {
+    padding-top: 20px;
+  }
+
+  &:last-child {
+    padding-bottom: 20px;
+  }
 
   // Comes from upper component
   &--unseen {
     background: $primary-active;
   }
 
-  &__left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  &__right {
+  &__main {
     flex-grow: 1;
     justify-content: space-between;
     padding-left: 16px;
@@ -63,8 +62,8 @@ export default {
 
   &__name-and-time {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
+    align-items: center;
+    margin-bottom: 4px;
   }
 
   &__content {
@@ -73,18 +72,7 @@ export default {
   }
 
   &__name {
-    color: $grey-500;
-  }
-
-  &:not(:last-child) &__vertical-line {
-    flex-grow: 1;
-    width: 2px;
-    margin: 4px 0;
-    background: $grey-200;
-  }
-
-  &:not(:last-child) &__content {
-    margin-bottom: 32px;
+    margin-right: 8px;
   }
 }
 </style>

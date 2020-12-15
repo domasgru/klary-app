@@ -1,20 +1,19 @@
 <template>
+  <div class="feedback-line-top" />
   <div class="feedback-comment">
     <div class="feedback-comment__header">
-      <div class="feedback-comment__line-top" />
       <div class="feedback-comment__author">
         <BaseAvatar
           class="feedback-comment__initial"
           :name="commentAuthor.name"
           :picture="commentAuthor.googlePicture || ''"
-          size="sm"
+          size="md"
         />
-        <p class="feedback-comment__author-name base-typography--b-14-20">
+        <p class="feedback-comment__author-name base-typography--bold-button1">
           {{ commentAuthor.name }}
         </p>
         <BaseTimestamp :timestamp="comment.createdAt.seconds" />
       </div>
-      <div class="feedback-comment__line-bottom" />
     </div>
     <div
       class="feedback-comment__content base-typography--b-16-24"
@@ -22,36 +21,30 @@
     >
       {{ comment.content }}
     </div>
-    <div
-      v-if="comment.replies && comment.replies.length"
-      class="feedback-comment__replies"
-    >
-      <FeedbakCommentReply
-        v-for="(reply, index) in comment.replies"
-        :id="reply.id"
-        :key="index"
-        :class="{'comment-reply--unseen': unseenComments.some(unseenComment => unseenComment.id === reply.id)}"
-        :reply="reply"
+  </div>
+  <div
+    v-if="comment.replies && comment.replies.length"
+    class="feedback-replies"
+  >
+    <FeedbakCommentReply
+      v-for="(reply, index) in comment.replies"
+      :id="reply.id"
+      :key="index"
+      :class="{'comment-reply--unseen': unseenComments.some(unseenComment => unseenComment.id === reply.id)}"
+      :reply="reply"
+    />
+  </div>
+  <div class="feedback-write-reply">
+    <div class="feedback-write-reply__input-wrapper">
+      <BaseTextarea
+        v-model="replyContent"
+        class="feedback-write-reply__input base-typography--b-16-24"
       />
-    </div>
-    <div class="feedback-comment__reply">
-      <BaseAvatar
-        class="feedback-comment__reply-initial"
-        :name="userData.name"
-        :picture="userData.googlePicture || ''"
-        size="sm"
+      <BaseSvg
+        class="feedback-write-reply__send-icon"
+        name="send-arrow"
+        @click="addReply(comment.id)"
       />
-      <div class="feedback-comment__reply-input-wrapper">
-        <BaseTextarea
-          v-model="replyContent"
-          class="feedback-comment__reply-input base-typography--b-16-24"
-        />
-        <BaseSvg
-          class="feedback-comment__send-icon"
-          name="send-arrow"
-          @click="addReply(comment.id)"
-        />
-      </div>
     </div>
   </div>
 </template>
@@ -101,11 +94,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.feedback-line-top {
+  width: 2px;
+  height: 36px;
+  margin-left: 34px;
+  background: $grey-200;
+}
+
 .feedback-comment {
+  padding: 20px 24px;
+  background: $light;
+  border: $stroke;
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+
   &__header {
     position: relative;
     display: flex;
     flex-direction: column;
+    margin-bottom: 16px;
   }
 
   &__author {
@@ -115,66 +122,51 @@ export default {
   }
 
   &__initial {
-    margin-right: 12px;
+    margin-right: 16px;
   }
 
   &__author-name {
-    margin-right: auto;
-  }
-
-  &__line-top {
-    width: 2px;
-    height: 36px;
-    margin-bottom: 4px;
-    margin-left: 14px;
-    background: $grey-200;
-  }
-
-  &__line-bottom {
-    width: 2px;
-    height: 16px;
-    margin-top: 4px;
-    margin-left: 14px;
-    background: $grey-200;
+    margin-right: 8px;
   }
 
   &__content {
-    padding: 24px;
     word-break: break-word;
     white-space: pre-line;
-    background: $light;
-    border: $stroke;
-    border-top-left-radius: $border-radius;
-    border-top-right-radius: $border-radius;
     transition: background 0.3s;
 
     &--unseen {
       background: $primary-active;
     }
   }
+}
 
-  &__reply {
-    display: flex;
-    align-items: center;
-    padding: 12px 24px;
-    background: $grey-50;
-    border: $stroke;
-    border-top: none;
-    border-bottom-right-radius: $border-radius;
-    border-bottom-left-radius: $border-radius;
-  }
+.feedback-replies {
+  border-right: $stroke;
+  border-bottom: $stroke;
+  border-left: $stroke;
+}
 
-  &__reply-initial {
+.feedback-write-reply {
+  display: flex;
+  align-items: center;
+  padding: 8px 24px;
+  background: $grey-50;
+  border: $stroke;
+  border-top: none;
+  border-bottom-right-radius: $border-radius;
+  border-bottom-left-radius: $border-radius;
+
+  &__initial {
     margin-right: 12px;
   }
 
-  &__reply-input {
-    width: 100%;
-  }
-
-  &__reply-input-wrapper {
+  &__input-wrapper {
     position: relative;
     flex-grow: 1;
+  }
+
+  &__input {
+    width: 100%;
   }
 
   &__send-icon {
@@ -186,13 +178,6 @@ export default {
     height: 16px;
     padding: 8px;
     cursor: pointer;
-  }
-
-  &__replies {
-    padding: 24px 0;
-    border-right: $stroke;
-    border-bottom: $stroke;
-    border-left: $stroke;
   }
 }
 </style>

@@ -11,5 +11,8 @@ export const DELETED_STATE = 'DELETED';
 export const CLOSED_STATUS = 'CLOSED';
 export const ACTIVE_STATUS = 'ACTIVE';
 
+// Flags
+export const FAVORITE_FLAG = 'FAVORITE';
+
 // firestore
 export const FEEDBACKS_COLLECTION = 'feedbacks';

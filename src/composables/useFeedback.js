@@ -1,14 +1,17 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-shadow */
-import { computed, ref } from 'vue';
+import {
+ computed, ref, toRefs, watch,
+} from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import {
-  RECEIVED_TYPE, SENT_TYPE, FAVORITE_TYPE, ARCHIVED_STATE,
+  RECEIVED_TYPE, SENT_TYPE, FAVORITE_TYPE, ARCHIVED_STATE, ACTIVE_STATUS, CLOSED_STATUS,
 } from '@/constants/feedback';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import arraySort from 'array-sort';
 import getObjectValue from 'get-value';
+import { updateFeedback } from '@/firebase';
 
 const validTypes = [RECEIVED_TYPE, SENT_TYPE, FAVORITE_TYPE, ARCHIVED_STATE];
 
@@ -90,5 +93,45 @@ export const useFeedbackList = (type) => {
 
   return {
     feedbacks, isLoading, getFilteredAndSortedFeedbacks, openFeedback,
+  };
+};
+
+export const useFeedbackData = (feedbackData) => {
+  const store = useStore();
+  const userData = computed(() => store.state.user.userData);
+  const feedbackFlags = computed(() => feedbackData.value.participants[userData.value.uid]?.flags);
+  const feedbackId = computed(() => feedbackData.value.id);
+
+  const toggleFeedbackFlag = (flag) => {
+    const updatedFlags = feedbackFlags.value.includes(flag)
+        ? feedbackFlags.value.filter((feedbackFlag) => feedbackFlag !== flag)
+        : [...feedbackFlags.value, flag];
+
+    return updateFeedback({
+      feedbackId: feedbackId.value,
+      path: `participants.${userData.value.uid}.flags`,
+      value: updatedFlags,
+    });
+  };
+  const updateFeedbackStatus = (status) => updateFeedback({
+    feedbackId: feedbackId.value,
+    path: 'status',
+    value: status,
+  });
+  const updateFeedbackState = (state) => updateFeedback({
+      feedbackId: feedbackId.value,
+      path: `participants.${userData.value.uid}.feedbackState`,
+      value: state,
+  });
+
+  return {
+    feedbackFlags,
+    isFeedbackClosed: computed(() => feedbackData.value?.status === CLOSED_STATUS),
+    isFeedbackFavorite: computed(() => feedbackFlags.value.includes(FAVORITE_TYPE)),
+    isFeedbackArchived: computed(() => feedbackData.value.participants[userData.value.uid]?.feedbackState === ARCHIVED_STATE),
+    isFeedbackSent: computed(() => feedbackData.value.authorId === userData.value.uid),
+    toggleFeedbackFlag,
+    updateFeedbackStatus,
+    updateFeedbackState,
   };
 };

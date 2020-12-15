@@ -16,9 +16,14 @@ export default {
 
 <style lang="scss" scoped>
 .base-topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
   width: 100%;
-  padding: 12px;
-  background: $light;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.85);
   border-bottom: 1px solid $grey-200;
+  backdrop-filter: blur(10px);
 }
 </style>

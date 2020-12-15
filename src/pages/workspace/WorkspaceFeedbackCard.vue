@@ -66,9 +66,9 @@
       :is-open="showOptions"
       :items="optionsItems"
       @click.stop
-      @archive="archiveFeedback"
-      @unarchive="unarchiveFeedback"
-      @delete="deleteFeedback"
+      @archive="updateFeedbackState(ARCHIVED_STATE)"
+      @unarchive="updateFeedbackState(ACTIVE_STATE)"
+      @delete="updateFeedbackState(DELETED_STATE)"
     >
       <BaseSvg
         class="card__more"
@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import { computed } from 'vue';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useGetUser } from '@/composables/useGetUser';
@@ -105,12 +106,16 @@ export default {
     },
   },
   setup(props) {
-    const userId = props.isSentFeedback
+    const userId = computed(() => (props.isSentFeedback
       ? props.feedbackData.receiverId
-      : props.feedbackData.authorId;
-    const user = useGetUser(userId);
+      : props.feedbackData.authorId));
+    const user = useGetUser(userId.value);
+
     return {
       user,
+      ACTIVE_STATE,
+      ARCHIVED_STATE,
+      DELETED_STATE,
     };
   },
   data() {
@@ -158,26 +163,13 @@ export default {
         value: updatedFlags,
       });
     },
-    archiveFeedback() {
-      updateFeedback({
+    updateFeedbackState(newState) {
+       updateFeedback({
         feedbackId: this.feedbackData.id,
         path: `participants.${this.userData.uid}.feedbackState`,
-        value: ARCHIVED_STATE,
+        value: newState,
       });
-    },
-    unarchiveFeedback() {
-      updateFeedback({
-        feedbackId: this.feedbackData.id,
-        path: `participants.${this.userData.uid}.feedbackState`,
-        value: ACTIVE_STATE,
-      });
-    },
-    deleteFeedback() {
-      updateFeedback({
-        feedbackId: this.feedbackData.id,
-        path: `participants.${this.userData.uid}.feedbackState`,
-        value: DELETED_STATE,
-      });
+      this.showOptions = false;
     },
   },
 };

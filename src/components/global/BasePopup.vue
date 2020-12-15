@@ -60,6 +60,7 @@ export default {
   &__content {
     position: absolute;
     z-index: 100;
+    z-index: 2000;
     padding: 4px;
     transform: translateY(100%);
   }

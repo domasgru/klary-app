@@ -9,10 +9,14 @@ const isProduction = process.env.NODE_ENV === 'production';
 export const store = createStore({
   state: {
     loading: false,
+    scrollContainerRef: null,
   },
   mutations: {
     setLoading(state, value) {
       state.loading = value;
+    },
+    setScrollContainerRef(state, value) {
+      state.scrollContainerRef = value;
     },
     ...vuexfireMutations,
   },
