@@ -1,21 +1,25 @@
 <template>
-  <div class="feedback-actions">
+  <div
+    ref="actionsRef"
+    class="feedback-actions"
+  >
     <WorkspaceActionButton
+      ref="backRef"
       class="feedback-actions__back"
       icon="arrow-left"
       @click="router.back()"
     />
     <WorkspaceActionButton
       v-if="!isFeedbackSent"
-      :ref="el =>{ if(el) rightActionsRefs = [...rightActionsRefs, el] }"
+      ref="closeRef"
       class="feedback-actions__right-action feedback-actions__right-action--1"
       icon="checkmark-black"
-      :text="closeFeedbackActionButtonText"
+      :text="showOnSides? '' : closeFeedbackActionButtonText"
       :active="isFeedbackClosed"
       @click="toggleFeedbackStatus"
     />
     <WorkspaceActionButton
-      :ref="el =>{ if(el) rightActionsRefs = [...rightActionsRefs, el] }"
+      ref="starRef"
       class="feedback-actions__right-action feedback-actions__right-action--2"
       icon="star"
       theme="star"
@@ -23,7 +27,7 @@
       @click="toggleFeedbackFlag(FAVORITE_FLAG)"
     />
     <WorkspaceActionButton
-      :ref="el =>{ if(el) rightActionsRefs = [...rightActionsRefs, el] }"
+      ref="moreRef"
       class="feedback-actions__right-action feedback-actions__right-action--3"
       icon="more-horizontal"
       @click="toggleMoreOptions"
@@ -33,7 +37,7 @@
 
 <script>
 import {
- computed, ref, toRefs, onMounted, onBeforeUpdate, watch,
+ computed, ref, toRefs, onMounted, onBeforeUpdate, watch, nextTick,
 } from 'vue';
 import { useRouter } from 'vue-router';
 import { useFeedbackData } from '@/composables/useFeedback';
@@ -86,64 +90,95 @@ export default {
       }
     };
     const toggleMoreOptions = () => {};
-    const closeFeedbackActionButtonText = computed(() => (isFeedbackClosed.value ? 'Closed' : 'Close'));
+    const closeFeedbackActionButtonText = computed(() => {
+      if (isFeedbackClosed.value) {
+        return 'Closed';
+      }
+        return 'Close';
+    });
     const archiveActionButtonText = computed(() => (isFeedbackArchived.value ? 'Unarchive for you' : 'Archive for you'));
 
     // ANIMATION
-    const rightActionsRefs = ref([]);
+    const actionsRef = ref(null);
+    const backRef = ref(null);
+    const closeRef = ref(null);
+    const starRef = ref(null);
+    const moreRef = ref(null);
 
-    onBeforeUpdate(() => {
-      rightActionsRefs.value = [];
-    });
+    let actionsAnimationData = null;
+
     const calcAnimationData = (parentWidth) => {
+      const leftActionsRefs = [backRef.value].filter((v) => v);
+      const rightActionsRefs = [closeRef.value, starRef.value, moreRef.value].filter((v) => v);
+      const actionsWrapperWidth = actionsRef.value.offsetWidth;
+
       const data = [];
-      let currentIndex = 0;
-      rightActionsRefs.value.forEach(({ $el }) => {
-        const animationData = {};
-        const x = parentWidth - $el.offsetLeft + 24;
-        const y = 48 + ((40 + 8) * (currentIndex + 1));
-        animationData.timeline = gsap.timeline({ paused: true }).to(
-          $el,
-          {
+      const animationOptions = (x, y, index) => ({
             keyframes: [
               {
-                x: x + 30,
                 y: -50,
                 duration: 0.05,
               },
               {
                 x,
+                duration: 0.05,
+                opacity: 0,
+                delay: 0.05,
+              },
+              {
+                x,
                 y,
-                duration: 0.2,
+                opacity: 1,
+                duration: 0.05,
+                delay: 0.05,
               },
             ],
-            ease: 'power1.in',
-            delay: 0.05 * (rightActionsRefs.value.length - currentIndex),
-          },
+            ease: 'sine',
+            delay: 0.05 * (rightActionsRefs.length - index),
+      });
+
+      let leftCurrentIndex = 0;
+      leftActionsRefs.forEach(({ $el }) => {
+        const animationData = {};
+        const x = 0 - $el.offsetLeft - $el.offsetWidth - 24;
+        const y = 48 + ((40 + 8) * (leftCurrentIndex + 1));
+        animationData.timeline = gsap.timeline({ paused: true }).to(
+          $el,
+          animationOptions(x, y, leftCurrentIndex),
         );
         data.push(animationData);
-        currentIndex += 1;
+        leftCurrentIndex += 1;
+      });
+
+      let rightCurrentIndex = 0;
+      rightActionsRefs.forEach(({ $el }) => {
+        const animationData = {};
+        const x = actionsWrapperWidth - $el.offsetLeft + 24;
+        const y = 48 + ((40 + 8) * (rightCurrentIndex + 1));
+        animationData.timeline = gsap.timeline({ paused: true }).to(
+          $el,
+          animationOptions(x, y, rightCurrentIndex),
+        );
+        data.push(animationData);
+        rightCurrentIndex += 1;
       });
       return data;
     };
-    const runAnimations = (data) => {
-      data.forEach((animation) => {
-        animation.timeline.play();
+    const controlAnimations = (control) => {
+      actionsAnimationData.forEach((animation) => {
+        animation.timeline[control]();
       });
     };
-    onMounted(() => {
-      const marginTop = 48;
-      const marginLeft = 24;
-      const actionButtonSize = 40;
-      const actionButtonSpacing = 8;
-      const parentWidth = 900;
-      const actionsAnimationData = calcAnimationData(parentWidth);
-
-      runAnimations(actionsAnimationData);
-    });
-
-    watch(() => {
-      console.log(props);
+    watch(() => props.showOnSides, async (value) => {
+      await nextTick();
+      if (value) {
+        if (!actionsAnimationData) {
+          actionsAnimationData = calcAnimationData();
+        }
+        controlAnimations('play');
+      } else {
+        controlAnimations('reverse');
+      }
     });
 
     return {
@@ -159,7 +194,11 @@ export default {
       closeFeedbackActionButtonText,
       archiveActionButtonText,
       FAVORITE_FLAG,
-      rightActionsRefs,
+      actionsRef,
+      backRef,
+      closeRef,
+      starRef,
+      moreRef,
     };
   },
 };

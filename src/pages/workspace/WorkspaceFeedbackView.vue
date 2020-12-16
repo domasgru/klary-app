@@ -137,9 +137,9 @@ export default {
     onMounted(() => {
       const scrollContainer = document.querySelector('.workspace__content-container');
       scrollContainer.addEventListener('scroll', () => {
-        if (scrollContainer.scrollTop > 49) {
+        if (scrollContainer.scrollTop > 30) {
           showActionsOnSides.value = true;
-        } else if (scrollContainer.scrollTop < 49) {
+        } else if (scrollContainer.scrollTop < 5) {
           showActionsOnSides.value = false;
         }
       });

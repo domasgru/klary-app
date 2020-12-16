@@ -30,7 +30,11 @@ export default {
     ...mapState('workspace', ['currentWorkspace']),
   },
   mounted() {
-    this.setScrollContainerRef(this.$refs.scrollContainerRef);
+    try {
+      this.setScrollContainerRef('error', this.$refs.scrollContainerRef);
+    } catch (e) {
+      console.error(e);
+    }
   },
   methods: {
     ...mapActions('user', ['setUserAuth', 'unbindUser']),
@@ -71,6 +75,7 @@ export default {
     height: 100%;
     max-height: 100%;
     padding: 0 80px 48px 80px;
+    overflow-x: hidden;
     overflow-y: auto;
   }
 
