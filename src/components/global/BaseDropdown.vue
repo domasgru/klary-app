@@ -1,11 +1,5 @@
 <template>
-  <BasePopup
-    :is-open="isOpen"
-    :side="side"
-    :margin-top="marginTop"
-    :margin-left="marginLeft"
-    :width="width"
-  >
+  <BasePopup v-bind="$attrs">
     <slot />
     <template #content>
       <div
@@ -44,26 +38,6 @@ export default {
     items: {
       type: Array,
       required: true,
-    },
-    isOpen: {
-      type: Boolean,
-      require: true,
-    },
-    side: {
-      type: String,
-      default: 'right',
-    },
-     marginTop: {
-      type: String,
-      default: '0',
-    },
-    marginLeft: {
-      type: String,
-      default: '0',
-    },
-    width: {
-      type: String,
-      default: 'auto',
     },
   },
 };
@@ -106,6 +80,8 @@ export default {
     height: 20px;
     padding: 2px;
     margin-right: 8px;
+    fill: none;
+    stroke: $dark;
   }
 }
 </style>

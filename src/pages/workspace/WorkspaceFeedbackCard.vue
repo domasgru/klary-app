@@ -10,25 +10,27 @@
           class="card__unseen-indicator"
         />
       </div>
-      <p
-        v-if="isSentFeedback"
-        class="card__to base-typography--b-14-20"
-        v-text="'To:'"
-      />
-      <BaseAvatar
-        class="card__initial"
-        :name="user.name"
-        :picture="user.googlePicture || ''"
-        size="xs"
-      />
-      <p
-        class="card__name"
-        :class="{
-          'base-typography--b-14-20': isSeen,
-          'base-typography--bold-b-14-20': !isSeen
-        }"
-        v-text="user.name"
-      />
+      <div class="card__user">
+        <p
+          v-if="isSentFeedback"
+          class="card__to base-typography--b-14-20"
+          v-text="'To:'"
+        />
+        <BaseAvatar
+          class="card__initial"
+          :name="user.name"
+          :picture="user.googlePicture || ''"
+          size="xs"
+        />
+        <p
+          class="card__name"
+          :class="{
+            'base-typography--b-14-20': isSeen,
+            'base-typography--bold-b-14-20': !isSeen
+          }"
+          v-text="user.name"
+        />
+      </div>
       <div
         v-if="isClosed"
         class="card__label"
@@ -58,24 +60,17 @@
       :class="{'card__favorite--active': isFavorite}"
       @click.stop="toggleFavorite"
     />
-    <BaseDropdown
-      v-click-outside="{
-        handler: () => showOptions = false,
-        events: ['mousedown']
-      }"
-      :is-open="showOptions"
-      :items="optionsItems"
-      @click.stop
+    <WorkspaceFeedbackSettings
+      :feedback-data="feedbackData"
       @archive="updateFeedbackState(ARCHIVED_STATE)"
       @unarchive="updateFeedbackState(ACTIVE_STATE)"
       @delete="updateFeedbackState(DELETED_STATE)"
     >
       <BaseSvg
-        class="card__more"
+        class="icon-more"
         name="more-horizontal"
-        @click.stop="showOptions = !showOptions"
       />
-    </BaseDropdown>
+    </WorkspaceFeedbackSettings>
   </div>
 </template>
 
@@ -91,10 +86,14 @@ import {
 } from '@/constants/feedback';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import { updateFeedback } from '@/firebase';
+import WorkspaceFeedbackSettings from './WorkspaceFeedbackSettings.vue';
 
 dayjs.extend(relativeTime);
 
 export default {
+  components: {
+    WorkspaceFeedbackSettings,
+  },
   props: {
     feedbackData: {
       type: Object,
@@ -118,26 +117,8 @@ export default {
       DELETED_STATE,
     };
   },
-  data() {
-    return {
-      showOptions: false,
-    };
-  },
   computed: {
     ...mapState('user', ['userData']),
-    optionsItems() {
-      const optionsArchiveItem = this.feedbackData.participants[this.userData.uid].feedbackState === ARCHIVED_STATE
-      ? { name: 'Unarchive', action: 'unarchive', icon: 'archive' }
-      : { name: 'Archive for you', action: 'archive', icon: 'archive' };
-      const optionsDeleteItem = {
-        name: 'Delete for you', action: 'delete', icon: 'delete', theme: 'alarm',
-      };
-
-      return [
-        optionsArchiveItem,
-        optionsDeleteItem,
-      ];
-    },
     isSeen() {
       return isFeedbackSeen(this.feedbackData, this.userData.uid);
     },
@@ -217,23 +198,26 @@ export default {
     border-radius: 50%;
   }
 
+  &__user {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 194px;
+    margin-right: 32px;
+  }
+
   &__to {
-    flex-shrink: 0;
-    margin-right: 0.9237%;
+    margin-right: 8px;
     color: $grey-600;
   }
 
   &__initial {
-    flex-shrink: 0;
     width: 24px;
     margin-right: 8px;
   }
 
   &__name {
-    flex-shrink: 0;
-    width: 100%;
-    max-width: 162px;
-    margin-right: 32px;
+    flex-grow: 1;
   }
 
   &__label {
@@ -285,11 +269,12 @@ export default {
       stroke: #ffc800;
     }
   }
+}
 
-  &__more {
-    width: 24px;
-    height: 24px;
-    padding: 2px;
-  }
+.icon-more {
+  width: 24px;
+  height: 24px;
+  padding: 2px;
+  stroke: $grey-600;
 }
 </style>

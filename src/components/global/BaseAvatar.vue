@@ -2,11 +2,16 @@
   <button
     class="base-avatar"
     :class="computedClasses"
-    :style="picture
-      ? {background: `url(${picture})`, backgroundSize: 'cover',backgroundPosition: 'center'}
-      : {}"
   >
-    {{ picture ? '' : name.slice(0,1) }}
+    <div
+      class="base-avatar__image-background"
+      :style="picture
+        ? {background: `url(${picture})`, backgroundSize: 'cover',backgroundPosition: 'center'}
+        : {}"
+    />
+    <div class="base-avatar__default-initials">
+      {{ name.slice(0,1) }}
+    </div>
   </button>
 </template>
 
@@ -52,9 +57,11 @@ export default {
 
 <style lang="scss" scoped>
 .base-avatar {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   font-size: 20px;
   color: $light;
   text-transform: uppercase;
@@ -88,6 +95,21 @@ export default {
   &--lg {
     width: 72px;
     height: 72px;
+  }
+
+  &__image-background {
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__default-initials {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

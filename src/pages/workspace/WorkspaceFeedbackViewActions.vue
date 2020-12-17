@@ -3,35 +3,52 @@
     ref="actionsRef"
     class="feedback-actions"
   >
-    <WorkspaceActionButton
+    <div
       ref="backRef"
-      class="feedback-actions__back"
-      icon="arrow-left"
-      @click="router.back()"
-    />
-    <WorkspaceActionButton
-      v-if="!isFeedbackSent"
+      class="feedback-actions__back animation-wrapper"
+    >
+      <WorkspaceActionButton
+        icon="arrow-left"
+        @click="router.back()"
+      />
+    </div>
+    <div
       ref="closeRef"
-      class="feedback-actions__right-action feedback-actions__right-action--1"
-      icon="checkmark-black"
-      :text="showOnSides? '' : closeFeedbackActionButtonText"
-      :active="isFeedbackClosed"
-      @click="toggleFeedbackStatus"
-    />
-    <WorkspaceActionButton
+      class="feedback-actions__right-action animation-wrapper"
+    >
+      <WorkspaceActionButton
+        v-if="!isFeedbackSent"
+        icon="checkmark-black"
+        :text="showOnSides? '' : closeFeedbackActionButtonText"
+        :active="isFeedbackClosed"
+        @click="toggleFeedbackStatus"
+      />
+    </div>
+    <div
       ref="starRef"
-      class="feedback-actions__right-action feedback-actions__right-action--2"
-      icon="star"
-      theme="star"
-      :active="isFeedbackFavorite"
-      @click="toggleFeedbackFlag(FAVORITE_FLAG)"
-    />
-    <WorkspaceActionButton
+      class="feedback-actions__right-action animation-wrapper"
+    >
+      <WorkspaceActionButton
+        icon="star"
+        theme="star"
+        :active="isFeedbackFavorite"
+        @click="toggleFeedbackFlag(FAVORITE_FLAG)"
+      />
+    </div>
+    <WorkspaceFeedbackSettings
       ref="moreRef"
-      class="feedback-actions__right-action feedback-actions__right-action--3"
-      icon="more-horizontal"
-      @click="toggleMoreOptions"
-    />
+      :feedback-data="feedbackData"
+      :position="settingsPopupPosition"
+      @archive="updateFeedbackStateAndClose(ARCHIVED_STATE)"
+      @unarchive="updateFeedbackStateAndClose(ACTIVE_STATE)"
+      @delete="updateFeedbackStateAndClose(DELETED_STATE)"
+    >
+      <WorkspaceActionButton
+        class="feedback-actions__right-action"
+        icon="more-horizontal"
+        @click="toggleMoreOptions"
+      />
+    </WorkspaceFeedbackSettings>
   </div>
 </template>
 
@@ -42,14 +59,16 @@ import {
 import { useRouter } from 'vue-router';
 import { useFeedbackData } from '@/composables/useFeedback';
 import {
- ACTIVE_STATUS, CLOSED_STATUS, FAVORITE_FLAG, ACTIVE_STATE, ARCHIVED_STATE,
+ ACTIVE_STATUS, CLOSED_STATUS, FAVORITE_FLAG, ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE,
 } from '@/constants/feedback';
 import { gsap } from 'gsap';
 import WorkspaceActionButton from './WorkspaceActionButton.vue';
+import WorkspaceFeedbackSettings from './WorkspaceFeedbackSettings.vue';
 
 export default {
   components: {
     WorkspaceActionButton,
+    WorkspaceFeedbackSettings,
   },
   props: {
     feedbackData: {
@@ -80,14 +99,9 @@ export default {
         updateFeedbackStatus(CLOSED_STATUS);
       }
     };
-    const toggleFeedbackState = async () => {
-      if (isFeedbackArchived.value) {
-        updateFeedbackState(ACTIVE_STATE);
-        router.back();
-      } else {
-        updateFeedbackState(ARCHIVED_STATE);
-        router.back();
-      }
+    const updateFeedbackStateAndClose = (state) => {
+      updateFeedbackState(state);
+      router.back();
     };
     const toggleMoreOptions = () => {};
     const closeFeedbackActionButtonText = computed(() => {
@@ -97,7 +111,7 @@ export default {
         return 'Close';
     });
     const archiveActionButtonText = computed(() => (isFeedbackArchived.value ? 'Unarchive for you' : 'Archive for you'));
-
+    const settingsPopupPosition = computed(() => (props.showOnSides ? 'medium-left' : 'bottom-left'));
     // ANIMATION
     const actionsRef = ref(null);
     const backRef = ref(null);
@@ -114,36 +128,38 @@ export default {
 
       const data = [];
       const animationOptions = (x, y, index) => ({
-            keyframes: [
-              {
-                y: -50,
-                duration: 0.05,
-              },
-              {
-                x,
-                duration: 0.05,
-                opacity: 0,
-                delay: 0.05,
-              },
-              {
-                x,
-                y,
-                opacity: 1,
-                duration: 0.05,
-                delay: 0.05,
-              },
-            ],
-            ease: 'sine',
-            delay: 0.05 * (rightActionsRefs.length - index),
+        keyframes: [
+          {
+            y: -30,
+            duration: 0.15,
+            opacity: 0.1,
+          },
+          {
+            x,
+            duration: 0.1,
+            opacity: 0.1,
+            delay: 0.05 * ((rightActionsRefs.length - 1) - index),
+          },
+          {
+            x,
+            y,
+            opacity: 1,
+            duration: 0.15,
+
+          },
+        ],
+        ease: 'sine.inOut',
+        // delay: 0.05 * (rightActionsRefs.length - index),
       });
 
       let leftCurrentIndex = 0;
-      leftActionsRefs.forEach(({ $el }) => {
+      leftActionsRefs.forEach((actionRef) => {
+        const element = actionRef.$el || actionRef;
         const animationData = {};
-        const x = 0 - $el.offsetLeft - $el.offsetWidth - 24;
-        const y = 48 + ((40 + 8) * (leftCurrentIndex + 1));
+        const x = 0 - element.offsetLeft - element.offsetWidth - 24;
+        const y = ((40 + 8) * (leftCurrentIndex + 1));
         animationData.timeline = gsap.timeline({ paused: true }).to(
-          $el,
+          element,
           animationOptions(x, y, leftCurrentIndex),
         );
         data.push(animationData);
@@ -151,12 +167,13 @@ export default {
       });
 
       let rightCurrentIndex = 0;
-      rightActionsRefs.forEach(({ $el }) => {
+      rightActionsRefs.forEach((actionRef) => {
+        const element = actionRef.$el || actionRef;
         const animationData = {};
-        const x = actionsWrapperWidth - $el.offsetLeft + 24;
-        const y = 48 + ((40 + 8) * (rightCurrentIndex + 1));
+        const x = actionsWrapperWidth - element.offsetLeft + 24;
+        const y = ((40 + 8) * (rightCurrentIndex + 1));
         animationData.timeline = gsap.timeline({ paused: true }).to(
-          $el,
+          element,
           animationOptions(x, y, rightCurrentIndex),
         );
         data.push(animationData);
@@ -166,7 +183,7 @@ export default {
     };
     const controlAnimations = (control) => {
       actionsAnimationData.forEach((animation) => {
-        animation.timeline[control]();
+        animation.timeline[control](0);
       });
     };
     watch(() => props.showOnSides, async (value) => {
@@ -189,11 +206,15 @@ export default {
       isFeedbackSent,
       toggleFeedbackStatus,
       toggleFeedbackFlag,
-      toggleFeedbackState,
+      updateFeedbackStateAndClose,
       toggleMoreOptions,
       closeFeedbackActionButtonText,
+      settingsPopupPosition,
       archiveActionButtonText,
       FAVORITE_FLAG,
+      ARCHIVED_STATE,
+      ACTIVE_STATE,
+      DELETED_STATE,
       actionsRef,
       backRef,
       closeRef,

@@ -63,12 +63,12 @@ $star-color: #fac04b;
   }
 
   &--active {
-    color: $primary;
-    background: rgba(81, 31, 220, 0.1);
-    border: 1px solid $primary;
+    color: $success;
+    background: $success-light;
+    border: 1px solid $success;
 
     &:hover {
-      background: rgba(81, 31, 220, 0.1);
+      background: $success-light;
     }
   }
 
@@ -91,7 +91,7 @@ $star-color: #fac04b;
     transition: stroke 0.2s ease;
 
     #{$this}--active & {
-      stroke: $primary;
+      stroke: $success;
     }
 
     #{$this}--active-star & {

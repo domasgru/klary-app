@@ -1,6 +1,10 @@
 <template>
   <div class="feedback-line-top" />
-  <div class="feedback-comment">
+  <div
+    class="feedback-comment"
+    v-bind="$attrs"
+    :class="{'feedback-comment__content--unseen': unseenComments.some(unseenComment => unseenComment.id === comment.id)}"
+  >
     <div class="feedback-comment__header">
       <div class="feedback-comment__author">
         <BaseAvatar
@@ -17,7 +21,6 @@
     </div>
     <div
       class="feedback-comment__content base-typography--b-16-24"
-      :class="{'feedback-comment__content--unseen': unseenComments.some(unseenComment => unseenComment.id === comment.id)}"
     >
       {{ comment.content }}
     </div>
@@ -35,17 +38,14 @@
     />
   </div>
   <div class="feedback-write-reply">
-    <div class="feedback-write-reply__input-wrapper">
-      <BaseTextarea
-        v-model="replyContent"
-        class="feedback-write-reply__input base-typography--b-16-24"
-      />
-      <BaseSvg
-        class="feedback-write-reply__send-icon"
-        name="send-arrow"
-        @click="addReply(comment.id)"
-      />
-    </div>
+    <BaseTextarea
+      v-model="replyContent"
+      placeholder="Reply..."
+      class="feedback-write-reply__input base-typography--b-16-24"
+      has-submit
+      submit-button-text="Reply"
+      @submit="addReply(comment.id)"
+    />
   </div>
 </template>
 
@@ -94,6 +94,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$background-unseen: #511fdc1f;
+
 .feedback-line-top {
   width: 2px;
   height: 36px;
@@ -135,7 +137,7 @@ export default {
     transition: background 0.3s;
 
     &--unseen {
-      background: $primary-active;
+      background: $background-unseen;
     }
   }
 }

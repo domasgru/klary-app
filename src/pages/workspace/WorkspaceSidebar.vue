@@ -5,11 +5,13 @@
         handler: () => showUserDropdown = false,
         events: ['mousedown']
       }"
+      class="workspace-sidebar__user-wrapper"
       :is-open="showUserDropdown"
       :items="$options.userDropdownItems"
       side="left"
       margin-top="-12"
       width="256px"
+      position="bottom-right"
       @open-settings="openSettings"
       @logout="logoutAndRedirectToHomepage"
     >
@@ -152,12 +154,15 @@ export default {
 .workspace-sidebar {
   padding: 8px 12px;
 
+  &__user-wrapper {
+    margin-bottom: 16px;
+  }
+
   &__user {
     display: flex;
     align-items: center;
     width: 100%;
     padding: 4px;
-    margin-bottom: 16px;
     border-radius: 8px;
     transition: background 0.2s ease;
 

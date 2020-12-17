@@ -1,22 +1,14 @@
 <template>
-  <div class="comment">
-    <div class="comment__header base-typography--b-14-20">
-      Write comment:
-    </div>
-    <div class="comment__main">
-      <BaseTextarea
-        v-model="comment"
-        class="comment__textarea"
-        rows="5"
-      />
-      <BaseButton
-        class="comment__button"
-        @click="addComment"
-      >
-        Comment
-      </BaseButton>
-    </div>
-  </div>
+  <BaseTextarea
+    v-model="comment"
+    placeholder="Leave a comment..."
+    class="comment"
+    padding="16px 24px"
+    rows="5"
+    has-submit
+    submit-button-text="Comment"
+    @submit="addComment"
+  />
 </template>
 
 <script>
@@ -66,30 +58,6 @@ export default {
 
 <style lang="scss" scoped>
 .comment {
-  margin-top: 40px;
-  overflow: hidden;
-  background: $light;
-  border: $stroke;
-  border-radius: $border-radius;
-
-  &__header {
-    padding: 20px 24px;
-    color: $grey-500;
-    background: $grey-50;
-  }
-
-  &__main {
-    display: flex;
-    flex-direction: column;
-    padding: 12px;
-  }
-
-  &__textarea {
-    margin-bottom: 10px;
-  }
-
-  &__button {
-    margin-left: auto;
-  }
+  margin-top: 16px;
 }
 </style>

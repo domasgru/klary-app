@@ -39,6 +39,7 @@ export default {
 .comment-reply {
   display: flex;
   padding: 10px 24px 10px 24px;
+  background: $grey-50;
   transition: background 0.3s;
 
   &:first-child {
@@ -51,7 +52,7 @@ export default {
 
   // Comes from upper component
   &--unseen {
-    background: $primary-active;
+    background: #511fdc1f;
   }
 
   &__main {

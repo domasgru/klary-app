@@ -4,6 +4,11 @@
     <BaseBackgroundWrapper
       v-if="isOpen"
       class="base-popup__content"
+      :class="{
+        'base-popup__content--medium-left': position === $options.MEDIUM_LEFT,
+        'base-popup__content--bottom-right': position === $options.BOTTOM_RIGHT,
+        'base-popup__content--bottom-left': position === $options.BOTTOM_LEFT,
+      }"
       :style="popupStyles"
     >
       <slot name="content" />
@@ -12,23 +17,21 @@
 </template>
 
 <script>
+const MEDIUM_LEFT = 'medium-left';
+const BOTTOM_RIGHT = 'bottom-right';
+const BOTTOM_LEFT = 'bottom-left';
+const VALID_POSITIONS = [MEDIUM_LEFT, BOTTOM_RIGHT, BOTTOM_LEFT];
+
 export default {
   props: {
     isOpen: {
       type: Boolean,
       required: true,
     },
-    side: {
+    position: {
       type: String,
-      default: 'right',
-    },
-    marginTop: {
-      type: String,
-      default: '0',
-    },
-    marginLeft: {
-      type: String,
-      default: '0',
+      default: 'bottom-left',
+      validator: (value) => VALID_POSITIONS.includes(value),
     },
     width: {
       type: String,
@@ -38,13 +41,13 @@ export default {
   computed: {
     popupStyles() {
       return {
-        right: this.side === 'right' ? '0' : 'auto',
-        left: this.side === 'left' ? `${-parseInt(this.marginLeft, 10)}px` : 'auto',
-        bottom: `${-parseInt(this.marginTop, 10)}px`,
         width: this.width,
       };
     },
   },
+  MEDIUM_LEFT,
+  BOTTOM_RIGHT,
+  BOTTOM_LEFT,
 };
 </script>
 
@@ -62,7 +65,24 @@ export default {
     z-index: 100;
     z-index: 2000;
     padding: 4px;
-    transform: translateY(100%);
+
+    &--bottom-left {
+      right: 0;
+      bottom: -4px;
+      transform: translateY(100%);
+    }
+
+    &--bottom-right {
+      bottom: -4px;
+      left: 0;
+      transform: translateY(100%);
+    }
+
+    &--medium-left {
+      top: 0;
+      left: -4px;
+      transform: translateX(-100%);
+    }
   }
 }
 </style>
