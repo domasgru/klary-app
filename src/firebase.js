@@ -150,6 +150,9 @@ export const addComment = async (feedbackId, content, author) => {
     content,
     author: {
       name: author.name,
+      email: author.email,
+      picture: author.picture,
+      googlePicture: author.googlePicture,
       uid: author.uid,
     },
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
@@ -166,6 +169,9 @@ export const addCommentReply = async (feedbackId, commentId, content, author) =>
     id: shortId.generate(),
     author: {
       name: author.name,
+      email: author.email,
+      picture: author.picture,
+      googlePicture: author.googlePicture,
       uid: author.uid,
     },
     content,

@@ -11,14 +11,14 @@
         <BaseAvatar
           class="feedback__author-initial"
           size="md"
-          :name="author.name"
-          :picture="author.googlePicture || ''"
+          :name="feedbackAuthor.name"
+          :picture="feedbackAuthor.googlePicture || ''"
         />
         <div class="feedback__info-wrapper">
           <div class="feedback__author-and-time">
             <div
               class="feedback__author base-typography--bold-button1"
-              v-text="author.name"
+              v-text="feedbackAuthor.name"
             />
             <BaseTimestamp
               class="feedback__time"
@@ -55,12 +55,9 @@ import { useRouter } from 'vue-router';
 import {
  ref, computed, watch, nextTick, toRefs, onMounted,
 } from 'vue';
-import { useGetUser } from '@/composables/useGetUser';
 import { updateSeenAt } from '@/firebase';
 import { CREATE_ACTION } from '@/constants';
-import {
- ACTIVE_STATUS, CLOSED_STATUS, FAVORITE_FLAG, ACTIVE_STATE, ARCHIVED_STATE,
-} from '@/constants/feedback';
+import { useFeedbackData } from '@/composables/useFeedback';
 import WorkspaceWriteComment from './WorkspaceWriteComment.vue';
 import FeedbackComment from './FeedbackComment.vue';
 import WorkspaceFeedbackViewActions from './WorkspaceFeedbackViewActions.vue';
@@ -82,9 +79,10 @@ export default {
     const router = useRouter();
     const actionsRef = ref(null);
 
+    const { feedbackAuthor } = useFeedbackData(toRefs(props).feedbackData);
+
     const currentFeedbackComments = computed(() => store.state.feedback.currentFeedbackComments);
     const currentUser = computed(() => store.state.user.userData);
-    const author = useGetUser(props.feedbackData.authorId);
     const unseenComments = ref([]);
     const updateUnseenComments = (id) => {
       setTimeout(() => { unseenComments.value = unseenComments.value.filter((comment) => comment.id !== id); }, 2000);
@@ -148,7 +146,7 @@ export default {
       actionsRef,
       unseenComments,
       currentFeedbackComments,
-      author,
+      feedbackAuthor,
       router,
       showActionsOnSides,
     };

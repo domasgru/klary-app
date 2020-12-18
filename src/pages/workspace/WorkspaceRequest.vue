@@ -50,10 +50,7 @@ export default {
   },
   computed: {
     ...mapState('user', ['userData']),
-    ...mapState('workspace', ['currentWorkspace', 'team']),
-    teamArray() {
-      return Object.values(this.team);
-    },
+    ...mapState('workspace', ['currentWorkspace']),
     isFormValid() {
       return !!this.selectedUsers.length;
     },

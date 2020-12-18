@@ -101,6 +101,10 @@ export const useFeedbackData = (feedbackData) => {
   const userData = computed(() => store.state.user.userData);
   const feedbackFlags = computed(() => feedbackData.value.participants[userData.value.uid]?.flags);
   const feedbackId = computed(() => feedbackData.value.id);
+  const isFeedbackSent = computed(() => feedbackData.value.authorId === userData.value.uid);
+  const feedbackCardUserId = computed(() => (isFeedbackSent.value
+    ? feedbackData.value.receiverId
+    : feedbackData.value.authorId));
 
   const toggleFeedbackFlag = (flag) => {
     const updatedFlags = feedbackFlags.value.includes(flag)
@@ -126,10 +130,12 @@ export const useFeedbackData = (feedbackData) => {
 
   return {
     feedbackFlags,
+    feedbackCardUser: computed(() => feedbackData.value.participants[feedbackCardUserId.value]),
+    feedbackAuthor: computed(() => feedbackData.value.participants[feedbackData.value.authorId]),
     isFeedbackClosed: computed(() => feedbackData.value?.status === CLOSED_STATUS),
     isFeedbackFavorite: computed(() => feedbackFlags.value.includes(FAVORITE_TYPE)),
     isFeedbackArchived: computed(() => feedbackData.value.participants[userData.value.uid]?.feedbackState === ARCHIVED_STATE),
-    isFeedbackSent: computed(() => feedbackData.value.authorId === userData.value.uid),
+    isFeedbackSent,
     isFeedbackLastActionSeen: computed(() => isFeedbackSeen(feedbackData.value, userData.value.uid)),
     toggleFeedbackFlag,
     updateFeedbackStatus,

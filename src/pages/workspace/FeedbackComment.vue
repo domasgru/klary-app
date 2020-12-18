@@ -9,12 +9,12 @@
       <div class="feedback-comment__author">
         <BaseAvatar
           class="feedback-comment__initial"
-          :name="commentAuthor.name"
-          :picture="commentAuthor.googlePicture || ''"
+          :name="comment.author.name"
+          :picture="comment.author.googlePicture || ''"
           size="md"
         />
         <p class="feedback-comment__author-name base-typography--bold-button1">
-          {{ commentAuthor.name }}
+          {{ comment.author.name }}
         </p>
         <BaseTimestamp :timestamp="comment.createdAt.seconds" />
       </div>
@@ -52,7 +52,6 @@
 <script>
 import { mapState } from 'vuex';
 import { addCommentReply } from '@/firebase';
-import { useGetUser } from '@/composables/useGetUser';
 import FeedbakCommentReply from './FedbackCommentReply.vue';
 
 export default {
@@ -68,9 +67,6 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  setup(props) {
-    return { commentAuthor: useGetUser(props.comment.author.uid) };
   },
   data() {
     return {

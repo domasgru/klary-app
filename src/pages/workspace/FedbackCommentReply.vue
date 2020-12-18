@@ -2,13 +2,13 @@
   <div class="comment-reply">
     <BaseAvatar
       size="md"
-      :name="author.name"
-      :picture="author.googlePicture || ''"
+      :name="reply.author.name"
+      :picture="reply.author.googlePicture || ''"
     />
     <div class="comment-reply__main">
       <div class="comment-reply__name-and-time">
         <p class="comment-reply__name base-typography--bold-button1">
-          {{ author.name }}
+          {{ reply.author.name }}
         </p>
         <BaseTimestamp :timestamp="reply.createdAt.seconds" />
       </div>
@@ -20,17 +20,12 @@
 </template>
 
 <script>
-import { useGetUser } from '@/composables/useGetUser';
-
 export default {
   props: {
     reply: {
       type: Object,
       required: true,
     },
-  },
-  setup(props) {
-    return { author: useGetUser(props.reply.author.uid) };
   },
 };
 </script>

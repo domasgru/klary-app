@@ -41,9 +41,12 @@ export default {
       type: Array,
       default: () => ([]),
     },
+    team: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
-    ...mapState('workspace', ['team']),
     usersArray() {
       return Object.values(this.team).filter(
         (user) => !this.selectedUsers.some((selectedUser) => selectedUser.uid === user.uid),

@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { computed, toRefs } from 'vue';
+import { toRefs } from 'vue';
 import {
   FAVORITE_FLAG, ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE,
 } from '@/constants/feedback';
@@ -97,6 +97,7 @@ export default {
   setup(props) {
     const { feedbackData } = toRefs(props);
     const {
+      feedbackCardUser: user,
       isFeedbackSent,
       isFeedbackClosed,
       isFeedbackFavorite,
@@ -104,11 +105,6 @@ export default {
       toggleFeedbackFlag,
       updateFeedbackState,
     } = useFeedbackData(feedbackData);
-
-    const userId = computed(() => (isFeedbackSent.value
-      ? feedbackData.value.receiverId
-      : feedbackData.value.authorId));
-    const user = computed(() => feedbackData.value.participants[userId.value]);
 
     return {
       user,
