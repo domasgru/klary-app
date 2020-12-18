@@ -54,10 +54,11 @@
         :timestamp="feedbackData.createdAt.seconds"
       />
     </div>
-    <BaseSvg
-      name="favorite"
+    <WorkspaceFeedbackCardButton
+      icon="star"
+      theme="star"
       class="card__favorite"
-      :class="{'card__favorite--active': isFeedbackFavorite}"
+      :active="isFeedbackFavorite"
       @click.stop="toggleFeedbackFlag(FAVORITE_FLAG)"
     />
     <WorkspaceFeedbackSettings
@@ -66,9 +67,8 @@
       @unarchive="updateFeedbackState(ACTIVE_STATE)"
       @delete="updateFeedbackState(DELETED_STATE)"
     >
-      <BaseSvg
-        class="icon-more"
-        name="more-horizontal"
+      <WorkspaceFeedbackCardButton
+        icon="more-horizontal"
       />
     </WorkspaceFeedbackSettings>
   </div>
@@ -81,10 +81,12 @@ import {
 } from '@/constants/feedback';
 import { useFeedbackData } from '@/composables/useFeedback';
 import WorkspaceFeedbackSettings from './WorkspaceFeedbackSettings.vue';
+import WorkspaceFeedbackCardButton from './WorkspaceFeedbackCardButton.vue';
 
 export default {
   components: {
     WorkspaceFeedbackSettings,
+    WorkspaceFeedbackCardButton,
   },
   props: {
     feedbackData: {
@@ -116,6 +118,7 @@ export default {
       isFeedbackLastActionSeen,
       toggleFeedbackFlag,
       updateFeedbackState,
+      FAVORITE_FLAG,
       ACTIVE_STATE,
       ARCHIVED_STATE,
       DELETED_STATE,
@@ -130,7 +133,7 @@ export default {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 28px 32px 28px 0;
+  padding: 24px 32px 24px 0;
   color: $dark;
   user-select: none;
   background: $grey-100;
@@ -148,6 +151,7 @@ export default {
     display: flex;
     flex-grow: 1;
     align-items: center;
+    margin-right: 8px;
   }
 
   &__unseen-indicator-container {
@@ -220,28 +224,11 @@ export default {
   &__time {
     width: 100%;
     max-width: 80px;
-    margin-right: 16px;
     text-align: right;
   }
 
   &__favorite {
-    width: 24px;
-    height: 24px;
-    padding: 2px;
-    margin-right: 16px;
-    stroke: $grey-600;
-    transition: stroke 0.2s ease;
-
-    &--active {
-      stroke: #ffc800;
-    }
+    margin-right: 8px;
   }
-}
-
-.icon-more {
-  width: 24px;
-  height: 24px;
-  padding: 2px;
-  stroke: $grey-600;
 }
 </style>
