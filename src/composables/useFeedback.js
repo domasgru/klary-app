@@ -30,7 +30,7 @@ export const useFeedbackList = (type) => {
     isLoading.value = true;
     await store.dispatch(
       'feedback/bindAllFeedbacks',
-      { userId: store.state.user.userData.uid, workspaceId: store.state.workspace.currentWorkspace.id },
+      { userId: store.state.user.userData.uid },
     );
 
     if (type === ARCHIVED_STATE) {

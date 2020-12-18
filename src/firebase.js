@@ -83,53 +83,6 @@ export const updateUserProfileDocument = (uid, userData) => db.collection('users
     ...userData,
   });
 
-// Workspace
-export const getUserWorkspaces = async (userId) => (await db.collection('workspaces').where('team', 'array-contains', userId).get())
-  .docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-export const getInvitedWorkspaces = async (userEmail) => (
-  await db.collection('workspaceInvites').where('email', '==', userEmail).where('status', '==', 'PENDING').get())
-  .docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-export const createWorkspace = async (userId, workspaceName) => {
-  const workspaceRef = await db.collection('workspaces').add({
-    name: workspaceName,
-    team: [userId],
-  });
-  await db.collection('workspaces').doc(workspaceRef.id).collection('roles').doc(userId)
-    .set({
-      role: 'admin',
-    });
-  return {
-    id: workspaceRef.id,
-    data: (await workspaceRef.get()).data(),
-  };
-};
-export const getWorkspace = async (id) => {
-  const workspaceRef = db.doc(`workspaces/${id}`);
-  return { id: workspaceRef.id, ...(await workspaceRef.get()).data() };
-};
-export const addWorkspaceInvites = ({ invitedEmails, workspace, author }) => {
-  const batch = db.batch();
-  invitedEmails.forEach((email) => {
-    const docRef = db.collection('workspaceInvites').doc();
-    batch.set(docRef, {
-      createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
-      status: 'PENDING',
-      email,
-      workspace,
-      author,
-    });
-  });
-  return batch.commit();
-};
-export const updateWorkspaceInvite = (id, data) => {
-  const docRef = db.doc(`workspaceInvites/${id}`);
-  return docRef.update(data);
-};
-// TODO: FIND A SECURE WAY
-export const updateWorkspaceTeam = (id, uid) => db.doc(`workspaces/${id}`).update({ team: firebase.firestore.FieldValue.arrayUnion(uid) });
-
 // Feedback
 export const updateFeedback = ({ feedbackId, path, value }) => db.collection('feedbacks').doc(feedbackId).update({ [path]: value });
 export const updateFeedbackLastAction = ({ userId, feedbackId, actionType }) => updateFeedback({

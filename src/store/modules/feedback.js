@@ -41,7 +41,7 @@ export default {
     bindCurrentFeedback: firestoreAction(({ bindFirestoreRef }, feedbackId) => (
       bindFirestoreRef('currentFeedback', db.collection(FEEDBACKS_COLLECTION).doc(feedbackId))
     )),
-    bindReceivedFeedbacks({ commit }, { userId, workspaceId }) {
+    bindReceivedFeedbacks({ commit }, { userId }) {
       return bindFirestoreArrayRefAction(
         commit,
        'receivedFeedbacks',
@@ -61,8 +61,8 @@ export default {
     },
     bindAllFeedbacks({ dispatch }, { userId, workspaceId }) {
       return Promise.all([
-        dispatch('bindReceivedFeedbacks', { userId, workspaceId }),
-        dispatch('bindSentFeedbacks', { userId, workspaceId }),
+        dispatch('bindReceivedFeedbacks', { userId }),
+        dispatch('bindSentFeedbacks', { userId }),
       ]);
     },
     bindCurrentFeedbackComments({ commit }, id) {

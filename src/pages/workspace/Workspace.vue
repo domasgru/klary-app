@@ -26,9 +26,6 @@ export default {
     Sidebar,
     WorkspaceTopbar,
   },
-  computed: {
-    ...mapState('workspace', ['currentWorkspace']),
-  },
   mounted() {
     try {
       this.setScrollContainerRef('error', this.$refs.scrollContainerRef);

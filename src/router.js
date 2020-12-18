@@ -3,12 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { store } from '@/store';
 import Home from '@/pages/Home.vue';
 import Login from '@/pages/get-started/Login.vue';
-import GetStartedCreateName from '@/pages/GetStartedCreateName.vue';
-import GetStartedCreateTeam from '@/pages/GetStartedCreateTeam.vue';
-import GetStartedInviteTeam from '@/pages/GetStartedInviteTeam.vue';
 import Workspace from '@/pages/workspace/Workspace.vue';
 import WorkspaceReceived from '@/pages/workspace/WorkspaceReceived.vue';
-import SelectWorkspace from '@/pages/SelectWorkspace.vue';
 import ComingSoon from '@/pages/ComingSoon.vue';
 import WorkspaceSent from '@/pages/workspace/WorkspaceSent.vue';
 import WorkspaceFavorites from '@/pages/workspace/WorkspaceFavorites.vue';
@@ -18,13 +14,7 @@ import WorkspaceRequest from '@/pages/workspace/WorkspaceRequest.vue';
 import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
 import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
 
-import {
-  auth,
-  getCurrentUser,
-  getWorkspace,
-  getUserWorkspaces,
-  getInvitedWorkspaces,
-} from '@/firebase';
+import { auth, getCurrentUser } from '@/firebase';
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -46,47 +36,6 @@ export const router = createRouter({
       component: Login,
     },
     {
-      path: '/create-name',
-      component: GetStartedCreateName,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-    {
-      path: '/create-team',
-      component: GetStartedCreateTeam,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-    {
-      path: '/invite-team',
-      component: GetStartedInviteTeam,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-    {
-      path: '/select-workspace',
-      component: SelectWorkspace,
-      beforeEnter: async (to, from, next) => {
-        const { uid, email } = store.state.user.userData;
-        const [allWorkspaces, invitedWorkspaces] = await Promise.all([
-          getUserWorkspaces(uid),
-          getInvitedWorkspaces(email),
-        ]);
-        if (!allWorkspaces.length && !invitedWorkspaces.length) {
-          return next('/create-team');
-        }
-        store.dispatch('workspace/setAllWorkspaces', allWorkspaces);
-        store.dispatch('workspace/setInvitedWorkspaces', invitedWorkspaces);
-        return next();
-      },
-      meta: {
-        requiresAuth: true,
-      },
-    },
-    {
       path: '/workspace',
       component: Workspace,
       redirect: '/workspace/received',
@@ -94,21 +43,9 @@ export const router = createRouter({
         requiresAuth: true,
       },
       beforeEnter: async (to, from, next) => {
-        const { currentWorkspace, uid, email } = store.state.user.userData;
-        if (currentWorkspace) {
-          const workspace = await getWorkspace(currentWorkspace);
-          await store.dispatch('feedback/bindAllFeedbacks', { userId: uid, workspaceId: currentWorkspace });
-          store.dispatch('workspace/setCurrentWorkspace', workspace);
-
-          return next();
-        }
-
-        const allWorkspaces = await getUserWorkspaces(uid);
-        const invitedWorkspaces = await getInvitedWorkspaces(email);
-        if (allWorkspaces.length || invitedWorkspaces.length) {
-          return next('/select-workspace');
-        }
-        return next('/create-team');
+        const { uid } = store.state.user.userData;
+        await store.dispatch('feedback/bindAllFeedbacks', { userId: uid });
+        return next();
       },
       children: [
         {
@@ -169,9 +106,6 @@ router.beforeEach(async (to, from, next) => {
     if (!user) {
       return next('/login');
     }
-    if (!isUserAccountComplete(user)) {
-      return next('/complete-user');
-    }
     return next();
   }
   return next();
@@ -221,11 +155,4 @@ async function isLoggedIn() {
   store.dispatch('user/setUserAuth', userAuth);
   const userData = store.state.user.userData || await store.dispatch('user/bindUser', userAuth.uid);
   return userData;
-}
-
-async function isUserAccountComplete(userData) {
-  if (!userData.name) {
-    return false;
-  }
-  return true;
 }

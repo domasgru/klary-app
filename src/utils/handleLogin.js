@@ -1,6 +1,7 @@
+/* eslint-disable camelcase */
 /* eslint-disable import/prefer-default-export */
 import { store } from '@/store';
-import { createUserProfileDocument, updateUserProfileDocument, getInvitedWorkspaces } from '@/firebase';
+import { createUserProfileDocument, updateUserProfileDocument } from '@/firebase';
 
 export const handleLoginAndReturnRedirect = async (authResult) => {
     const { user, additionalUserInfo } = authResult;
@@ -11,18 +12,17 @@ export const handleLoginAndReturnRedirect = async (authResult) => {
 
     // Create new user profile
     if (additionalUserInfo.isNewUser) {
-      await createUserProfileDocument(user, { ...profilePicture });
-      await store.dispatch('user/bindUser', user.uid);
-      store.dispatch('workspace/setAllWorkspaces', []);
-      return '/create-name';
-    }
-
-    updateUserProfileDocument(user.uid, profilePicture);
-
-    // Redirect to invites if present
-    const invitedWorkspaces = await getInvitedWorkspaces(user.email);
-    if (invitedWorkspaces.length) {
-      return '/select-workspace';
+      const { name, given_name, email } = additionalUserInfo.profile;
+      await createUserProfileDocument(user, {
+         ...profilePicture,
+         name: name || given_name || email,
+      });
+    } else {
+      try {
+        updateUserProfileDocument(user.uid, profilePicture);
+      } catch (e) {
+        console.error(e);
+      }
     }
 
     await store.dispatch('user/bindUser', user.uid);

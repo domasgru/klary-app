@@ -58,7 +58,6 @@ export default {
   },
   computed: {
     ...mapState('user', ['userData']),
-    ...mapState('workspace', ['currentWorkspace']),
   },
   created() {
     this.title = `Feedback from ${this.userData.name}`;
@@ -77,7 +76,6 @@ export default {
       createFeedback({
         authorId: this.userData.uid,
         receiverId: this.selectedUser.uid,
-        workspaceId: this.currentWorkspace.id,
         participants: {
           [this.userData.uid]: {
             feedbackState: ACTIVE_STATE,

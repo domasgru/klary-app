@@ -50,7 +50,6 @@ export default {
   },
   computed: {
     ...mapState('user', ['userData']),
-    ...mapState('workspace', ['currentWorkspace']),
     isFormValid() {
       return !!this.selectedUsers.length;
     },
@@ -68,7 +67,6 @@ export default {
         from: { name: this.userData.name, uid: this.userData.uid },
         to: { name: this.selectedUser.name, uid: this.selectedUser.uid },
         message: this.message,
-        workspaceId: this.currentWorkspace.id,
       });
     },
   },
