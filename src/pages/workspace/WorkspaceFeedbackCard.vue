@@ -1,18 +1,18 @@
 <template>
   <div
     class="card"
-    :class="{'card--unseen': !isSeen}"
+    :class="{'card--unseen': !isFeedbackLastActionSeen}"
   >
     <div class="card__clickable-area-wrapper">
       <div class="card__unseen-indicator-container">
         <div
-          v-show="!isSeen"
+          v-show="!isFeedbackLastActionSeen"
           class="card__unseen-indicator"
         />
       </div>
       <div class="card__user">
         <p
-          v-if="isSentFeedback"
+          v-if="isFeedbackSent"
           class="card__to base-typography--b-14-20"
           v-text="'To:'"
         />
@@ -25,14 +25,14 @@
         <p
           class="card__name"
           :class="{
-            'base-typography--b-14-20': isSeen,
-            'base-typography--bold-b-14-20': !isSeen
+            'base-typography--b-14-20': isFeedbackLastActionSeen,
+            'base-typography--bold-b-14-20': !isFeedbackLastActionSeen
           }"
           v-text="user.name"
         />
       </div>
       <div
-        v-if="isClosed"
+        v-if="isFeedbackClosed"
         class="card__label"
       >
         <BaseSvg
@@ -44,8 +44,8 @@
       <p
         class="card__title"
         :class="{
-          'base-typography--b-14-20': isSeen,
-          'base-typography--bold-b-14-20': !isSeen
+          'base-typography--b-14-20': isFeedbackLastActionSeen,
+          'base-typography--bold-b-14-20': !isFeedbackLastActionSeen
         }"
         v-text="feedbackData.title"
       />
@@ -57,8 +57,8 @@
     <BaseSvg
       name="favorite"
       class="card__favorite"
-      :class="{'card__favorite--active': isFavorite}"
-      @click.stop="toggleFavorite"
+      :class="{'card__favorite--active': isFeedbackFavorite}"
+      @click.stop="toggleFeedbackFlag(FAVORITE_FLAG)"
     />
     <WorkspaceFeedbackSettings
       :feedback-data="feedbackData"
@@ -75,20 +75,12 @@
 </template>
 
 <script>
-import { computed } from 'vue';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { useGetUser } from '@/composables/useGetUser';
-import { mapState } from 'vuex';
-import { CREATE_ACTION, COMMENT_ACTION } from '@/constants';
+import { computed, toRefs } from 'vue';
 import {
-  FAVORITE_TYPE, ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE, CLOSED_STATUS,
+  FAVORITE_FLAG, ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE,
 } from '@/constants/feedback';
-import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
-import { updateFeedback } from '@/firebase';
+import { useFeedbackData } from '@/composables/useFeedback';
 import WorkspaceFeedbackSettings from './WorkspaceFeedbackSettings.vue';
-
-dayjs.extend(relativeTime);
 
 export default {
   components: {
@@ -99,59 +91,35 @@ export default {
       type: Object,
       required: true,
     },
-    isSentFeedback: {
-      type: Boolean,
-      default: false,
-    },
   },
   setup(props) {
-    const userId = computed(() => (props.isSentFeedback
-      ? props.feedbackData.receiverId
-      : props.feedbackData.authorId));
-    const user = useGetUser(userId.value);
+    const { feedbackData } = toRefs(props);
+    const {
+      isFeedbackSent,
+      isFeedbackClosed,
+      isFeedbackFavorite,
+      isFeedbackLastActionSeen,
+      toggleFeedbackFlag,
+      updateFeedbackState,
+    } = useFeedbackData(feedbackData);
+
+    const userId = computed(() => (isFeedbackSent.value
+      ? feedbackData.value.receiverId
+      : feedbackData.value.authorId));
+    const user = computed(() => feedbackData.value.participants[userId.value]);
 
     return {
       user,
+      isFeedbackSent,
+      isFeedbackClosed,
+      isFeedbackFavorite,
+      isFeedbackLastActionSeen,
+      toggleFeedbackFlag,
+      updateFeedbackState,
       ACTIVE_STATE,
       ARCHIVED_STATE,
       DELETED_STATE,
     };
-  },
-  computed: {
-    ...mapState('user', ['userData']),
-    isSeen() {
-      return isFeedbackSeen(this.feedbackData, this.userData.uid);
-    },
-    isClosed() {
-      return this.feedbackData.status === CLOSED_STATUS;
-    },
-    feedbackFlags() {
-      return this.feedbackData.participants[this.userData.uid]?.flags;
-    },
-    isFavorite() {
-      return this.feedbackFlags.includes(FAVORITE_TYPE);
-    },
-  },
-  methods: {
-    toggleFavorite() {
-      const updatedFlags = this.feedbackFlags.includes(FAVORITE_TYPE)
-        ? this.feedbackFlags.filter((flag) => flag !== FAVORITE_TYPE)
-        : [...this.feedbackFlags, FAVORITE_TYPE];
-
-      updateFeedback({
-        feedbackId: this.feedbackData.id,
-        path: `participants.${this.userData.uid}.flags`,
-        value: updatedFlags,
-      });
-    },
-    updateFeedbackState(newState) {
-       updateFeedback({
-        feedbackId: this.feedbackData.id,
-        path: `participants.${this.userData.uid}.feedbackState`,
-        value: newState,
-      });
-      this.showOptions = false;
-    },
   },
 };
 </script>
@@ -166,7 +134,6 @@ export default {
   color: $dark;
   user-select: none;
   background: $grey-100;
-  //transition: background 0.2s;
 
   &:hover {
     cursor: pointer;

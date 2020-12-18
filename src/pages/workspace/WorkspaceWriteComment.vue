@@ -4,7 +4,7 @@
     placeholder="Leave a comment..."
     class="comment"
     padding="16px 24px"
-    rows="5"
+    rows="3"
     has-submit
     submit-button-text="Comment"
     @submit="addComment"

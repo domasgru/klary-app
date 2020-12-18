@@ -130,6 +130,7 @@ export const useFeedbackData = (feedbackData) => {
     isFeedbackFavorite: computed(() => feedbackFlags.value.includes(FAVORITE_TYPE)),
     isFeedbackArchived: computed(() => feedbackData.value.participants[userData.value.uid]?.feedbackState === ARCHIVED_STATE),
     isFeedbackSent: computed(() => feedbackData.value.authorId === userData.value.uid),
+    isFeedbackLastActionSeen: computed(() => isFeedbackSeen(feedbackData.value, userData.value.uid)),
     toggleFeedbackFlag,
     updateFeedbackStatus,
     updateFeedbackState,
