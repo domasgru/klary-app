@@ -1,6 +1,7 @@
 <template>
   <div class="empty-state">
     <BaseSvg
+      v-if="illustrationName"
       class="empty-state__illustration"
       :name="illustrationName"
     />
@@ -21,7 +22,7 @@ export default {
  props: {
    illustrationName: {
      type: String,
-     default: 'man-type',
+     default: null,
    },
    title: {
      type: String,
@@ -46,7 +47,6 @@ export default {
   flex-grow: 1;
   align-items: center;
   justify-content: center;
-  margin-top: -120px;
 
   &__illustration {
     width: 266px;

@@ -69,6 +69,8 @@ export default {
   }
 
   &__content-container {
+    display: flex;
+    flex-direction: column;
     height: 100%;
     max-height: 100%;
     padding: 0 80px 48px 80px;
@@ -77,6 +79,9 @@ export default {
   }
 
   &__content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
     width: 100%;
     max-width: 900px;
     padding-top: 105px;
