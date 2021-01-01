@@ -44,20 +44,24 @@
         class="workspace-sidebar__button"
       />
     </div>
-    <BaseButton
-      size="md"
-      fluid
-      to="/workspace/request-feedback"
-      v-text="'Request feedback'"
-    />
+    <WorkspaceRequestFeedbackUI>
+      <BaseButton
+        size="md"
+        fluid
+        v-text="'Request feedback'"
+      />
+    </WorkspaceRequestFeedbackUI>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
-import { logout } from '@/firebase';
+import {
+ logout, createFeedbackRequest, getFeedbackRequest, updateFeedbackRequest,
+} from '@/firebase';
 import WorkspaceSidebarButton from './WorkspaceSidebarButton.vue';
+import WorkspaceRequestFeedbackUI from './WorkspaceRequestFeedbackUI.vue';
 
 const INBOX = {
   RECEIVED: {
@@ -119,10 +123,16 @@ const userDropdownItems = [
 export default {
   components: {
     WorkspaceSidebarButton,
+    WorkspaceRequestFeedbackUI,
   },
   data() {
     return {
       showUserDropdown: false,
+      showRequestModal: false,
+      feedbackRequestId: null,
+      feedbackRequestDataLoading: false,
+      feedbackRequestMessage: '',
+      feedbackRequestLink: null,
     };
   },
   computed: {
@@ -135,8 +145,8 @@ export default {
     },
     getNotificationsCount({ storeState: feedbacksType }) {
       return feedbacksType
-      ? this[feedbacksType].filter((feedback) => !isFeedbackSeen(feedback, this.userData.uid)).length
-      : 0;
+        ? this[feedbacksType].filter((feedback) => !isFeedbackSeen(feedback, this.userData.uid)).length
+        : 0;
     },
     openSettings() {},
     logoutAndRedirectToHomepage() {

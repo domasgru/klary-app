@@ -1,7 +1,6 @@
 import { firestoreAction } from 'vuexfire';
 import { db } from '@/firebase';
 import { FEEDBACKS_COLLECTION, ACTIVE_STATE, ARCHIVED_STATE } from '@/constants/feedback';
-import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import { bindFirestoreArrayRefMutations, bindFirestoreArrayRefAction } from '../utils/bindFirestoreRef';
 
 export default {

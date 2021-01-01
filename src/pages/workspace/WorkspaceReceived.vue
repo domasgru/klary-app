@@ -1,5 +1,5 @@
 <template>
-  <h4 class="title">
+  <h4 class="title h4">
     Received
   </h4>
   <template v-if="isLoading || activeFeedbacks.length || closedFeedbacks.length">
@@ -24,10 +24,11 @@
     title="Get your first feedback"
     description="It can be about anything, quarterly or yearly review or just ask others how you align with company values."
   >
-    <BaseButton
-      @click="$router.push('/workspace/request-feedback')"
-      v-text="'Request first feedback'"
-    />
+    <WorkspaceRequestFeedbackUI>
+      <BaseButton
+        v-text="'Request first feedback'"
+      />
+    </WorkspaceRequestFeedbackUI>
   </WorkspaceInboxEmptyState>
 </template>
 
@@ -38,11 +39,13 @@ import { useFeedbackList } from '@/composables/useFeedback';
 import { RECEIVED_TYPE, ACTIVE_STATUS, CLOSED_STATUS } from '@/constants/feedback';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
 import WorkspaceInboxEmptyState from './WorkspaceInboxEmptyState.vue';
+import WorkspaceRequestFeedbackUI from './WorkspaceRequestFeedbackUI.vue';
 
 export default {
   components: {
     WorkspaceFeedbackList,
     WorkspaceInboxEmptyState,
+    WorkspaceRequestFeedbackUI,
   },
   setup() {
     const { isLoading, openFeedback, getFilteredAndSortedFeedbacks } = useFeedbackList(RECEIVED_TYPE);

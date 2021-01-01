@@ -7,9 +7,9 @@
     :is-open="showOptions"
     :items="optionsItems"
     @click.stop
-    @archive="$emit('archive')"
-    @unarchive="$emit('unarchive')"
-    @delete="$emit('delete')"
+    @archive="$emit('archive'), showOptions = false"
+    @unarchive="$emit('unarchive'), showOptions = false"
+    @delete="$emit('delete'), showOptions = false"
   >
     <div
       class="trigger"

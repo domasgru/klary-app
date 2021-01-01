@@ -4,6 +4,7 @@
       size="md"
       :name="reply.author.name"
       :picture="reply.author.googlePicture || ''"
+      class="comment-reply__avatar"
     />
     <div class="comment-reply__main">
       <div class="comment-reply__name-and-time">
@@ -48,6 +49,10 @@ export default {
   // Comes from upper component
   &--unseen {
     background: #511fdc1f;
+  }
+
+  &__avatar {
+    flex-shrink: 0;
   }
 
   &__main {

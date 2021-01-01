@@ -6,7 +6,7 @@
     <div
       class="base-avatar__image-background"
       :style="picture
-        ? {background: `url(${picture})`, backgroundSize: 'cover',backgroundPosition: 'center'}
+        ? {background: `url(${picture})`, backgroundSize: 'cover', backgroundPosition: 'center'}
         : {}"
     />
     <div class="base-avatar__default-initials">
@@ -85,16 +85,19 @@ export default {
   &--sm {
     width: 32px;
     height: 32px;
+    font-size: 16px;
   }
 
   &--md {
     width: 40px;
     height: 40px;
+    font-size: 20px;
   }
 
   &--lg {
     width: 72px;
     height: 72px;
+    font-size: 36px;
   }
 
   &__image-background {

@@ -15,6 +15,7 @@
       :placeholder="placeholder"
       :value="modelValue"
       :rows="rows"
+      :autofocus="autofocus"
       @input="$emit('update:modelValue', $event.target.value)"
       @keydown="handleCmdEnter"
     />
@@ -23,7 +24,12 @@
       class="base-textarea__submit base-typography--b-14-20"
       :style="submitPosition"
     >
-      Or press ⌘+Enter
+      <p
+        v-if="allowShortcutSubmit"
+        class="b2"
+      >
+        Or press ⌘+Enter
+      </p>
       <BaseButton
         class="base-textarea__submit-button"
         @click="$emit('submit')"
@@ -46,9 +52,21 @@ const SUBMIT_HEIGHT = 40;
 
 export default {
   props: {
+    autofocus: {
+      type: Boolean,
+      default: false,
+    },
     padding: {
       type: String,
       default: '8px 12px',
+    },
+    fontSize: {
+      type: String,
+      default: '16px',
+    },
+    lineHeight: {
+      type: String,
+      default: '24px',
     },
     modelValue: {
       type: String,
@@ -90,6 +108,10 @@ export default {
       type: String,
       default: '',
     },
+    allowShortcutSubmit: {
+      type: Boolean,
+      default: true,
+    },
   },
   emits: ['update:modelValue', 'submit'],
   data() {
@@ -106,8 +128,12 @@ export default {
       bottom: `${verticalPadding}px`,
       right: `${horizontalPadding}px`,
     }),
-    textareaStyle: ({ padding, verticalPadding, showSubmit }) => ({
+    textareaStyle: ({
+      padding, fontSize, lineHeight, verticalPadding, showSubmit,
+    }) => ({
       padding,
+      fontSize,
+      lineHeight,
       ...(showSubmit ? { paddingBottom: `${16 + SUBMIT_HEIGHT + verticalPadding}px` } : { paddingBottom: `${verticalPadding}px` }),
     }),
   },
@@ -130,7 +156,7 @@ export default {
   },
   methods: {
     handleCmdEnter(e) {
-      if ((e.metaKey || e.ctrlKey) && e.keyCode === 13) {
+      if ((e.metaKey || e.ctrlKey) && e.keyCode === 13 && this.allowShortcutSubmit) {
         this.$emit('submit');
       }
     },

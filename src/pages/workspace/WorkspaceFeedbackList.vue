@@ -2,7 +2,7 @@
   <div class="feedback-list">
     <h6
       v-if="label"
-      class="feedback-list__label"
+      class="feedback-list__label h6"
       v-text="label"
     />
     <div
@@ -11,7 +11,7 @@
     >
       <p
         v-if="!feedbacks.length"
-        class="base-typography--b-14-20"
+        class="b2"
         v-text="emptyStateText"
       />
       <div

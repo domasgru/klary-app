@@ -38,9 +38,6 @@ export default {
     ...mapMutations(['setScrollContainerRef']),
     logoutUser() {
       logout();
-      this.setUserAuth(null);
-      this.unbindUser();
-      this.$router.push('/');
     },
   },
 };
@@ -74,9 +71,9 @@ export default {
     flex-direction: column;
     height: 100%;
     max-height: 100%;
-    padding: 0 80px 48px 80px;
+    padding: 0 80px 64px 80px;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
   }
 
   &__content {

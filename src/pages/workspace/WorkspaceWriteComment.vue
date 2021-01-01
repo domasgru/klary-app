@@ -6,7 +6,8 @@
     padding="16px 24px"
     rows="3"
     has-submit
-    submit-button-text="Comment"
+    submit-button-text="Send"
+    autofocus
     @submit="addComment"
   />
 </template>
@@ -14,7 +15,6 @@
 <script>
 import { addComment } from '@/firebase';
 import { mapState } from 'vuex';
-import { required } from '@vuelidate/validators';
 
 export default {
   props: {
@@ -28,27 +28,11 @@ export default {
       comment: '',
     };
   },
-  validations() {
-    return {
-      comment: {
-        required,
-      },
-    };
-  },
   computed: {
     ...mapState('user', ['userData']),
   },
   methods: {
     addComment() {
-      try {
-        this.$v.$touch();
-        if (this.$v.comment.$invalid) {
-          return;
-        }
-      } catch (e) {
-        console.log(e);
-      }
-
       addComment(this.$route.params.id, this.comment, this.userData);
       this.comment = '';
     },

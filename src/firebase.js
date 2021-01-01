@@ -104,11 +104,11 @@ export const addComment = async (feedbackId, content, author) => {
     author: {
       name: author.name,
       email: author.email,
-      picture: author.picture,
-      googlePicture: author.googlePicture,
+      picture: author.picture || '',
+      googlePicture: author.googlePicture || '',
       uid: author.uid,
     },
-    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+    createdAt: getTimeNow(),
   };
   const discussionRef = db.collection(`feedbacks/${feedbackId}/discussion`);
   updateFeedbackLastAction(
@@ -123,12 +123,12 @@ export const addCommentReply = async (feedbackId, commentId, content, author) =>
     author: {
       name: author.name,
       email: author.email,
-      picture: author.picture,
-      googlePicture: author.googlePicture,
+      picture: author.picture || '',
+      googlePicture: author.googlePicture || '',
       uid: author.uid,
     },
     content,
-    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+    createdAt: getTimeNow(),
   };
   const commentRef = db.doc(`feedbacks/${feedbackId}/discussion/${commentId}`);
   updateFeedbackLastAction(
@@ -141,15 +141,6 @@ export const updateSeenAt = async (userId, feedbackId) => updateFeedback(
   { feedbackId, path: `participants.${userId}.seenAt`, value: getTimeNow() },
 );
 
-export const createFeedbackRequest = async (requestData) => {
-  const feedbackRequest = {
-    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
-    ...requestData,
-  };
-  const requestRef = db.collection('feedbackRequests');
-  return requestRef.add(feedbackRequest);
-};
-
 export const createFeedback = async (feedbackData) => {
   const feedback = {
     createdAt: getTimeNow(),
@@ -158,3 +149,24 @@ export const createFeedback = async (feedbackData) => {
   const feedbackRef = db.collection('feedbacks');
   return feedbackRef.add(feedback);
 };
+
+// Feedback request
+export const getFeedbackRequest = async (uid) => {
+  const feedbackRequest = await db.collection('feedbackRequests').where('uid', '==', uid).get();
+  if (feedbackRequest.docs[0]) {
+    return { ...feedbackRequest.docs[0].data(), id: feedbackRequest.docs[0].id };
+  }
+    return null;
+};
+export const getFeedbackRequestById = async (id) => (await db.doc(`feedbackRequests/${id}`).get()).data();
+
+export const createFeedbackRequest = (requestData) => {
+  const feedbackRequest = {
+    createdAt: getTimeNow(),
+    ...requestData,
+  };
+  const requestRef = db.collection('feedbackRequests');
+  return requestRef.add(feedbackRequest);
+};
+
+export const updateFeedbackRequest = (feedbackId, data) => db.doc(`feedbackRequests/${feedbackId}`).update(data);

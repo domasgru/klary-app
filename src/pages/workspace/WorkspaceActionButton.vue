@@ -1,6 +1,6 @@
 <template>
   <button
-    class="action-button"
+    class="action-button btn2"
     :class="{
       'action-button--star': isStarTheme,
       'action-button--active': active,

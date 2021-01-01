@@ -80,6 +80,7 @@ export default {
     const actionsRef = ref(null);
 
     const { feedbackAuthor } = useFeedbackData(toRefs(props).feedbackData);
+    const isSelfFeedback = computed(() => props.feedbackData.authorId === props.feedbackData.receiverId);
 
     const currentFeedbackComments = computed(() => store.state.feedback.currentFeedbackComments);
     const currentUser = computed(() => store.state.user.userData);
@@ -97,6 +98,10 @@ export default {
     store.dispatch('feedback/bindCurrentFeedbackComments', props.feedbackData.id);
 
     const otherParticipantsLastAction = computed(() => {
+      if (isSelfFeedback.value) {
+        return props.feedbackData.participants[props.feedbackData.authorId].lastAction;
+      }
+
        const { lastAction, name } = Object.entries(props.feedbackData.participants)
         .filter(([id, participant]) => id !== currentUser.value.uid)
         .map(([id, value]) => value)
