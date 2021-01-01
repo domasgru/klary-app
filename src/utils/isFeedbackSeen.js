@@ -1,10 +1,15 @@
 export const isFeedbackSeen = (feedbackData, userId) => {
-  const { participants } = feedbackData;
+  const { participants, authorId, receiverId } = feedbackData;
   const currentUser = participants[userId];
 
   // User didn't see feedback at all
   if (!currentUser.seenAt) {
     return false;
+  }
+
+  // Feedback for yourself handling
+  if (authorId === receiverId) {
+    return true;
   }
 
   const { lastAction, name } = Object.entries(participants)

@@ -1,20 +1,21 @@
 /* eslint-disable no-use-before-define */
+import { defineAsyncComponent } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import { store } from '@/store';
 import Home from '@/pages/Home.vue';
+import GiveFeedback from '@/pages/give-feedback/GiveFeedback.vue';
 import Login from '@/pages/get-started/Login.vue';
-import Workspace from '@/pages/workspace/Workspace.vue';
 import WorkspaceReceived from '@/pages/workspace/WorkspaceReceived.vue';
 import ComingSoon from '@/pages/ComingSoon.vue';
 import WorkspaceSent from '@/pages/workspace/WorkspaceSent.vue';
 import WorkspaceFavorites from '@/pages/workspace/WorkspaceFavorites.vue';
 import WorkspaceArchived from '@/pages/workspace/WorkspaceArchived.vue';
-import WorkspaceGive from '@/pages/workspace/WorkspaceGive.vue';
-import WorkspaceRequest from '@/pages/workspace/WorkspaceRequest.vue';
 import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
 import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
 
 import { auth, getCurrentUser } from '@/firebase';
+
+const Workspace = defineAsyncComponent(() => import('@/pages/workspace/Workspace.vue'));
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -34,6 +35,10 @@ export const router = createRouter({
     {
       path: '/login',
       component: Login,
+    },
+    {
+      path: '/give-feedback/:requestId',
+      component: GiveFeedback,
     },
     {
       path: '/workspace',
@@ -65,16 +70,8 @@ export const router = createRouter({
           component: ComingSoon,
         },
         {
-          path: 'request-feedback',
-          component: WorkspaceRequest,
-        },
-        {
           path: 'archived',
           component: WorkspaceArchived,
-        },
-        {
-          path: 'give-feedback',
-          component: WorkspaceGive,
         },
         {
           path: ':type/feedback/:id',

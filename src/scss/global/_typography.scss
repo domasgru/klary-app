@@ -3,42 +3,140 @@ body {
   color: $dark;
 }
 
-h1,
+.h1 {
+  font-size: 64px;
+  font-weight: bold;
+  line-height: 76px;
+}
+
+.h2 {
+  font-size: 48px;
+  font-weight: bold;
+  line-height: 56px;
+}
+
+.h3 {
+  font-size: 40px;
+  font-weight: bold;
+  line-height: 48px;
+}
+
+.h4 {
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 40px;
+}
+
+.h5 {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 30px;
+}
+
+.h6 {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 24px;
+}
+
+.subheader {
+  font-size: 20px;
+  font-weight: normal;
+  line-height: 28px;
+}
+
+.b1 {
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 24px;
+}
+
+.b1s {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.b2 {
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 20px;
+}
+
+.b2s {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.btn1 {
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 24px;
+}
+
+.btn1s {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.btn2 {
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 20px;
+}
+
+.btn2s {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.caption {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.overline {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 .base-typography--h1 {
   font-size: 64px;
   font-weight: bold;
   line-height: 76px;
 }
 
-h2,
 .base-typography--h2 {
   font-size: 48px;
   font-weight: bold;
   line-height: 60px;
 }
 
-h3,
 .base-typography--h3 {
   font-size: 40px;
   font-weight: bold;
   line-height: 48px;
 }
 
-h4,
 .base-typography--h4 {
   font-size: 32px;
   font-weight: bold;
   line-height: 40px;
 }
 
-h5,
 .base-typography--h5 {
   font-size: 24px;
   font-weight: bold;
   line-height: 28px;
 }
 
-h6,
 .base-typography--h6 {
   font-size: 20px;
   font-weight: bold;

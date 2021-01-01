@@ -6,7 +6,7 @@
     :class="{
       ...computedClasses,
       'base-typography--bold-button1': ['xlg', 'lg'].includes(size),
-      'base-typography--bold-button2': ['sm', 'md'].includes(size)
+      'base-typography--bold-button2': ['sm', 'md'].includes(size),
     }"
     :disabled="disabled"
   >
@@ -31,6 +31,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    isPlain: {
+      type: Boolean,
+      default: false,
+    },
+    isInline: {
+      type: Boolean,
+      default: false,
+    },
     size: {
       type: String,
       default: 'md',
@@ -44,13 +52,15 @@ export default {
   computed: {
     tag: ({ to }) => (to ? 'router-link' : 'button'),
     computedClasses: ({
-      disabled, fluid, inverse, size,
+      disabled, fluid, inverse, size, isPlain, isInline,
     }) => (
       {
         'button--disabled': disabled,
         'button--fluid': fluid,
         'button--inverse': inverse,
         [`button--${size}`]: size,
+        'button--plain': isPlain,
+        'button--inline': isInline,
       }
     ),
   },
@@ -105,6 +115,29 @@ export default {
 
     &:hover {
       background: $light;
+    }
+  }
+
+  &--plain {
+    color: $dark;
+    background: transparent;
+
+    &:hover {
+      color: $dark;
+      background: transparent;
+    }
+  }
+
+  &--inline {
+    display: inline;
+    padding: 0;
+    font-weight: normal;
+    color: $primary-100;
+    background: transparent;
+
+    &:hover {
+      color: $primary-100;
+      background: transparent;
     }
   }
 }

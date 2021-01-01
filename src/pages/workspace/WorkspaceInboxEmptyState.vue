@@ -6,11 +6,11 @@
       :name="illustrationName"
     />
     <h5
-      class="empty-state__title"
+      class="empty-state__title h5"
       v-text="title"
     />
     <p
-      class="empty-state__description base-typography--b-14-20"
+      class="empty-state__description b2"
       v-text="description"
     />
     <slot />

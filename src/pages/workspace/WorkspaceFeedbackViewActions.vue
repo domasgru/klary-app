@@ -13,11 +13,11 @@
       />
     </div>
     <div
+      v-if="!isFeedbackSent"
       ref="closeRef"
       class="feedback-actions__right-action animation-wrapper"
     >
       <WorkspaceActionButton
-        v-if="!isFeedbackSent"
         icon="checkmark-black"
         :text="showOnSides? '' : closeFeedbackActionButtonText"
         :active="isFeedbackClosed"
@@ -230,6 +230,7 @@ export default {
   position: sticky;
   top: 57px;
   left: 0;
+  z-index: 1;
   display: flex;
   margin-bottom: 16px;
 

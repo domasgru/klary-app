@@ -1,5 +1,5 @@
 <template>
-  <h4 class="title">
+  <h4 class="title h4">
     Archived
   </h4>
   <WorkspaceFeedbackList

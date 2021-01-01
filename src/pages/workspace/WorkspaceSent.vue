@@ -1,5 +1,5 @@
 <template>
-  <h4 class="title">
+  <h4 class="title h4">
     Sent
   </h4>
   <template v-if="isLoading || activeFeedbacks.length || closedFeedbacks.length">
