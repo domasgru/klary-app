@@ -99,6 +99,7 @@ export default {
   align-items: center;
   padding: 56px 56px 24px 56px;
   text-align: center;
+  background: $light;
 }
 
 .title {
@@ -112,7 +113,7 @@ export default {
 .button-google {
   display: flex;
   align-items: center;
-  padding: 12px 98px;
+  padding: 11px 98px;
   margin-bottom: 40px;
   cursor: pointer;
   border: 1px solid $grey-200;

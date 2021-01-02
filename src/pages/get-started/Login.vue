@@ -1,235 +1,58 @@
 <template>
-  <div class="login">
-    <Header />
-    <div
-      class="login__container"
-      :class="{'login__container--wide': !showForm}"
-    >
-      <div
-        v-show="showForm"
-        class="login-form"
-      >
-        <h5 class="login-form__title stagger">
-          Sign up or login
-        </h5>
-        <p class="login-form__subtitle stagger">
-          One email for everything. Sign up or login.
-        </p>
-        <BaseButton @click="loginGoogle">
-          Google login
-        </BaseButton>
-        <BaseInput
-          ref="input"
-          v-model="email"
-          placeholder="Enter your email"
-          label="Your email"
-          class="login-form__input stagger"
-          :error="error"
-          @input="error=''"
-          @keydown.enter="submit(), showHint()"
-        />
-        <div
-          class="login-form__button-wrapper stagger"
-          @mouseenter="showHint"
-        >
-          <BaseButton
-            class="login-form__button"
-            :disabled="$v.email.$invalid"
-            fluid
-            @click="submit"
-          >
-            Continue with email
-          </BaseButton>
-        </div>
-        <!-- eslint-disable -->
-      <p class="login-form__terms base-typography--b-14-20 stagger">
-        By continuing with Google, Apple, or email, you agree
-        to Curiodesk’s <a href="#" class="login-form__terms-link"> Terms of Service</a> and
-        <a href="#" class="login-form__terms-link"> Privacy Police</a>.
-      </p>
-      </div>
-      <!-- eslint-enable -->
-
-      <div
-        v-show="!showForm"
-        class="check-email"
-      >
-        <h5 class="check-email__title stagger-check-email">
-          Check your email!
-        </h5>
-        <p class="check-email__text1 stagger-check-email">
-          We’ve emailed a special link to <b>{{ email }}</b>.
-          Click the link to confirm your address and get started.
-        </p>
-        <!-- eslint-disable -->
-        <p class="check-email__text2 stagger-check-email">
-          Wrong email? No probs, <span @click="showForm=true" class="login__terms-link">just re-enter your address</span>.
-        </p>
-        <div class="check-email__links stagger-check-email">
-          <a href="https://mail.google.com/" class="check-email__provider">
-            <BaseSvg class="check-email__icon" name="gmail"/>
-            <p class="base-typography--bb2">Open Gmail</p>
-          </a>
-          <div class="check-email__provider">
-            <BaseSvg class="check-email__icon" name="outlook"/>
-            <p class="base-typography--bb2">Open Outlook</p>
-          </div>
-        </div>
-        <p class="check-email__resend base-typography--b-14-20 stagger-check-email">Didn’t receive the emai? <span class="login__terms-link" @click="submit">Resend email</span></p>
-      </div>
+  <div class="signup">
+    <div class="signup__header">
+      <BaseSvg
+        class="signup__logo"
+        name="logo"
+      />
+    </div>
+    <div class="signup-wrapper">
+      <Signup @success="$router.push('/workspace')" />
     </div>
   </div>
 </template>
 
 <script>
-import Header from '@/components/ui/HeaderAuth.vue';
-import { required, email } from '@vuelidate/validators';
-import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
-import { login, loginWithGoogle } from '@/firebase';
+import Signup from '@/pages/Signup.vue';
 
 export default {
   components: {
-    Header,
-  },
-  data() {
-    return {
-      email: '',
-      error: '',
-      showForm: true,
-    };
-  },
-  validations() {
-    return {
-      email: {
-        required,
-        email,
-      },
-    };
-  },
-  methods: {
-    showHint() {
-      this.$v.$touch();
-      if (!this.$v.email.email) {
-        this.error = 'Email is invalid.';
-      }
-    },
-    async submit() {
-      this.$v.$touch();
-      if (this.$v.email.$invalid) {
-        return;
-      }
-
-      login(this.email, '/complete-auth');
-      this.showForm = false;
-    },
-    async loginGoogle() {
-     const result = await loginWithGoogle();
-     const nextRoute = await handleLoginAndReturnRedirect(result);
-     this.$router.push(nextRoute);
-    },
+    Signup,
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.login {
+.signup {
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
   height: 100%;
-  padding-bottom: 12vh;
+  background: $grey-100;
 
-  @media screen and (min-height: 780px) {
-    padding-bottom: 20vh;
-  }
-
-  &__container {
+  &__header {
+    position: absolute;
+    top: 0;
+    left: 0;
     display: flex;
-    flex: 1;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    width: 470px;
-
-    &--wide {
-      width: 650px;
-      text-align: center;
-    }
-  }
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  &__title,
-  .check-email__title {
-    margin-bottom: 24px;
-  }
-
-  &__subtitle {
-    margin-bottom: 40px;
-  }
-
-  &__input {
-    margin-bottom: 14px;
-  }
-
-  &__button-wrapper {
     width: 100%;
+    padding: 20px 24px;
   }
 
-  &__button {
-    margin-bottom: 24px;
-  }
-
-  &__terms {
-    line-height: 20px;
-    text-align: center;
-  }
-
-  &__terms-link {
-    color: $primary;
-    text-decoration: none;
-    cursor: pointer;
+  &__logo {
+    width: 44px;
+    height: 24px;
   }
 }
 
-.check-email {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  &__links {
-    display: flex;
-    justify-content: space-between;
-    width: 360px;
-    margin-bottom: 32px;
-  }
-
-  &__text1 {
-    margin-bottom: 16px;
-  }
-
-  &__text2 {
-    margin-bottom: 64px;
-  }
-
-  &__provider {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  &__icon {
-    width: 28px;
-    height: 28px;
-    margin-right: 18px;
-  }
-
-  &__resend {
-    color: $grey-400;
-  }
+.signup-wrapper {
+  width: 100%;
+  max-width: 592px;
+  overflow: hidden;
+  border: 1px solid $grey-200;
+  border-radius: $border-radius;
 }
 </style>
