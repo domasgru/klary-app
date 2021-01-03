@@ -101,8 +101,12 @@ export default {
 
   &--disabled {
     //pointer-events: none;
-    cursor: not-allowed;
     background: $primary-disabled;
+
+    &:hover {
+      cursor: not-allowed;
+      background: $primary-disabled;
+    }
   }
 
   &--fluid {

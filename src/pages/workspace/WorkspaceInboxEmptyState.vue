@@ -47,6 +47,7 @@ export default {
   flex-grow: 1;
   align-items: center;
   justify-content: center;
+  text-align: center;
 
   &__illustration {
     width: 266px;
@@ -59,6 +60,7 @@ export default {
   }
 
   &__description {
+    max-width: 410px;
     margin-bottom: 32px;
     color: $grey-600;
   }

@@ -13,7 +13,7 @@
       <BaseTextarea
         :placeholder="'E.g. Hi, I am collecting feedbacks on how I am doing at work. Please share your thoughts about my work.'"
         :model-value="modelValue"
-        padding="12px 16px"
+        padding="10px 12px"
         font-size="14px"
         line-height="20px"
         rows="3"

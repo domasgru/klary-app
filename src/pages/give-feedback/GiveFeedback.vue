@@ -1,5 +1,8 @@
 <template>
-  <div class="give-feedback">
+  <div
+    v-if="!isLoading && request"
+    class="give-feedback"
+  >
     <div class="give-feedback__gradient">
       <div class="give-feedback__navigation">
         <BaseSvg
@@ -21,7 +24,7 @@
       </div>
     </div>
     <div
-      v-if="!isLoading && request"
+      v-if="request"
       class="give-feedback__content"
     >
       <!-- Success message -->
@@ -63,7 +66,10 @@
           <div class="give-feedback__title h5">
             Give feedback for {{ request.name }}
           </div>
-          <div class="give-feedback__message b1">
+          <div
+            v-if="message"
+            class="give-feedback__message b1"
+          >
             {{ request.message }}
           </div>
         </div>
@@ -90,11 +96,24 @@
         <Signup @success="submitAfterLogin" />
       </template>
     </BaseModal>
-    <div
-      v-if="!isLoading && !request"
-      class="give-feedback__error"
-    >
-      Feedback request not found
+  </div>
+  <div
+    v-if="!isLoading && !request"
+    class="error"
+  >
+    <BaseSvg
+      class="error__logo"
+      name="logo"
+    />
+    <BaseSvg
+      class="error__emoji"
+      name="eyes-emoji"
+    />
+    <div class="error__title h4">
+      Oops, this feedback request link was not found
+    </div>
+    <div class="error__description b1">
+      Make sure you use the correct link.
     </div>
   </div>
 </template>
@@ -301,7 +320,10 @@ export default {
 
   &__title {
     max-width: 290px;
-    margin-bottom: 24px;
+
+    &:not(:last-child) {
+      margin-bottom: 24px;
+    }
 
     &--success {
       max-width: 464px;
@@ -315,6 +337,38 @@ export default {
     &--success {
       max-width: 464px;
     }
+  }
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: $grey-100;
+
+  &__logo {
+    position: absolute;
+    top: 20px;
+    right: 0;
+    left: 0;
+    width: 44px;
+    height: 24px;
+    margin: auto;
+  }
+
+  &__emoji {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 24px;
+  }
+
+  &__title {
+    max-width: 480px;
+    margin-bottom: 16px;
   }
 }
 </style>

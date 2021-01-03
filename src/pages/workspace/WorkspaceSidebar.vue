@@ -51,6 +51,16 @@
         v-text="'Request feedback'"
       />
     </WorkspaceRequestFeedbackUI>
+
+    <BaseModal
+      :show-modal="showAccountSettingsModal"
+      max-width="600px"
+      @close="showAccountSettingsModal = false"
+    >
+      <template #content>
+        <WorkspaceAccountSettings />
+      </template>
+    </BaseModal>
   </div>
 </template>
 
@@ -61,6 +71,7 @@ import {
  logout, createFeedbackRequest, getFeedbackRequest, updateFeedbackRequest,
 } from '@/firebase';
 import WorkspaceSidebarButton from './WorkspaceSidebarButton.vue';
+import WorkspaceAccountSettings from './WorkspaceAccountSettings.vue';
 import WorkspaceRequestFeedbackUI from './WorkspaceRequestFeedbackUI.vue';
 
 const INBOX = {
@@ -124,11 +135,13 @@ export default {
   components: {
     WorkspaceSidebarButton,
     WorkspaceRequestFeedbackUI,
+    WorkspaceAccountSettings,
   },
   data() {
     return {
       showUserDropdown: false,
       showRequestModal: false,
+      showAccountSettingsModal: false,
       feedbackRequestId: null,
       feedbackRequestDataLoading: false,
       feedbackRequestMessage: '',
@@ -148,7 +161,9 @@ export default {
         ? this[feedbacksType].filter((feedback) => !isFeedbackSeen(feedback, this.userData.uid)).length
         : 0;
     },
-    openSettings() {},
+    openSettings() {
+      this.showAccountSettingsModal = true;
+    },
     logoutAndRedirectToHomepage() {
       logout();
       window.location.replace(window.location.origin);

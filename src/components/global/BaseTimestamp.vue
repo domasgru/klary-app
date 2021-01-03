@@ -35,6 +35,6 @@ export default {
 
 <style lang="scss" scoped>
 .base-timestamp {
-  color: $grey-500;
+  color: $grey-600;
 }
 </style>

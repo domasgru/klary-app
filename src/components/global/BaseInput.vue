@@ -4,6 +4,7 @@
     :class="{
       'base-input--error': error,
       'base-input--success': success,
+      'base-input--disabled': isDisabled === true,
       'base-input--liftUpAnimation': animateLiftUp
     }"
     @animationend="animateLiftUp = false"
@@ -27,128 +28,25 @@
         :id="`input${$.uid}`"
         ref="input"
         type="text"
-        class="base-input__input base-typography--b-16-24"
+        class="base-input__input"
+        :class="{
+          'base-input__input--lg': size === 'lg',
+          'base-input__input--md': size === 'md',
+        }"
         spellcheck="false"
         :value="modelValue"
         :placeholder="placeholder"
         :autofocus="autofocus"
         :autocomplete="autocomplete ? null : 'off'"
-        v-bind="$attrs"
         @input="$emit('update:modelValue', $event.target.value)"
         @keydown.enter="handleSubmitKeyDown"
         @keydown.esc="blur"
       >
-      <!-- SINGLE SELECT INPUT -->
-      <div
-        v-if="type==='single-select'"
-        :id="`singleInput-${$.uid}`"
-        class="base-input__input base-input__single-select base-typography--b-16-24"
-      >
-        <div
-          v-if="selectedValue.uid"
-          class="base-input__single-select-selected"
-        >
-          <BaseAvatar
-            size="sm"
-            class="base-input__single-select-initial"
-            :name="selectedValue.name"
-          />
-          <div class="base-input__single-select-name">
-            {{ selectedValue.name }}
-          </div>
-          <button
-            class="base-input__multi-x"
-            @click="$emit('remove', selectedValue.uid)"
-          >
-            <BaseSvg
-              class="base-input__multi-x-icon"
-              name="x"
-            />
-          </button>
-        </div>
-        <input
-          v-else
-          :id="`input${$.uid}`"
-          ref="input"
-          class="base-input__single-select-input base-typography--b-16-24"
-          spellcheck="false"
-          type="text"
-          :value="modelValue"
-          :placeholder="placeholder"
-          :autofocus="autofocus"
-          :autocomplete="autocomplete ? null : 'off'"
-          v-bind="$attrs"
-          @input="$emit('update:modelValue', $event.target.value)"
-          @keydown.enter="handleSubmitKeyDown"
-          @keydown.esc="blur"
-        >
-      </div>
-      <!-- MULTI SELECT INPUT -->
-      <div
-        ref="multiInputMeasurer"
-        class="base-input__multi-input-measurer base-typography--b-16-24"
-        v-text="modelValue"
-      />
-      <div
-        v-if="type=== 'multi-select'"
-        :id="`multiInput-${$.uid}`"
-        class="base-input__multi base-input__input base-typography--b-16-24"
-        @mousedown="handleMultiInputMousedown"
-      >
-        <div
-          v-for="selectedValue in selectedValues"
-          :key="selectedValue.uid"
-          class="base-input__multi-selected-item"
-        >
-          <BaseAvatar
-            class="base-input__initial"
-            size="xs"
-            :name="selectedValue.name"
-          />
-          {{ selectedValue.name }}
-          <button
-            class="base-input__multi-x"
-            @click="$emit('remove', selectedValue.uid)"
-          >
-            <BaseSvg
-              class="base-input__multi-x-icon"
-              name="x"
-            />
-          </button>
-        </div>
-        <input
-          :id="`input${$.uid}`"
-          ref="input"
-          class="base-input__multi-input base-typography--b-16-24"
-          spellcheck="false"
-          type="text"
-          :value="modelValue"
-          :placeholder="!selectedValues.length ? placeholder : ''"
-          :autofocus="autofocus"
-          :autocomplete="autocomplete ? null : 'off'"
-          :style="{width: multiSelectWidth}"
-          v-bind="$attrs"
-          @input="$emit('update:modelValue', $event.target.value)"
-          @keydown.enter="handleSubmitKeyDown"
-          @keydown.esc="blur"
-        >
-      </div>
-      <!-- TEXTAREA INPUT -->
-      <textarea
-        v-if="type === 'textarea'"
-        :id="`input${$.uid}`"
-        ref="input"
-        class="base-input__input base-typography--b-16-24"
-        :placeholder="placeholder"
-        :value="modelValue"
-        :rows="rows"
-        v-bind="$attrs"
-        @input="$emit('update:modelValue', $event.target.value)"
-        @keydown.enter="handleSubmitKeyDown"
-        @keydown.esc="blur"
-      />
     </div>
-    <span class="base-input__hint">
+    <span
+      v-if="showHintArea"
+      class="base-input__hint"
+    >
       {{ hint || error || success }}
     </span>
   </div>
@@ -159,7 +57,6 @@
 import autosize from 'autosize';
 
 export default {
-  inheritAttrs: false,
   props: {
     type: {
       type: String,
@@ -179,15 +76,15 @@ export default {
     },
     hint: {
       type: String,
-      default: '',
+      default: undefined,
     },
     error: {
       type: String,
-      default: '',
+      default: undefined,
     },
     success: {
       type: String,
-      default: '',
+      default: undefined,
     },
     autofocus: {
       type: Boolean,
@@ -197,20 +94,13 @@ export default {
       type: Boolean,
       default: true,
     },
-    // Textarea specific
-    rows: {
-      type: [Number, String],
-      default: 1,
+    size: {
+      type: String,
+      default: 'md',
     },
-    // Single-select specific
-    selectedValue: {
-      type: Object,
-      default: () => ({}),
-    },
-    // Multi-select specific
-    selectedValues: {
-      type: Array,
-      default: () => ([]),
+    isDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ['focus', 'update:modelValue'],
@@ -234,12 +124,8 @@ export default {
         '--outlineColorEnd': outlineColorEnd,
       };
     },
-    multiSelectWidth() {
-      if (!this.selectedValues.length) {
-        return '100%';
-      }
-
-      return `${this.multiInputWidth}px`;
+    showHintArea() {
+      return this.hint !== undefined || this.error !== undefined || this.success !== undefined;
     },
   },
   watch: {
@@ -288,18 +174,6 @@ export default {
     focus() {
       this.$refs.input.focus();
     },
-    handleMultiInputMousedown(e) {
-      const { input } = this.$refs;
-      const clickingAroundInput = e.target.closest(`#multiInput-${this.$.uid}`);
-      const clickingInput = e.target.closest(`#input${this.$.uid}`);
-      if (clickingInput) {
-        input.focus();
-      } else if (clickingAroundInput) {
-        e.preventDefault();
-        input.focus();
-        input.selectionStart = this.value.length;
-      }
-    },
   },
 };
 </script>
@@ -317,10 +191,13 @@ export default {
     animation: liftUp 0.2s;
   }
 
+  &--disabled {
+    pointer-events: none;
+  }
+
   &__input {
     position: relative;
     width: 100%;
-    padding: 16px;
     overflow: hidden;
     font-family: 'Inter', sans-serif;
     color: $dark;
@@ -331,6 +208,18 @@ export default {
     border-radius: 10px;
     outline: none;
     transition: box-shadow 0.15s ease;
+
+    &--lg {
+      padding: 12px 16px;
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    &--md {
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 20px;
+    }
 
     &::placeholder {
       color: $grey-500;
@@ -354,6 +243,11 @@ export default {
     #{$this}--success & {
       background: $success-light;
       border: 1px solid $success;
+    }
+
+    #{$this}--disabled & {
+      color: $grey-600;
+      background: $grey-50;
     }
   }
   // Single-select
@@ -454,7 +348,7 @@ export default {
 
   &__label {
     display: block;
-    margin-bottom: 8px;
+    padding-bottom: 8px;
   }
 
   &__hint {
