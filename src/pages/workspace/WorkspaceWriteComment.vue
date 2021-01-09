@@ -33,6 +33,10 @@ export default {
   },
   methods: {
     addComment() {
+      if (!this.comment) {
+        return;
+      }
+
       addComment(this.$route.params.id, this.comment, this.userData);
       this.comment = '';
     },

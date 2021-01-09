@@ -97,10 +97,10 @@ const INBOX = {
     text: 'Highlights',
     path: '/workspace/highlights',
   },
-  ARCHIVE: {
-    icon: 'archive',
-    text: 'Archive',
-    path: '/workspace/archived',
+  TRASH: {
+    icon: 'trash',
+    text: 'Trash',
+    path: '/workspace/trash',
   },
 };
 

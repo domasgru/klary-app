@@ -9,7 +9,7 @@ import WorkspaceReceived from '@/pages/workspace/WorkspaceReceived.vue';
 import ComingSoon from '@/pages/ComingSoon.vue';
 import WorkspaceSent from '@/pages/workspace/WorkspaceSent.vue';
 import WorkspaceFavorites from '@/pages/workspace/WorkspaceFavorites.vue';
-import WorkspaceArchived from '@/pages/workspace/WorkspaceArchived.vue';
+import WorkspaceTrash from '@/pages/workspace/WorkspaceTrash.vue';
 import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
 import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
 
@@ -70,8 +70,8 @@ export const router = createRouter({
           component: ComingSoon,
         },
         {
-          path: 'archived',
-          component: WorkspaceArchived,
+          path: 'trash',
+          component: WorkspaceTrash,
         },
         {
           path: ':type/feedback/:id',

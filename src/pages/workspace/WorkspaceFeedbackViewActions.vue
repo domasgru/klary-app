@@ -39,8 +39,8 @@
       ref="moreRef"
       :feedback-data="feedbackData"
       :position="settingsPopupPosition"
-      @archive="updateFeedbackStateAndClose(ARCHIVED_STATE)"
-      @unarchive="updateFeedbackStateAndClose(ACTIVE_STATE)"
+      @remove="updateFeedbackStateAndClose(REMOVED_STATE)"
+      @unremove="updateFeedbackStateAndClose(ACTIVE_STATE)"
       @delete="updateFeedbackStateAndClose(DELETED_STATE)"
     >
       <WorkspaceActionButton
@@ -59,7 +59,7 @@ import {
 import { useRouter } from 'vue-router';
 import { useFeedbackData } from '@/composables/useFeedback';
 import {
- ACTIVE_STATUS, CLOSED_STATUS, FAVORITE_FLAG, ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE,
+ ACTIVE_STATUS, CLOSED_STATUS, FAVORITE_FLAG, ACTIVE_STATE, REMOVED_STATE, DELETED_STATE,
 } from '@/constants/feedback';
 import { gsap } from 'gsap';
 import WorkspaceActionButton from './WorkspaceActionButton.vue';
@@ -85,7 +85,7 @@ export default {
     const {
       isFeedbackClosed,
       isFeedbackFavorite,
-      isFeedbackArchived,
+      isFeedbackRemoved,
       isFeedbackSent,
       toggleFeedbackFlag,
       updateFeedbackStatus,
@@ -101,7 +101,7 @@ export default {
     };
     const updateFeedbackStateAndClose = (state) => {
       updateFeedbackState(state);
-      router.back();
+      router.push(`/workspace/${router.currentRoute.value.params.type}`);
     };
     const toggleMoreOptions = () => {};
     const closeFeedbackActionButtonText = computed(() => {
@@ -110,7 +110,6 @@ export default {
       }
         return 'Close';
     });
-    const archiveActionButtonText = computed(() => (isFeedbackArchived.value ? 'Unarchive for you' : 'Archive for you'));
     const settingsPopupPosition = computed(() => (props.showOnSides ? 'medium-left' : 'bottom-left'));
     // ANIMATION
     const actionsRef = ref(null);
@@ -202,7 +201,7 @@ export default {
       router,
       isFeedbackClosed,
       isFeedbackFavorite,
-      isFeedbackArchived,
+      isFeedbackRemoved,
       isFeedbackSent,
       toggleFeedbackStatus,
       toggleFeedbackFlag,
@@ -210,9 +209,8 @@ export default {
       toggleMoreOptions,
       closeFeedbackActionButtonText,
       settingsPopupPosition,
-      archiveActionButtonText,
       FAVORITE_FLAG,
-      ARCHIVED_STATE,
+      REMOVED_STATE,
       ACTIVE_STATE,
       DELETED_STATE,
       actionsRef,

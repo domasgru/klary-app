@@ -58,6 +58,7 @@ const LOGIN_TEXTS = {
 };
 
 export default {
+ emits: ['success', 'error'],
  data() {
    return {
      isSignup: true,
@@ -78,6 +79,7 @@ export default {
       await handleLoginAndReturnRedirect(result);
       this.$emit('success');
      } catch (e) {
+       this.$emit('error');
        console.error(e);
      }
    },

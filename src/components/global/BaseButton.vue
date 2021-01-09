@@ -5,8 +5,8 @@
     class="button"
     :class="{
       ...computedClasses,
-      'base-typography--bold-button1': ['xlg', 'lg'].includes(size),
-      'base-typography--bold-button2': ['sm', 'md'].includes(size),
+      'b1s': size === 'lg',
+      'b2s': size === 'md',
     }"
     :disabled="disabled"
   >
@@ -19,6 +19,10 @@ const VALID_BUTTON_TYPES = ['sm', 'md', 'lg', 'xlg'];
 
 export default {
   props: {
+    type: {
+      type: String,
+      default: 'primary',
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -52,9 +56,10 @@ export default {
   computed: {
     tag: ({ to }) => (to ? 'router-link' : 'button'),
     computedClasses: ({
-      disabled, fluid, inverse, size, isPlain, isInline,
+      type, disabled, fluid, inverse, size, isPlain, isInline,
     }) => (
       {
+        [`button--${type}`]: type,
         'button--disabled': disabled,
         'button--fluid': fluid,
         'button--inverse': inverse,
@@ -69,10 +74,10 @@ export default {
 
 <style lang="scss" scoped>
 .button {
+  $this: &;
+
   display: block;
-  color: white;
   text-align: center;
-  background: $primary;
   border: none;
   border-radius: 10px;
   outline: none;
@@ -80,32 +85,67 @@ export default {
 
   &:hover {
     cursor: pointer;
-    background: $primary-400;
   }
 
-  &--sm {
-    padding: 6px 16px;
+  &--primary {
+    color: white;
+    background: $primary;
+
+    &:hover {
+      background: $primary-200;
+    }
+
+    &:active {
+      background: $primary-300;
+    }
+
+    &#{$this}--disabled {
+      cursor: not-allowed;
+      background: $primary-disabled;
+    }
+  }
+
+  &--secondary {
+    color: $dark;
+    background: $light;
+    border: 1px solid $grey-200;
+
+    &:hover {
+      background: $grey-100;
+    }
+
+    &:active {
+      background: $grey-150;
+    }
+
+    &#{$this}--disabled {
+      color: $grey-500;
+      cursor: not-allowed;
+    }
+  }
+
+  &--error {
+    color: $light;
+    background: $error;
+
+    &#{$this}--disabled {
+      cursor: not-allowed;
+    }
   }
 
   &--md {
     padding: 10px 20px;
+
+    &#{$this}--secondary {
+      padding: 9px 20px;
+    }
   }
 
   &--lg {
     padding: 12px 20px;
-  }
 
-  &--xlg {
-    padding: 16px 24px;
-  }
-
-  &--disabled {
-    //pointer-events: none;
-    background: $primary-disabled;
-
-    &:hover {
-      cursor: not-allowed;
-      background: $primary-disabled;
+    &#{$this}--secondary {
+      padding: 11px 20px;
     }
   }
 

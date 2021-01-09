@@ -6,14 +6,14 @@ import {
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import {
-  RECEIVED_TYPE, SENT_TYPE, FAVORITE_TYPE, ARCHIVED_STATE, ACTIVE_STATUS, CLOSED_STATUS,
+  RECEIVED_TYPE, SENT_TYPE, FAVORITE_FLAG, FAVORITES_TYPE, REMOVED_STATE, ACTIVE_STATUS, CLOSED_STATUS,
 } from '@/constants/feedback';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import arraySort from 'array-sort';
 import getObjectValue from 'get-value';
 import { updateFeedback } from '@/firebase';
 
-const validTypes = [RECEIVED_TYPE, SENT_TYPE, FAVORITE_TYPE, ARCHIVED_STATE];
+const validTypes = [RECEIVED_TYPE, SENT_TYPE, FAVORITES_TYPE, REMOVED_STATE];
 
 export const useFeedbackList = (type) => {
   const store = useStore();
@@ -22,6 +22,7 @@ export const useFeedbackList = (type) => {
 
   const isValidType = validTypes.includes(type);
   const currentUser = store.state.user.userData;
+
   const feedbacks = isValidType
     ? computed(() => store.getters[`feedback/${type.toLowerCase()}Feedbacks`])
     : computed(() => store.getters.allFeedbacks);
@@ -33,8 +34,8 @@ export const useFeedbackList = (type) => {
       { userId: store.state.user.userData.uid },
     );
 
-    if (type === ARCHIVED_STATE) {
-      await store.dispatch('feedback/bindArchivedFeedbacks', { userId: store.state.user.userData.uid });
+    if (type === REMOVED_STATE) {
+      await store.dispatch('feedback/bindRemovedFeedbacks', { userId: store.state.user.userData.uid });
     }
     isLoading.value = false;
   };
@@ -71,8 +72,8 @@ export const useFeedbackList = (type) => {
   const getFilteredAndSortedFeedbacks = ({
     filterBy, filterValue, sortBy = 'createdAt.seconds', sortReverse = false,
   }) => computed(() => {
+    try {
     let preparedFeedbacks = null;
-
     if (filterBy && filterValue) {
       preparedFeedbacks = feedbacks.value.filter((feedback) => {
         const valueToFilter = getObjectValue(feedback, filterBy);
@@ -88,6 +89,10 @@ export const useFeedbackList = (type) => {
     }
 
     return preparedFeedbacks;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
   });
   const openFeedback = (id) => router.push({ path: `/workspace/${type.toLowerCase()}/feedback/${id}` });
 
@@ -96,12 +101,24 @@ export const useFeedbackList = (type) => {
   };
 };
 
-export const useFeedbackData = (feedbackData) => {
+export const useFeedbackData = (feedbackData, inboxType) => {
   const store = useStore();
   const userData = computed(() => store.state.user.userData);
   const feedbackFlags = computed(() => feedbackData.value.participants[userData.value.uid]?.flags);
   const feedbackId = computed(() => feedbackData.value.id);
-  const isFeedbackSent = computed(() => feedbackData.value.authorId === userData.value.uid);
+  const isFeedbackSent = computed(() => {
+    const isAuthor = feedbackData.value.authorId === userData.value.uid;
+    const isSelfFeedback = feedbackData.value.authorId === feedbackData.value.receiverId;
+
+    if (isSelfFeedback && inboxType === RECEIVED_TYPE) {
+      return false;
+    }
+    if (isSelfFeedback && (inboxType === SENT_TYPE || inboxType === FAVORITES_TYPE)) {
+      return true;
+    }
+
+    return isAuthor;
+  });
   const feedbackCardUserId = computed(() => (isFeedbackSent.value
     ? feedbackData.value.receiverId
     : feedbackData.value.authorId));
@@ -133,8 +150,8 @@ export const useFeedbackData = (feedbackData) => {
     feedbackCardUser: computed(() => feedbackData.value.participants[feedbackCardUserId.value]),
     feedbackAuthor: computed(() => feedbackData.value.participants[feedbackData.value.authorId]),
     isFeedbackClosed: computed(() => feedbackData.value?.status === CLOSED_STATUS),
-    isFeedbackFavorite: computed(() => feedbackFlags.value.includes(FAVORITE_TYPE)),
-    isFeedbackArchived: computed(() => feedbackData.value.participants[userData.value.uid]?.feedbackState === ARCHIVED_STATE),
+    isFeedbackFavorite: computed(() => feedbackFlags.value.includes(FAVORITE_FLAG)),
+    isFeedbackRemoved: computed(() => feedbackData.value.participants[userData.value.uid]?.feedbackState === REMOVED_STATE),
     isFeedbackSent,
     isFeedbackLastActionSeen: computed(() => isFeedbackSeen(feedbackData.value, userData.value.uid)),
     toggleFeedbackFlag,

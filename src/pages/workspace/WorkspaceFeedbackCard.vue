@@ -63,8 +63,8 @@
     />
     <WorkspaceFeedbackSettings
       :feedback-data="feedbackData"
-      @archive="updateFeedbackState(ARCHIVED_STATE)"
-      @unarchive="updateFeedbackState(ACTIVE_STATE)"
+      @remove="updateFeedbackState(REMOVED_STATE)"
+      @unremove="updateFeedbackState(ACTIVE_STATE)"
       @delete="updateFeedbackState(DELETED_STATE)"
     >
       <WorkspaceFeedbackCardButton
@@ -77,7 +77,7 @@
 <script>
 import { toRefs } from 'vue';
 import {
-  FAVORITE_FLAG, ACTIVE_STATE, ARCHIVED_STATE, DELETED_STATE,
+  FAVORITE_FLAG, ACTIVE_STATE, REMOVED_STATE, DELETED_STATE,
 } from '@/constants/feedback';
 import { useFeedbackData } from '@/composables/useFeedback';
 import WorkspaceFeedbackSettings from './WorkspaceFeedbackSettings.vue';
@@ -93,6 +93,10 @@ export default {
       type: Object,
       required: true,
     },
+    inboxType: {
+      type: String,
+      required: true,
+    },
   },
   setup(props) {
     const { feedbackData } = toRefs(props);
@@ -104,7 +108,7 @@ export default {
       isFeedbackLastActionSeen,
       toggleFeedbackFlag,
       updateFeedbackState,
-    } = useFeedbackData(feedbackData);
+    } = useFeedbackData(feedbackData, props.inboxType);
 
     return {
       user,
@@ -116,7 +120,7 @@ export default {
       updateFeedbackState,
       FAVORITE_FLAG,
       ACTIVE_STATE,
-      ARCHIVED_STATE,
+      REMOVED_STATE,
       DELETED_STATE,
     };
   },

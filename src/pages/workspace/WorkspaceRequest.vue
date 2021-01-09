@@ -66,7 +66,7 @@ export default {
       createFeedbackRequest({
         from: { name: this.userData.name, uid: this.userData.uid },
         to: { name: this.selectedUser.name, uid: this.selectedUser.uid },
-        message: this.message,
+        message: this.message.replace(/^\s+|\s+$/g, ''),
       });
     },
   },

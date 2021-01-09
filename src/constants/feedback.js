@@ -1,10 +1,11 @@
 export const RECEIVED_TYPE = 'RECEIVED';
 export const SENT_TYPE = 'SENT';
-export const FAVORITE_TYPE = 'FAVORITE';
+export const FAVORITES_TYPE = 'FAVORITES';
+export const REMOVED_TYPE = 'REMOVED';
 
 // Invidual participants states
 export const ACTIVE_STATE = 'ACTIVE';
-export const ARCHIVED_STATE = 'ARCHIVED';
+export const REMOVED_STATE = 'REMOVED';
 export const DELETED_STATE = 'DELETED';
 
 // Status for both participants

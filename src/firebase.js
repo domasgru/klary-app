@@ -100,7 +100,7 @@ export const getFeedback = async (id) => {
 
 export const addComment = async (feedbackId, content, author) => {
   const comment = {
-    content,
+    content: content.replace(/^\s+|\s+$/g, ''),
     author: {
       name: author.name,
       email: author.email,
@@ -127,7 +127,7 @@ export const addCommentReply = async (feedbackId, commentId, content, author) =>
       googlePicture: author.googlePicture || '',
       uid: author.uid,
     },
-    content,
+    content: content.replace(/^\s+|\s+$/g, ''),
     createdAt: getTimeNow(),
   };
   const commentRef = db.doc(`feedbacks/${feedbackId}/discussion/${commentId}`);

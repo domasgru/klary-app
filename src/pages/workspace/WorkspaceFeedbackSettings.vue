@@ -7,8 +7,8 @@
     :is-open="showOptions"
     :items="optionsItems"
     @click.stop
-    @archive="$emit('archive'), showOptions = false"
-    @unarchive="$emit('unarchive'), showOptions = false"
+    @remove="$emit('remove'), showOptions = false"
+    @unremove="$emit('unremove'), showOptions = false"
     @delete="$emit('delete'), showOptions = false"
   >
     <div
@@ -23,7 +23,7 @@
 <script>
 import { mapState } from 'vuex';
 import { updateFeedback } from '@/firebase';
-import { ARCHIVED_STATE } from '@/constants/feedback';
+import { REMOVED_STATE } from '@/constants/feedback';
 
 export default {
   props: {
@@ -32,7 +32,7 @@ export default {
       required: true,
     },
   },
-  emits: ['archive', 'unarchive', 'delete'],
+  emits: ['remove', 'unremove', 'delete'],
   data() {
     return {
       showOptions: false,
@@ -41,16 +41,22 @@ export default {
   computed: {
     ...mapState('user', ['userData']),
     optionsItems() {
-      const optionsArchiveItem = this.feedbackData.participants[this.userData.uid].feedbackState === ARCHIVED_STATE
-      ? { name: 'Unarchive', action: 'unarchive', icon: 'archive' }
-      : { name: 'Archive for you', action: 'archive', icon: 'archive' };
-      const optionsDeleteItem = {
-        name: 'Delete for you', action: 'delete', icon: 'delete', theme: 'alarm',
-      };
+      const isRemoved = this.feedbackData.participants[this.userData.uid].feedbackState === REMOVED_STATE;
+      const optionsRemoveItem = isRemoved
+      ? [{ name: 'Restore', action: 'unremove', icon: 'trash' }]
+      : [{
+          name: 'Remove for you', action: 'remove', icon: 'trash', theme: 'alarm',
+      }];
+
+      const optionsDeleteItem = isRemoved
+      ? [{
+        name: 'Delete for you', action: 'delete', icon: 'trash', theme: 'alarm',
+      }]
+      : [];
 
       return [
-        optionsArchiveItem,
-        optionsDeleteItem,
+        ...optionsRemoveItem,
+        ...optionsDeleteItem,
       ];
     },
   },

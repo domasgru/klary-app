@@ -18,6 +18,9 @@
             v-if="icon"
             :name="icon"
             class="dropdown__item-icon"
+            :class="{
+              'dropdown__item-icon--alarm': theme === 'alarm'
+            }"
           />
           {{ name }}
         </button>
@@ -82,6 +85,10 @@ export default {
     margin-right: 8px;
     fill: none;
     stroke: $dark;
+
+    &--alarm {
+      stroke: $error;
+    }
   }
 }
 </style>

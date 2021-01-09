@@ -1,11 +1,10 @@
-$primary-100: #6c3bf5;
-$primary-200: #5e2ce8;
-$primary-300: #511fdc;
-$primary-400: #4817cf;
-$primary-500: #3f10c2;
-$primary-disabled: rgba($primary-300, 0.6);
-$primary-active: rgba($primary-300, 0.2);
-$primary: $primary-300;
+$primary-100:#511fdc;
+$primary-200: #4716cc;
+$primary-300:#3d0fbd;
+$primary-active-input:#dcd2f8;
+$primary-active: #ede8fa;
+$primary-disabled: rgba(81, 31, 220, 0.6);
+$primary: $primary-100;
 
 $secondary-100: #240a69;
 $secondary-200: #1c055c;

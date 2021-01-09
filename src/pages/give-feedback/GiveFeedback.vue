@@ -67,7 +67,7 @@
             Give feedback for {{ request.name }}
           </div>
           <div
-            v-if="message"
+            v-if="request.message"
             class="give-feedback__message b1"
           >
             {{ request.message }}
@@ -194,7 +194,7 @@ export default {
           },
         },
         title: 'Personal feedback',
-        content: message.value,
+        content: message.value.replace(/^\s+|\s+$/g, ''),
         status: ACTIVE_STATUS,
       });
       sentFeedbackId.value = sentFeedback.id;

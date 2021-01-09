@@ -1,6 +1,6 @@
 import { firestoreAction } from 'vuexfire';
 import { db } from '@/firebase';
-import { FEEDBACKS_COLLECTION, ACTIVE_STATE, ARCHIVED_STATE } from '@/constants/feedback';
+import { FEEDBACKS_COLLECTION, ACTIVE_STATE, REMOVED_STATE } from '@/constants/feedback';
 import { bindFirestoreArrayRefMutations, bindFirestoreArrayRefAction } from '../utils/bindFirestoreRef';
 
 export default {
@@ -8,7 +8,7 @@ export default {
     // Sent and received has to have separate state, as firestore does not have logical OR opretator
     receivedFeedbacks: null,
     sentFeedbacks: null,
-    archivedFeedbacks: null,
+    removedFeedbacks: null,
     currentFeedback: null,
     currentFeedbackComments: null,
   },
@@ -18,7 +18,10 @@ export default {
         return null;
       }
 
-      return [...state.receivedFeedbacks, ...state.sentFeedbacks];
+      const allFeedbacks = [...state.receivedFeedbacks, ...state.sentFeedbacks];
+      const uniqueAllFeedbacks = Array.from(new Set(allFeedbacks.map((f) => f.id)))
+        .map((id) => allFeedbacks.find((f) => f.id === id));
+      return uniqueAllFeedbacks;
     },
     receivedFeedbacks(state) {
       return state.receivedFeedbacks;
@@ -26,11 +29,11 @@ export default {
     sentFeedbacks(state) {
       return state.sentFeedbacks;
     },
-    favoriteFeedbacks(state, getters) {
+    favoritesFeedbacks(state, getters) {
       return getters.allFeedbacks;
     },
-    archivedFeedbacks(state, getters) {
-      return state.archivedFeedbacks;
+    removedFeedbacks(state, getters) {
+      return state.removedFeedbacks;
     },
   },
   mutations: {
@@ -72,13 +75,13 @@ export default {
         .orderBy('createdAt', 'asc'),
       );
     },
-    // Separate handling for archived feedabcks
-    bindArchivedFeedbacks({ commit }, { userId }) {
+    // Separate handling for removed feedabcks
+    bindRemovedFeedbacks({ commit }, { userId }) {
       return bindFirestoreArrayRefAction(
         commit,
-        'archivedFeedbacks',
+        'removedFeedbacks',
         db.collection(FEEDBACKS_COLLECTION)
-          .where(`participants.${userId}.feedbackState`, '==', ARCHIVED_STATE),
+          .where(`participants.${userId}.feedbackState`, '==', REMOVED_STATE),
       );
     },
   },

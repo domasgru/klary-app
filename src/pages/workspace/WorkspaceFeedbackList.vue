@@ -23,6 +23,7 @@
           class="feedback__card"
           :feedback-data="feedback"
           :is-sent-feedback="isSentFeedback(feedback)"
+          :inbox-type="inboxType"
           @click="$emit('open', feedback.id)"
         />
         <div class="feedback__separator" />
@@ -51,6 +52,10 @@ export default {
     emptyStateText: {
       type: String,
       default: '',
+    },
+    inboxType: {
+      type: String,
+      required: true,
     },
   },
   emits: ['open'],

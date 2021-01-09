@@ -6,6 +6,7 @@
     <WorkspaceFeedbackList
       v-if="!isLoading"
       :feedbacks="activeFeedbacks"
+      :inbox-type="SENT_TYPE"
       label="Active"
       empty-state-text="No active sent feedbacks"
       class="active-feedback-list"
@@ -15,6 +16,7 @@
     <WorkspaceFeedbackList
       v-if="!isLoading"
       :feedbacks="closedFeedbacks"
+      :inbox-type="SENT_TYPE"
       label="Closed"
       empty-state-text="No closed sent feedbacks"
       class="active-feedback-list"
@@ -60,6 +62,7 @@ export default {
       activeFeedbacks,
       closedFeedbacks,
       openFeedback,
+      SENT_TYPE,
     };
   },
 };
