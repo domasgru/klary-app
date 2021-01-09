@@ -74,7 +74,7 @@ export const router = createRouter({
           component: WorkspaceTrash,
         },
         {
-          path: ':type/feedback/:id',
+          path: ':type/:id',
           component: WorkspaceFeedbackView,
           beforeEnter: async (to, from, next) => {
             const { type, id } = to.params;

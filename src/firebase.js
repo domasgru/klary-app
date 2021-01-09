@@ -1,6 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/storage';
 import shortId from 'shortid';
 import { COMMENT_ACTION } from '@/constants';
 
@@ -21,6 +22,7 @@ export const googleAuthProviderId = firebase.auth.GoogleAuthProvider.PROVIDER_ID
 
 export const auth = firebase.auth();
 export const db = firebase.firestore();
+export const storage = firebase.storage();
 export const { FieldValue } = firebase.firestore;
 export const getTimeNow = () => firebase.firestore.Timestamp.fromDate(new Date());
 export const loginWithGoogle = () => auth.signInWithPopup(googleAuthProvider);

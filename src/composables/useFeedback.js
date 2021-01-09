@@ -94,7 +94,7 @@ export const useFeedbackList = (type) => {
     return null;
   }
   });
-  const openFeedback = (id) => router.push({ path: `/workspace/${type.toLowerCase()}/feedback/${id}` });
+  const openFeedback = (id) => router.push({ path: `/workspace/${type.toLowerCase()}/${id}` });
 
   return {
     feedbacks, isLoading, getFilteredAndSortedFeedbacks, openFeedback,

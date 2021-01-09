@@ -45,7 +45,7 @@
     </div>
     <span
       v-if="showHintArea"
-      class="base-input__hint"
+      class="base-input__hint caption"
     >
       {{ hint || error || success }}
     </span>
@@ -125,7 +125,8 @@ export default {
       };
     },
     showHintArea() {
-      return this.hint !== undefined || this.error !== undefined || this.success !== undefined;
+      // return this.hint !== undefined || this.error !== undefined || this.success !== undefined;
+      return this.hint || this.error || this.success;
     },
   },
   watch: {
@@ -352,10 +353,9 @@ export default {
   }
 
   &__hint {
-    height: 14px;
+    height: 20px;
     margin-top: 4px;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 14px;
     color: $grey-500;
 
     #{$this}--success & {

@@ -4,6 +4,40 @@
       class="account-settings__title h5"
       v-text="'Account settings'"
     />
+    <div class="account-settings__profile">
+      <div class="account-settings__profile-title caption">
+        Profile photo
+      </div>
+      <div class="account-settings__profile-actions">
+        <BaseAvatar
+          size="lg"
+          :name="settings.name"
+          :picture="settings.picture || userData.googlePicture"
+          class="account-settings__profile-photo"
+        />
+        <input
+          id="fileElem"
+          ref="fileInput"
+          type="file"
+          multiple
+          accept="image/*"
+          style="display: none;"
+          @change="updateProfileImage"
+        >
+        <BaseButton
+          type="secondary"
+          class="account-settings__upload-photo"
+          @click="$refs.fileInput.click()"
+          v-text="'Upload photo'"
+        />
+        <div
+          class="account-settings__remove-photo btn2"
+          @click="removeProfileImage"
+        >
+          Remove photo
+        </div>
+      </div>
+    </div>
     <BaseInput
       v-model="settings.name"
       :error="settingsErrors.name"
@@ -29,7 +63,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { updateUserProfileDocument } from '@/firebase';
+import { updateUserProfileDocument, storage } from '@/firebase';
 
 export default {
   data() {
@@ -75,6 +109,20 @@ export default {
     this.hasInitialized = true;
   },
   methods: {
+    async updateProfileImage() {
+      try {
+        const file = this.$refs.fileInput.files[0];
+        const profileImageRef = storage.ref().child(`${this.userData.uid}/images/${file.name}`);
+        const uploadedFile = await profileImageRef.put(file);
+        const downloadURL = await profileImageRef.getDownloadURL();
+        this.settings.picture = downloadURL;
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    removeProfileImage() {
+      this.settings.picture = '';
+    },
     async save() {
       if (!this.settings.name) {
         this.settingsErrors.name = "Full name can't be empty";
@@ -104,12 +152,41 @@ export default {
     margin-bottom: 24px;
   }
 
-  &__name {
+  &__profile {
+    margin-bottom: 16px;
+  }
+
+  &__profile-title {
     margin-bottom: 8px;
   }
 
+  &__profile-actions {
+    display: flex;
+    align-items: center;
+  }
+
+  &__profile-photo {
+    margin-right: 24px;
+  }
+
+  &__remove-photo {
+    color: $primary;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__upload-photo {
+    margin-right: 24px;
+  }
+
+  &__name {
+    margin-bottom: 16px;
+  }
+
   &__email {
-    margin-bottom: 8px;
+    margin-bottom: 16px;
   }
 
   &__save {

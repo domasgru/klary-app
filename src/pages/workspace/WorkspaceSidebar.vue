@@ -22,7 +22,7 @@
         <BaseAvatar
           size="sm"
           :name="userData.name"
-          :picture="userData.googlePicture || ''"
+          :picture="userData.picture || userData.googlePicture || ''"
           class="workspace-sidebar__user-avatar"
         />
         {{ userData.name }}
