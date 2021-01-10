@@ -64,7 +64,7 @@ export default {
   },
   setup() {
     const store = useStore();
-    const { isLoading, openFeedback, getFilteredAndSortedFeedbacks } = useFeedbackList(REMOVED_STATE);
+    const { isLoading, openFeedback, getFilteredAndSortedFeedbacks } = useFeedbackList(REMOVED_TYPE);
     const showEmptyTrashModal = ref(false);
     const { uid } = store.state.user.userData;
 

@@ -12,6 +12,8 @@ import WorkspaceFavorites from '@/pages/workspace/WorkspaceFavorites.vue';
 import WorkspaceTrash from '@/pages/workspace/WorkspaceTrash.vue';
 import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
 import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
+import { NAME_TYPE_MAP } from '@/constants/feedback';
+import { capitalize } from '@/utils/stringUtils';
 
 import { auth, getCurrentUser } from '@/firebase';
 
@@ -78,9 +80,12 @@ export const router = createRouter({
           component: WorkspaceFeedbackView,
           beforeEnter: async (to, from, next) => {
             const { type, id } = to.params;
-            if (!store.getters[`feedback/${type}Feedbacks`]?.some((fb) => fb.id === id)) {
+            if (!store.getters[`feedback/${NAME_TYPE_MAP[type]}Feedbacks`]?.some((fb) => fb.id === id)) {
               try {
-                await store.dispatch('feedback/bindCurrentFeedback', id);
+                await store.dispatch(
+                  `feedback/bind${capitalize(NAME_TYPE_MAP[type])}Feedbacks`,
+                  { userId: store.state.user.userData.uid },
+                );
               } catch (e) {
                 console.error(e);
               }
@@ -88,7 +93,7 @@ export const router = createRouter({
             next();
           },
           // eslint-disable-next-line max-len
-          props: (route) => ({ feedbackData: store.getters[`feedback/${route.params.type}Feedbacks`]?.find((fb) => fb.id === route.params.id) }),
+          props: (route) => ({ feedbackData: store.getters[`feedback/${NAME_TYPE_MAP[route.params.type]}Feedbacks`]?.find((fb) => fb.id === route.params.id) }),
         },
       ],
     },

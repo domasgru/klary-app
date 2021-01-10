@@ -6,14 +6,14 @@ import {
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import {
-  RECEIVED_TYPE, SENT_TYPE, FAVORITE_FLAG, FAVORITES_TYPE, REMOVED_STATE, ACTIVE_STATUS, CLOSED_STATUS,
+  RECEIVED_TYPE, SENT_TYPE, FAVORITE_FLAG, FAVORITES_TYPE, REMOVED_STATE, REMOVED_TYPE, ACTIVE_STATUS, CLOSED_STATUS,
 } from '@/constants/feedback';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import arraySort from 'array-sort';
 import getObjectValue from 'get-value';
 import { updateFeedback } from '@/firebase';
 
-const validTypes = [RECEIVED_TYPE, SENT_TYPE, FAVORITES_TYPE, REMOVED_STATE];
+const validTypes = [RECEIVED_TYPE, SENT_TYPE, FAVORITES_TYPE, REMOVED_TYPE];
 
 export const useFeedbackList = (type) => {
   const store = useStore();
@@ -24,7 +24,7 @@ export const useFeedbackList = (type) => {
   const currentUser = store.state.user.userData;
 
   const feedbacks = isValidType
-    ? computed(() => store.getters[`feedback/${type.toLowerCase()}Feedbacks`])
+    ? computed(() => store.getters[`feedback/${type}Feedbacks`])
     : computed(() => store.getters.allFeedbacks);
 
   const getFeedbackList = async () => {
@@ -34,7 +34,7 @@ export const useFeedbackList = (type) => {
       { userId: store.state.user.userData.uid },
     );
 
-    if (type === REMOVED_STATE) {
+    if (type === REMOVED_TYPE) {
       await store.dispatch('feedback/bindRemovedFeedbacks', { userId: store.state.user.userData.uid });
     }
     isLoading.value = false;
@@ -73,28 +73,28 @@ export const useFeedbackList = (type) => {
     filterBy, filterValue, sortBy = 'createdAt.seconds', sortReverse = false,
   }) => computed(() => {
     try {
-    let preparedFeedbacks = null;
-    if (filterBy && filterValue) {
-      preparedFeedbacks = feedbacks.value.filter((feedback) => {
-        const valueToFilter = getObjectValue(feedback, filterBy);
-        if (Array.isArray(valueToFilter)) {
-          return valueToFilter.includes(filterValue);
-        }
+      let preparedFeedbacks = null;
+      if (filterBy && filterValue) {
+        preparedFeedbacks = feedbacks.value.filter((feedback) => {
+          const valueToFilter = getObjectValue(feedback, filterBy);
+          if (Array.isArray(valueToFilter)) {
+            return valueToFilter.includes(filterValue);
+          }
 
-        return valueToFilter === filterValue;
-      });
-    }
-    if (sortBy) {
-      preparedFeedbacks = arraySort(preparedFeedbacks, compare('isSeen'), compare(sortBy));
-    }
+          return valueToFilter === filterValue;
+        });
+      }
+      if (sortBy) {
+        preparedFeedbacks = arraySort(preparedFeedbacks, compare('isSeen'), compare(sortBy));
+      }
 
-    return preparedFeedbacks;
-  } catch (e) {
-    console.error(e);
-    return null;
+      return preparedFeedbacks;
+    } catch (e) {
+    console.error('Feedbacks didnt load yet', e);
+    return [];
   }
   });
-  const openFeedback = (id) => router.push({ path: `/workspace/${type.toLowerCase()}/${id}` });
+  const openFeedback = (id) => router.push({ path: `/workspace/${type === REMOVED_TYPE ? 'trash' : type.toLowerCase()}/${id}` });
 
   return {
     feedbacks, isLoading, getFilteredAndSortedFeedbacks, openFeedback,

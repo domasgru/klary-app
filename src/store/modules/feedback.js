@@ -9,7 +9,6 @@ export default {
     receivedFeedbacks: null,
     sentFeedbacks: null,
     removedFeedbacks: null,
-    currentFeedback: null,
     currentFeedbackComments: null,
   },
   getters: {
@@ -40,9 +39,6 @@ export default {
     ...bindFirestoreArrayRefMutations,
   },
   actions: {
-    bindCurrentFeedback: firestoreAction(({ bindFirestoreRef }, feedbackId) => (
-      bindFirestoreRef('currentFeedback', db.collection(FEEDBACKS_COLLECTION).doc(feedbackId))
-    )),
     bindReceivedFeedbacks({ commit }, { userId }) {
       return bindFirestoreArrayRefAction(
         commit,

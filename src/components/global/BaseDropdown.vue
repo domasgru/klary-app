@@ -43,6 +43,7 @@ export default {
       required: true,
     },
   },
+  emits: ['delete', 'remove', 'restore'],
 };
 </script>
 

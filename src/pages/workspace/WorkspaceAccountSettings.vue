@@ -31,6 +31,7 @@
           v-text="'Upload photo'"
         />
         <div
+          v-if="settings.picture"
           class="account-settings__remove-photo btn2"
           @click="removeProfileImage"
         >
@@ -112,7 +113,8 @@ export default {
     async updateProfileImage() {
       try {
         const file = this.$refs.fileInput.files[0];
-        const profileImageRef = storage.ref().child(`${this.userData.uid}/images/${file.name}`);
+        const fileExtension = file.name.split('.')[1];
+        const profileImageRef = storage.ref().child(`${this.userData.uid}/images/profileImage.${fileExtension}`);
         const uploadedFile = await profileImageRef.put(file);
         const downloadURL = await profileImageRef.getDownloadURL();
         this.settings.picture = downloadURL;

@@ -65,7 +65,7 @@
       :feedback-data="feedbackData"
       @remove="updateFeedbackState(REMOVED_STATE)"
       @unremove="updateFeedbackState(ACTIVE_STATE)"
-      @delete="updateFeedbackState(DELETED_STATE)"
+      @delete="showDeleteModal = true"
     >
       <WorkspaceFeedbackCardButton
         icon="more-horizontal"

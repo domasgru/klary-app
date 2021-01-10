@@ -39,8 +39,12 @@ export const useFeedbackRequest = () => {
   };
 
   const updateFeedbackRequestData = () => {
+    debugger;
     updateFeedbackRequest(id.value, {
+      name,
       message: message.value,
+      picture,
+      googlePicture,
     });
   };
 
