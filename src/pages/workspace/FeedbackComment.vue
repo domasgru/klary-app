@@ -3,7 +3,6 @@
   <div
     class="feedback-comment"
     v-bind="$attrs"
-    :class="{'feedback-comment__content--unseen': unseenComments.some(unseenComment => unseenComment.id === comment.id)}"
   >
     <div class="feedback-comment__header">
       <div class="feedback-comment__author">
@@ -17,13 +16,21 @@
           {{ comment.author.name }}
         </p>
         <BaseTimestamp :timestamp="comment.createdAt.seconds" />
+        <div
+          v-if="isCommentUnseen"
+          class="label-new overline"
+        >
+          NEW
+        </div>
       </div>
     </div>
-    <div
-      class="feedback-comment__content base-typography--b-16-24"
-    >
+    <div class="feedback-comment__content base-typography--b-16-24">
       {{ comment.content }}
     </div>
+    <div
+      v-if="isCommentUnseen"
+      class="feedback-comment__unseen-indicator"
+    />
   </div>
   <div
     v-if="comment.replies && comment.replies.length"
@@ -33,7 +40,7 @@
       v-for="(reply, index) in comment.replies"
       :id="reply.id"
       :key="index"
-      :class="{'comment-reply--unseen': unseenComments.some(unseenComment => unseenComment.id === reply.id)}"
+      :unseen-comments="unseenComments"
       :reply="reply"
     />
   </div>
@@ -75,6 +82,9 @@ export default {
   },
   computed: {
     ...mapState('user', ['userData']),
+    isCommentUnseen() {
+      return this.unseenComments.some((unseenComment) => unseenComment.id === this.comment.id);
+    },
   },
   methods: {
     addReply(commentId) {
@@ -84,6 +94,9 @@ export default {
 
       addCommentReply(this.$route.params.id, commentId, this.replyContent, this.userData);
       this.replyContent = '';
+    },
+    isReplyUnseen(replyId) {
+      return this.unseenComments.some((unseenComment) => unseenComment.id === replyId);
     },
   },
 };
@@ -100,6 +113,7 @@ $background-unseen: #511fdc1f;
 }
 
 .feedback-comment {
+  position: relative;
   padding: 20px 24px;
   background: $light;
   border: $stroke;
@@ -131,10 +145,17 @@ $background-unseen: #511fdc1f;
     word-break: break-word;
     white-space: pre-line;
     transition: background 0.3s;
+  }
 
-    &--unseen {
-      background: $background-unseen;
-    }
+  &__unseen-indicator {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    height: 72%;
+    margin: auto;
+    background: $primary;
   }
 }
 
@@ -177,5 +198,13 @@ $background-unseen: #511fdc1f;
     padding: 8px;
     cursor: pointer;
   }
+}
+
+.label-new {
+  padding: 2px 8px;
+  margin-left: 8px;
+  color: $light;
+  background: $primary;
+  border-radius: 14px;
 }
 </style>

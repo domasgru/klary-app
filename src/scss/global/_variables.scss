@@ -19,8 +19,13 @@ $light: #fff;
 
 $success-light: #e1f5e4;
 $success: #209e35;
-$error-light: #fbeeee;
-$error: #d92f2b;
+
+$error-100: #d92f2b;
+$error-200: #c92622;
+$error-300: #ba1d1a;
+$error-light: #faebeb;
+$error-disabled: #e88280;
+$error: $error-100;
 
 $grey-50: #fafafa;
 $grey-100: #f5f5f7;

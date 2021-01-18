@@ -6,7 +6,7 @@
         name="logo"
       />
     </div>
-    <div class="signup-wrapper">
+    <div class="welcome-modal">
       <Signup @success="$router.push('/workspace')" />
     </div>
   </div>
@@ -30,6 +30,7 @@ export default {
   justify-content: center;
   width: 100%;
   height: 100%;
+  padding: 0 24px;
   background: $grey-100;
 
   &__header {
@@ -46,13 +47,20 @@ export default {
     width: 44px;
     height: 24px;
   }
+
+  &__ellipse1 {
+
+  }
 }
 
-.signup-wrapper {
+.welcome-modal {
   width: 100%;
   max-width: 592px;
+  padding: 56px 8px;
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.5);
   border: 1px solid $grey-200;
-  border-radius: $border-radius;
+  border: 5px solid rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
 }
 </style>

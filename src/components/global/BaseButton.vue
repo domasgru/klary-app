@@ -128,8 +128,17 @@ export default {
     color: $light;
     background: $error;
 
+    &:hover {
+      background: $error-200;
+    }
+
+    &:active {
+      background: $error-300;
+    }
+
     &#{$this}--disabled {
       cursor: not-allowed;
+      background: $error-disabled;
     }
   }
 

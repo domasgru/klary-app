@@ -93,7 +93,12 @@
       @close="showSignupModal = false"
     >
       <template #content>
-        <Signup @success="submitAfterLogin" />
+        <div class="signup-modal">
+          <Signup
+            completion-text="Send feedback"
+            @success="submitAfterLogin"
+          />
+        </div>
       </template>
     </BaseModal>
   </div>
@@ -338,6 +343,10 @@ export default {
       max-width: 464px;
     }
   }
+}
+
+.signup-modal {
+  padding: 56px 8px;
 }
 
 .error {

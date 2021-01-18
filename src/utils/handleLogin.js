@@ -12,10 +12,10 @@ export const handleLoginAndReturnRedirect = async (authResult) => {
 
   // Create new user profile
   if (additionalUserInfo.isNewUser) {
-    const { name, given_name, email } = additionalUserInfo.profile;
+    const { name, given_name } = additionalUserInfo.profile;
     await createUserProfileDocument(user, {
         ...profilePicture,
-        name: name || given_name || email,
+        status: 'NEW',
     });
   } else {
     try {

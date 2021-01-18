@@ -12,6 +12,12 @@
           {{ reply.author.name }}
         </p>
         <BaseTimestamp :timestamp="reply.createdAt.seconds" />
+        <div
+          v-if="isReplyUnseen"
+          class="label-new overline"
+        >
+          NEW
+        </div>
       </div>
       <div class="comment-reply__content">
         {{ reply.content }}
@@ -26,6 +32,15 @@ export default {
     reply: {
       type: Object,
       required: true,
+    },
+    unseenComments: {
+      type: Array,
+      default: () => ([]),
+    },
+  },
+  computed: {
+    isReplyUnseen() {
+      return this.unseenComments.some((unseenComment) => unseenComment.id === this.reply.id);
     },
   },
 };
@@ -75,5 +90,13 @@ export default {
   &__name {
     margin-right: 8px;
   }
+}
+
+.label-new {
+  padding: 2px 8px;
+  margin-left: 8px;
+  color: $light;
+  background: $primary;
+  border-radius: 14px;
 }
 </style>

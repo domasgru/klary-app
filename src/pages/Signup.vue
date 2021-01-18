@@ -1,10 +1,13 @@
 <template>
-  <div class="top">
+  <div
+    v-if="step === 'welcome'"
+    class="welcome-content"
+  >
     <div class="h4 title">
-      {{ texts.title }}
+      Welcome to Kuri
     </div>
     <div class="b1 subtitle">
-      {{ texts.subtitle }}
+      Use your Google account to sign up or log in.
     </div>
     <button
       class="button-google btn1s"
@@ -14,7 +17,7 @@
         class="google-icon"
         name="google"
       />
-      {{ texts.button }}
+      Continue with Google
     </button>
     <div class="terms b2">
       By logging in, you agree to our
@@ -27,63 +30,85 @@
       </BaseButton>.
     </div>
   </div>
-  <div class="bottom btn2">
-    {{ texts.switch }}
+  <div
+    v-else-if="step === 'name'"
+    class="name-content"
+  >
+    <div class="h4 name-content__title">
+      Enter your full name
+    </div>
+    <BaseInput
+      v-model="fullName"
+      label="Your full name"
+      placeholder="Name Username"
+      class="name-content__input"
+      size="lg"
+      autofocus
+    />
     <BaseButton
-      is-inline
-      @click="switchMethod"
-    >
-      {{ texts.switchAction }}
-    </BaseButton>
+      size="lg"
+      is-fluid
+      @click="createFullName"
+      v-text="completionText"
+    />
   </div>
 </template>
 
 <script>
-import { loginWithGoogle } from '@/firebase';
+/* eslint-disable camelcase */
+import { loginWithGoogle, createUserProfileDocument } from '@/firebase';
 import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
-
-const SIGNUP_TEXTS = {
-  title: 'Sign up',
-  subtitle: 'Use your google account to sign up',
-  button: 'Sign up with Google',
-  switch: 'Already have an account?',
-  switchAction: 'Log in',
-};
-const LOGIN_TEXTS = {
-  title: 'Log in',
-  subtitle: 'Use your Google account to log in.',
-  button: 'Sign in with Google',
-  switch: "Don't have an account?",
-  switchAction: 'Sign up',
-};
+import { mapActions, mapState } from 'vuex';
 
 export default {
- emits: ['success', 'error'],
- data() {
-   return {
-     isSignup: true,
-   };
- },
- computed: {
-   texts() {
-     return this.isSignup ? SIGNUP_TEXTS : LOGIN_TEXTS;
-   },
- },
- methods: {
-   switchMethod() {
-     this.isSignup = !this.isSignup;
-   },
-   async loginGoogle() {
-     try {
-      const result = await loginWithGoogle();
-      await handleLoginAndReturnRedirect(result);
+  props: {
+    completionText: {
+      type: String,
+      default: 'Finish sign up',
+    },
+  },
+  emits: ['success', 'error'],
+  data() {
+    return {
+      step: 'welcome',
+      fullName: '',
+    };
+  },
+  computed: {
+    ...mapState('user', ['userAuth', 'userData']),
+  },
+  methods: {
+    ...mapActions('user', ['setUserAuth', 'bindUser']),
+    async loginGoogle() {
+      try {
+        const { user, additionalUserInfo } = await loginWithGoogle();
+        this.setUserAuth({ email: user.email, uid: user.uid, additionalUserInfo });
+        await this.bindUser(user.uid);
+
+        if (additionalUserInfo.isNewUser || !this.userData) {
+          const { name, given_name } = additionalUserInfo.profile;
+          this.fullName = name || given_name || '';
+          this.step = 'name';
+          return;
+        }
+
+        this.$emit('success');
+      } catch (e) {
+        this.$emit('error');
+        console.error(e);
+      }
+    },
+    async createFullName() {
+      const profilePicture = this.userAuth.additionalUserInfo.profile?.picture
+          ? { googlePicture: this.userAuth.additionalUserInfo.profile?.picture } : {};
+      await createUserProfileDocument(this.userAuth, {
+            ...profilePicture,
+            name: this.fullName,
+            status: 'NEW',
+      });
       this.$emit('success');
-     } catch (e) {
-       this.$emit('error');
-       console.error(e);
-     }
-   },
- },
+    },
+  },
 };
 </script>
 
@@ -95,13 +120,11 @@ export default {
   margin-right: 8px;
 }
 
-.top {
+.welcome-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 56px 56px 24px 56px;
   text-align: center;
-  background: $light;
 }
 
 .title {
@@ -126,9 +149,20 @@ export default {
   max-width: 244px;
 }
 
-.bottom {
-  padding: 30px;
+.name-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 384px;
+  margin: auto;
   text-align: center;
-  background: $grey-100;
+
+  &__title {
+    margin-bottom: 40px;
+  }
+
+  &__input {
+    margin-bottom: 40px;
+  }
 }
 </style>
