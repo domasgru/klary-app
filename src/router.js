@@ -2,7 +2,6 @@
 import { defineAsyncComponent } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import { store } from '@/store';
-import Home from '@/pages/Home.vue';
 import GiveFeedback from '@/pages/give-feedback/GiveFeedback.vue';
 import Login from '@/pages/get-started/Login.vue';
 import WorkspaceReceived from '@/pages/workspace/WorkspaceReceived.vue';
@@ -22,14 +21,6 @@ const Workspace = defineAsyncComponent(() => import('@/pages/workspace/Workspace
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
-    {
-      path: '/complete-auth',
-      beforeEnter: completeAuth,
-    },
-    {
-      path: '/complete-user',
-      beforeEnter: completeUser,
-    },
     {
       path: '/login',
       component: Login,
@@ -113,33 +104,6 @@ router.beforeEach(async (to, from, next) => {
 router.afterEach(async (to, from, next) => {
   store.commit('setLoading', false);
 });
-
-export async function completeAuth(to, from, next) {
-  if (auth.isSignInWithEmailLink(window?.location.href)) {
-    const email = window.localStorage.getItem('emailForSignIn');
-    if (!email) {
-      return next('/login');
-    }
-
-    const result = await auth.signInWithEmailLink(email, window?.location.href);
-    window.localStorage.removeItem('emailForSignIn');
-
-    const nextRoute = await handleLoginAndReturnRedirect(result);
-    next(nextRoute);
-  }
-  return next('/');
-}
-
-async function completeUser(to, from, next) {
-  const user = await isLoggedIn();
-  if (!user) {
-    return next('/login');
-  }
-  if (!user.name) {
-    return next('/create-name');
-  }
-  return next();
-}
 
 async function isLoggedIn() {
   if (store.state.user.userAuth && store.state.user.userData) {
