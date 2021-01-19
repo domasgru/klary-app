@@ -100,41 +100,29 @@ export const getFeedback = async (id) => {
   return { id: feedback.id, ...feedback.data() };
 };
 
-export const addComment = async (feedbackId, content, author) => {
+export const addComment = async (feedbackId, content, authorUid) => {
   const comment = {
     content: content.replace(/^\s+|\s+$/g, ''),
-    author: {
-      name: author.name,
-      email: author.email,
-      picture: author.picture || '',
-      googlePicture: author.googlePicture || '',
-      uid: author.uid,
-    },
+    authorUid,
     createdAt: getTimeNow(),
   };
   const discussionRef = db.collection(`feedbacks/${feedbackId}/discussion`);
   updateFeedbackLastAction(
-    { userId: author.uid, feedbackId, actionType: COMMENT_ACTION },
+    { userId: authorUid, feedbackId, actionType: COMMENT_ACTION },
   );
   return discussionRef.add(comment);
 };
 
-export const addCommentReply = async (feedbackId, commentId, content, author) => {
+export const addCommentReply = async (feedbackId, commentId, content, authorUid) => {
   const reply = {
     id: shortId.generate(),
-    author: {
-      name: author.name,
-      email: author.email,
-      picture: author.picture || '',
-      googlePicture: author.googlePicture || '',
-      uid: author.uid,
-    },
+    authorUid,
     content: content.replace(/^\s+|\s+$/g, ''),
     createdAt: getTimeNow(),
   };
   const commentRef = db.doc(`feedbacks/${feedbackId}/discussion/${commentId}`);
   updateFeedbackLastAction(
-    { userId: author.uid, feedbackId, actionType: COMMENT_ACTION },
+    { userId: authorUid, feedbackId, actionType: COMMENT_ACTION },
   );
   return commentRef.update({ replies: firebase.firestore.FieldValue.arrayUnion(reply) });
 };

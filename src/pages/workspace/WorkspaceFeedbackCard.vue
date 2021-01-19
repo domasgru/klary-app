@@ -19,7 +19,7 @@
         <BaseAvatar
           class="card__initial"
           :name="user.name"
-          :picture="user.googlePicture || ''"
+          :picture="user.picture"
           size="xs"
         />
         <p

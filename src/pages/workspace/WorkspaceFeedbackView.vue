@@ -12,7 +12,7 @@
           class="feedback__author-initial"
           size="md"
           :name="feedbackAuthor.name"
-          :picture="feedbackAuthor.googlePicture || ''"
+          :picture="feedbackAuthor.picture"
         />
         <div class="feedback__info-wrapper">
           <div class="feedback__author-and-time">
@@ -43,6 +43,7 @@
       :key="comment.id"
       :comment="comment"
       :unseen-comments="unseenComments"
+      :feedback-data="feedbackData"
     />
 
     <WorkspaceWriteComment />

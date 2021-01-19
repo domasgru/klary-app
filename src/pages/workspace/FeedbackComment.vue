@@ -8,12 +8,12 @@
       <div class="feedback-comment__author">
         <BaseAvatar
           class="feedback-comment__initial"
-          :name="comment.author.name"
-          :picture="comment.author.googlePicture || ''"
+          :name="author.name"
+          :picture="author.picture"
           size="md"
         />
         <p class="feedback-comment__author-name base-typography--bold-button1">
-          {{ comment.author.name }}
+          {{ author.name }}
         </p>
         <BaseTimestamp :timestamp="comment.createdAt.seconds" />
         <div
@@ -40,6 +40,7 @@
       v-for="(reply, index) in comment.replies"
       :id="reply.id"
       :key="index"
+      :feedback-data="feedbackData"
       :unseen-comments="unseenComments"
       :reply="reply"
     />
@@ -57,8 +58,10 @@
 </template>
 
 <script>
+import { toRefs } from 'vue';
 import { mapState } from 'vuex';
 import { addCommentReply } from '@/firebase';
+import { useFeedbackData } from '@/composables/useFeedback';
 import FeedbakCommentReply from './FedbackCommentReply.vue';
 
 export default {
@@ -74,6 +77,18 @@ export default {
       type: Array,
       required: true,
     },
+    feedbackData: {
+      type: Object,
+      required: true,
+    },
+  },
+  setup(props) {
+    const { getParticipant } = useFeedbackData(toRefs(props).feedbackData);
+    const author = getParticipant(props.comment.authorUid);
+
+    return {
+      author,
+    };
   },
   data() {
     return {
@@ -92,7 +107,7 @@ export default {
         return;
       }
 
-      addCommentReply(this.$route.params.id, commentId, this.replyContent, this.userData);
+      addCommentReply(this.$route.params.id, commentId, this.replyContent, this.userData.uid);
       this.replyContent = '';
     },
     isReplyUnseen(replyId) {

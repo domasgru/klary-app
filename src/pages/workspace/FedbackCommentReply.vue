@@ -2,14 +2,14 @@
   <div class="comment-reply">
     <BaseAvatar
       size="md"
-      :name="reply.author.name"
-      :picture="reply.author.googlePicture || ''"
+      :name="author.name"
+      :picture="author.picture"
       class="comment-reply__avatar"
     />
     <div class="comment-reply__main">
       <div class="comment-reply__name-and-time">
         <p class="comment-reply__name base-typography--bold-button1">
-          {{ reply.author.name }}
+          {{ author.name }}
         </p>
         <BaseTimestamp :timestamp="reply.createdAt.seconds" />
         <div
@@ -27,9 +27,16 @@
 </template>
 
 <script>
+import { toRefs } from 'vue';
+import { useFeedbackData } from '@/composables/useFeedback';
+
 export default {
   props: {
     reply: {
+      type: Object,
+      required: true,
+    },
+    feedbackData: {
       type: Object,
       required: true,
     },
@@ -37,6 +44,14 @@ export default {
       type: Array,
       default: () => ([]),
     },
+  },
+  setup(props) {
+    const { getParticipant } = useFeedbackData(toRefs(props).feedbackData);
+    const author = getParticipant(props.reply.authorUid);
+
+    return {
+      author,
+    };
   },
   computed: {
     isReplyUnseen() {

@@ -17,7 +17,7 @@
             class="give-feedback__user-avatar"
             size="sm"
             :name="userData.name"
-            :picture="userData.picture || userData.googlePicture"
+            :picture="userData.picture"
           />
           {{ userData.name }}
         </div>
@@ -60,7 +60,7 @@
             class="give-feedback__avatar"
             size="lg"
             :name="request.name"
-            :picture="request.picture || request.googlePicture"
+            :picture="request.picture"
           />
 
           <div class="give-feedback__title h5">
@@ -178,7 +178,6 @@ export default {
             flags: [],
             name: userData.value.name,
             picture: userData.value.picture || '',
-            googlePicture: userData.value.googlePicture || '',
             lastAction: {
               createdAt: timeNow,
               type: CREATE_ACTION,
@@ -190,7 +189,6 @@ export default {
             flags: [],
             name: request.value.name,
             picture: request.value.picture || '',
-            googlePicture: request.value.googlePicture || '',
             lastAction: {
               createdAt: null,
               type: '',

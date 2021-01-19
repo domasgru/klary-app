@@ -145,6 +145,8 @@ export const useFeedbackData = (feedbackData, inboxType) => {
       value: state,
   });
 
+  const getParticipant = (uid) => feedbackData.value.participants[uid];
+
   return {
     feedbackFlags,
     feedbackCardUser: computed(() => feedbackData.value.participants[feedbackCardUserId.value]),
@@ -157,5 +159,6 @@ export const useFeedbackData = (feedbackData, inboxType) => {
     toggleFeedbackFlag,
     updateFeedbackStatus,
     updateFeedbackState,
+    getParticipant,
   };
 };

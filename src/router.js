@@ -10,11 +10,10 @@ import WorkspaceSent from '@/pages/workspace/WorkspaceSent.vue';
 import WorkspaceFavorites from '@/pages/workspace/WorkspaceFavorites.vue';
 import WorkspaceTrash from '@/pages/workspace/WorkspaceTrash.vue';
 import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
-import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
 import { NAME_TYPE_MAP } from '@/constants/feedback';
 import { capitalize } from '@/utils/stringUtils';
 
-import { auth, getCurrentUser } from '@/firebase';
+import { getCurrentUser } from '@/firebase';
 
 const Workspace = defineAsyncComponent(() => import('@/pages/workspace/Workspace.vue'));
 

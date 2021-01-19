@@ -37,7 +37,7 @@ export default {
         return;
       }
 
-      addComment(this.$route.params.id, this.comment, this.userData);
+      addComment(this.$route.params.id, this.comment, this.userData.uid);
       this.comment = '';
     },
   },

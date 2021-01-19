@@ -99,10 +99,10 @@ export default {
       }
     },
     async createFullName() {
-      const profilePicture = this.userAuth.additionalUserInfo.profile?.picture
-          ? { googlePicture: this.userAuth.additionalUserInfo.profile?.picture } : {};
+      const picture = this.userAuth.additionalUserInfo.profile?.picture
+          ? { picture: this.userAuth.additionalUserInfo.profile?.picture } : {};
       await createUserProfileDocument(this.userAuth, {
-            ...profilePicture,
+            ...picture,
             name: this.fullName,
             status: 'NEW',
       });
@@ -143,6 +143,15 @@ export default {
   cursor: pointer;
   border: 1px solid $grey-200;
   border-radius: $border-radius;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: $grey-100;
+  }
+
+  &:active {
+    background: $grey-150;
+  }
 }
 
 .terms {

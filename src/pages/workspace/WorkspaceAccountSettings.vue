@@ -12,7 +12,7 @@
         <BaseAvatar
           size="lg"
           :name="settings.name"
-          :picture="settings.picture || userData.googlePicture"
+          :picture="settings.picture"
           class="account-settings__profile-photo"
         />
         <input
@@ -64,7 +64,9 @@
 
 <script>
 import { mapState } from 'vuex';
-import { updateUserProfileDocument, storage } from '@/firebase';
+import {
+ updateUserProfileDocument, storage, getFeedbackRequest, updateFeedbackRequest,
+} from '@/firebase';
 
 export default {
   data() {
@@ -138,6 +140,13 @@ export default {
         });
         this.stringifiedSettingsBeforeEdit = JSON.stringify(this.settings);
         this.saved = true;
+
+        // Update feedback requests
+        const feedbackRequest = getFeedbackRequest(this.userData.uid);
+        updateFeedbackRequest(feedbackRequest.id, {
+          name: this.userData.name,
+          picture: this.userData.picture,
+        });
       } catch (e) {
         console.error(e);
       }

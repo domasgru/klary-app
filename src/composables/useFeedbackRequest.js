@@ -10,7 +10,7 @@ const link = ref(null);
 export const useFeedbackRequest = () => {
   const store = useStore();
   const {
-    uid, name, picture, googlePicture,
+    uid, name, picture,
   } = store.state.user.userData;
   const setMessage = (value) => { message.value = value; };
 
@@ -24,7 +24,6 @@ export const useFeedbackRequest = () => {
           name,
           message: '',
           picture: picture || '',
-          googlePicture: googlePicture || '',
         });
       }
 
@@ -43,7 +42,6 @@ export const useFeedbackRequest = () => {
       name,
       message: message.value,
       picture,
-      googlePicture,
     });
   };
 
