@@ -217,7 +217,7 @@ export default {
     };
 
     const openFeedback = () => {
-      router.push(`/workspace/sent/${sentFeedbackId.value}`);
+      router.push(`/sent/${sentFeedbackId.value}`);
     };
 
     return {

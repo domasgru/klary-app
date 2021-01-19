@@ -1,53 +1,55 @@
 <template>
-  <BaseDropdown
-    v-click-outside="{
-      handler: () => showOptions = false,
-      events: ['mousedown']
-    }"
-    v-bind="$attrs"
-    :is-open="showOptions"
-    :items="optionsItems"
-    @click.stop
-    @remove="$emit('remove'), showOptions = false"
-    @unremove="$emit('unremove'), showOptions = false"
-    @delete="showDeleteModal = true"
-  >
-    <div
-      class="trigger"
-      @click.stop="showOptions = !showOptions"
+  <div class="feedback-settings">
+    <BaseDropdown
+      v-click-outside="{
+        handler: () => showOptions = false,
+        events: ['mousedown']
+      }"
+      v-bind="$attrs"
+      :is-open="showOptions"
+      :items="optionsItems"
+      @click.stop
+      @remove="$emit('remove'), showOptions = false"
+      @unremove="$emit('unremove'), showOptions = false"
+      @delete="showDeleteModal = true"
     >
-      <slot />
-    </div>
-  </BaseDropdown>
-  <BaseModal
-    max-width="512px"
-    :show-modal="showDeleteModal"
-    @close="showDeleteModal = false"
-  >
-    <template #content>
-      <div class="delete-feedback">
-        <div class="delete-feedback__title h5">
-          Delete feedback
-        </div>
-        <div class="delete-feedback__message b2">
-          This feedback will be deleted forever and you won’t be able to restore it. Other feedback members will still be able to see it.
-        </div>
-        <div class="delete-feedback__actions">
-          <BaseButton
-            class="delete-feedback__cancel"
-            type="secondary"
-            @click="showDeleteModal = false"
-            v-text="'Cancel'"
-          />
-          <BaseButton
-            type="error"
-            @click="$emit('delete'), showOptions = false"
-            v-text="'Delete forever'"
-          />
-        </div>
+      <div
+        class="trigger"
+        @click.stop="showOptions = !showOptions"
+      >
+        <slot />
       </div>
-    </template>
-  </BaseModal>
+    </BaseDropdown>
+    <BaseModal
+      max-width="512px"
+      :show-modal="showDeleteModal"
+      @close="showDeleteModal = false"
+    >
+      <template #content>
+        <div class="delete-feedback">
+          <div class="delete-feedback__title h5">
+            Delete feedback
+          </div>
+          <div class="delete-feedback__message b2">
+            This feedback will be deleted forever and you won’t be able to restore it. Other feedback members will still be able to see it.
+          </div>
+          <div class="delete-feedback__actions">
+            <BaseButton
+              class="delete-feedback__cancel"
+              type="secondary"
+              @click="showDeleteModal = false"
+              v-text="'Cancel'"
+            />
+            <BaseButton
+              type="error"
+              @click="$emit('delete'), showOptions = false"
+              v-text="'Delete forever'"
+            />
+          </div>
+        </div>
+      </template>
+    </BaseModal>
+  </div>
 </template>
 
 <script>

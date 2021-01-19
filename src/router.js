@@ -23,10 +23,6 @@ export const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/',
-      component: Home,
-    },
-    {
       path: '/complete-auth',
       beforeEnter: completeAuth,
     },
@@ -43,9 +39,9 @@ export const router = createRouter({
       component: GiveFeedback,
     },
     {
-      path: '/workspace',
+      path: '/',
       component: Workspace,
-      redirect: '/workspace/received',
+      redirect: '/received',
       meta: {
         requiresAuth: true,
       },

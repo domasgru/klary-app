@@ -101,7 +101,7 @@ export default {
     };
     const updateFeedbackStateAndClose = (state) => {
       updateFeedbackState(state);
-      router.push(`/workspace/${router.currentRoute.value.params.type}`);
+      router.push(`/${router.currentRoute.value.params.type}`);
     };
     const toggleMoreOptions = () => {};
     const closeFeedbackActionButtonText = computed(() => {

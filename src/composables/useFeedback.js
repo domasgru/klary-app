@@ -94,7 +94,7 @@ export const useFeedbackList = (type) => {
     return [];
   }
   });
-  const openFeedback = (id) => router.push({ path: `/workspace/${type === REMOVED_TYPE ? 'trash' : type.toLowerCase()}/${id}` });
+  const openFeedback = (id) => router.push({ path: `/${type === REMOVED_TYPE ? 'trash' : type.toLowerCase()}/${id}` });
 
   return {
     feedbacks, isLoading, getFilteredAndSortedFeedbacks, openFeedback,

@@ -26,5 +26,5 @@ export const handleLoginAndReturnRedirect = async (authResult) => {
   }
 
   await store.dispatch('user/bindUser', user.uid);
-  return Promise.resolve('/workspace');
+  return Promise.resolve('/');
 };

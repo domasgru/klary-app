@@ -7,7 +7,7 @@
       />
     </div>
     <div class="welcome-modal">
-      <Signup @success="$router.push('/workspace')" />
+      <Signup @success="$router.push('/')" />
     </div>
   </div>
 </template>

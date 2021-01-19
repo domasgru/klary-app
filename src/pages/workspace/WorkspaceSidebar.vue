@@ -79,41 +79,28 @@ const INBOX = {
     icon: 'received',
     text: 'Received',
     storeState: 'receivedFeedbacks',
-    path: '/workspace/received',
+    path: '/received',
   },
   SENT: {
     icon: 'sent',
     text: 'Sent',
     storeState: 'sentFeedbacks',
-    path: '/workspace/sent',
+    path: '/sent',
   },
   FAVORITES: {
     icon: 'favorites',
     text: 'Favorites',
-    path: '/workspace/favorites',
+    path: '/favorites',
   },
   HIGHLIGHTS: {
     icon: 'highlights',
     text: 'Highlights',
-    path: '/workspace/highlights',
+    path: '/highlights',
   },
   TRASH: {
     icon: 'trash',
     text: 'Trash',
-    path: '/workspace/trash',
-  },
-};
-
-const ACTIONS = {
-  GIVE: {
-    icon: 'give',
-    text: 'Give feedback',
-    path: '/workspace/give-feedback',
-  },
-  REQUEST: {
-    icon: 'request',
-    text: 'Request feedback',
-    path: '/workspace/request-feedback',
+    path: '/trash',
   },
 };
 
@@ -170,7 +157,6 @@ export default {
     },
   },
   INBOX,
-  ACTIONS,
   userDropdownItems,
 };
 </script>
