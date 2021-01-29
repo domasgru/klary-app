@@ -1,7 +1,7 @@
 <template>
   <div
     class="card"
-    :class="{'card--unseen': !isFeedbackLastActionSeen}"
+    :class="{'card--light-background': !isFeedbackLastActionSeen || !isFeedbackClosed}"
   >
     <div class="card__clickable-area-wrapper">
       <div class="card__unseen-indicator-container">
@@ -30,16 +30,6 @@
           }"
           v-text="user.name"
         />
-      </div>
-      <div
-        v-if="isFeedbackClosed"
-        class="card__label"
-      >
-        <BaseSvg
-          class="card__label-icon"
-          name="check"
-        />
-        Closed
       </div>
       <p
         class="card__title"
@@ -143,7 +133,7 @@ export default {
     background: $grey-150;
   }
 
-  &--unseen {
+  &--light-background {
     background: $light;
   }
 

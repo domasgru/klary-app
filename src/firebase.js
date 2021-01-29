@@ -100,15 +100,16 @@ export const getFeedback = async (id) => {
   return { id: feedback.id, ...feedback.data() };
 };
 
-export const addComment = async (feedbackId, content, authorUid) => {
+export const addAction = async (feedbackId, type, content, authorUid) => {
   const comment = {
+    type,
     content: content.replace(/^\s+|\s+$/g, ''),
     authorUid,
     createdAt: getTimeNow(),
   };
   const discussionRef = db.collection(`feedbacks/${feedbackId}/discussion`);
   updateFeedbackLastAction(
-    { userId: authorUid, feedbackId, actionType: COMMENT_ACTION },
+    { userId: authorUid, feedbackId, actionType: type },
   );
   return discussionRef.add(comment);
 };

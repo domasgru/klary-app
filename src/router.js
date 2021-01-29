@@ -83,6 +83,45 @@ export const router = createRouter({
         },
       ],
     },
+    {
+      path: '/test',
+      component: Workspace,
+      redirect: '/test/received',
+      beforeEnter: (to, from, next) => {
+        store.dispatch('user/setUserAuth', {
+          uid: 'asdasdas',
+          email: 'test@gmail.lt',
+        });
+        store.dispatch('user/setUserData', {
+          name: 'Test User',
+          email: 'test@gmail.lt',
+          uid: 'asdasdasd',
+        });
+        next();
+      },
+      children: [
+        {
+          path: 'received',
+          component: WorkspaceReceived,
+        },
+        {
+          path: 'sent',
+          component: WorkspaceSent,
+        },
+        {
+          path: 'favorites',
+          component: WorkspaceFavorites,
+        },
+        {
+          path: 'highlights',
+          component: ComingSoon,
+        },
+        {
+          path: 'trash',
+          component: WorkspaceTrash,
+        },
+      ],
+    },
   ],
 });
 

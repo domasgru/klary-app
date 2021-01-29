@@ -142,10 +142,10 @@ export default {
         this.saved = true;
 
         // Update feedback requests
-        const feedbackRequest = getFeedbackRequest(this.userData.uid);
+        const feedbackRequest = await getFeedbackRequest(this.userData.uid);
         updateFeedbackRequest(feedbackRequest.id, {
           name: this.userData.name,
-          picture: this.userData.picture,
+          picture: this.userData.picture || '',
         });
       } catch (e) {
         console.error(e);

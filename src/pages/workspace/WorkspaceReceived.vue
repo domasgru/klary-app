@@ -2,22 +2,19 @@
   <h4 class="title h4">
     Received
   </h4>
-  <template v-if="isLoading || activeFeedbacks.length || closedFeedbacks.length">
+  <template v-if="isLoading || pendingFeedbacks.length || clearFeedbacks.length">
     <WorkspaceFeedbackList
-      v-if="!isLoading"
-      :feedbacks="activeFeedbacks"
+      v-if="!isLoading && pendingFeedbacks.length"
+      :feedbacks="pendingFeedbacks"
       :inbox-type="RECEIVED_TYPE"
-      label="Active"
-      empty-state-text="All your given feedbacks are closed."
+      label="Waiting to be marked as clear"
       class="feedback-list"
       @open="openFeedback"
     />
     <WorkspaceFeedbackList
-      v-if="!isLoading"
-      :feedbacks="closedFeedbacks"
+      v-if="!isLoading && clearFeedbacks.length"
+      :feedbacks="clearFeedbacks"
       :inbox-type="RECEIVED_TYPE"
-      label="Closed "
-      empty-state-text="Once you close the feedback you received, it will be moved here."
       @open="openFeedback"
     />
   </template>
@@ -35,8 +32,6 @@
 </template>
 
 <script>
-import { computed } from 'vue';
-import { mapState, mapActions } from 'vuex';
 import { useFeedbackList } from '@/composables/useFeedback';
 import { RECEIVED_TYPE, ACTIVE_STATUS, CLOSED_STATUS } from '@/constants/feedback';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
@@ -52,18 +47,18 @@ export default {
   setup() {
     const { isLoading, openFeedback, getFilteredAndSortedFeedbacks } = useFeedbackList(RECEIVED_TYPE);
 
-    const activeFeedbacks = getFilteredAndSortedFeedbacks({
+    const pendingFeedbacks = getFilteredAndSortedFeedbacks({
       filterBy: 'status',
       filterValue: ACTIVE_STATUS,
     });
-    const closedFeedbacks = getFilteredAndSortedFeedbacks({
+    const clearFeedbacks = getFilteredAndSortedFeedbacks({
       filterBy: 'status',
       filterValue: CLOSED_STATUS,
     });
 
     return {
-      activeFeedbacks,
-      closedFeedbacks,
+      pendingFeedbacks,
+      clearFeedbacks,
       isLoading,
       openFeedback,
       RECEIVED_TYPE,

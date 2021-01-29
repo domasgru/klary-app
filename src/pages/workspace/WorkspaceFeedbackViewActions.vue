@@ -13,18 +13,6 @@
       />
     </div>
     <div
-      v-if="!isFeedbackSent"
-      ref="closeRef"
-      class="feedback-actions__right-action animation-wrapper"
-    >
-      <WorkspaceActionButton
-        icon="checkmark-black"
-        :text="showOnSides? '' : closeFeedbackActionButtonText"
-        :active="isFeedbackClosed"
-        @click="toggleFeedbackStatus"
-      />
-    </div>
-    <div
       ref="starRef"
       class="feedback-actions__right-action animation-wrapper"
     >
@@ -46,7 +34,6 @@
       <WorkspaceActionButton
         class="feedback-actions__right-action"
         icon="more-horizontal"
-        @click="toggleMoreOptions"
       />
     </WorkspaceFeedbackSettings>
   </div>
@@ -83,33 +70,16 @@ export default {
   setup(props) {
     const router = useRouter();
     const {
-      isFeedbackClosed,
       isFeedbackFavorite,
       isFeedbackRemoved,
-      isFeedbackSent,
       toggleFeedbackFlag,
-      updateFeedbackStatus,
       updateFeedbackState,
     } = useFeedbackData(toRefs(props).feedbackData);
 
-    const toggleFeedbackStatus = () => {
-      if (isFeedbackClosed.value) {
-        updateFeedbackStatus(ACTIVE_STATUS);
-      } else {
-        updateFeedbackStatus(CLOSED_STATUS);
-      }
-    };
     const updateFeedbackStateAndClose = (state) => {
       updateFeedbackState(state);
       router.push(`/${router.currentRoute.value.params.type}`);
     };
-    const toggleMoreOptions = () => {};
-    const closeFeedbackActionButtonText = computed(() => {
-      if (isFeedbackClosed.value) {
-        return 'Closed';
-      }
-        return 'Close';
-    });
     const settingsPopupPosition = computed(() => (props.showOnSides ? 'medium-left' : 'bottom-left'));
     // ANIMATION
     const actionsRef = ref(null);
@@ -199,15 +169,10 @@ export default {
 
     return {
       router,
-      isFeedbackClosed,
       isFeedbackFavorite,
       isFeedbackRemoved,
-      isFeedbackSent,
-      toggleFeedbackStatus,
       toggleFeedbackFlag,
       updateFeedbackStateAndClose,
-      toggleMoreOptions,
-      closeFeedbackActionButtonText,
       settingsPopupPosition,
       FAVORITE_FLAG,
       REMOVED_STATE,

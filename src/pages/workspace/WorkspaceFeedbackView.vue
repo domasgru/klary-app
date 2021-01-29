@@ -5,7 +5,26 @@
       :feedback-data="feedbackData"
       :show-on-sides="showActionsOnSides"
     />
-
+    <div
+      v-if="showMarkAsClear"
+      class="feedback-clear"
+    >
+      <div
+        class="b2"
+        v-text="'Accept feedback if everything is clear'"
+      />
+      <BaseButton
+        class="feedback-clear__button"
+        type="secondary"
+        @click="isMarkAsClearModalOpen = true"
+      >
+        <BaseSvg
+          class="feedback-clear__icon"
+          name="checkmark-black"
+        />
+        Mark as clear
+      </BaseButton>
+    </div>
     <div class="feedback">
       <div class="feedback__info">
         <BaseAvatar
@@ -47,6 +66,13 @@
     />
 
     <WorkspaceWriteComment />
+
+    <WorkspaceMarkAsClearModal
+      :show-modal="isMarkAsClearModalOpen"
+      :author-name="feedbackAuthor.name"
+      @markAsClear="markAsClear"
+      @close="isMarkAsClearModalOpen = false"
+    />
   </div>
 </template>
 
@@ -58,15 +84,18 @@ import {
 } from 'vue';
 import { updateSeenAt } from '@/firebase';
 import { CREATE_ACTION } from '@/constants';
+import { SENT_TYPE, CLOSED_STATUS, MARK_CLEAR_ACTION } from '@/constants/feedback';
 import { useFeedbackData } from '@/composables/useFeedback';
 import WorkspaceWriteComment from './WorkspaceWriteComment.vue';
 import FeedbackComment from './FeedbackComment.vue';
 import WorkspaceFeedbackViewActions from './WorkspaceFeedbackViewActions.vue';
+import WorkspaceMarkAsClearModal from './WorkspaceMarkAsClearModal.vue';
 
 export default {
   components: {
     WorkspaceWriteComment,
     WorkspaceFeedbackViewActions,
+    WorkspaceMarkAsClearModal,
     FeedbackComment,
   },
   props: {
@@ -80,8 +109,14 @@ export default {
     const router = useRouter();
     const actionsRef = ref(null);
 
-    const { feedbackAuthor } = useFeedbackData(toRefs(props).feedbackData);
-    const isSelfFeedback = computed(() => props.feedbackData.authorId === props.feedbackData.receiverId);
+    const {
+      feedbackAuthor,
+      isFeedbackClosed,
+      updateFeedbackStatus,
+      addFeedbackAction,
+      isFeedbackSent,
+      isSelfFeedback,
+    } = useFeedbackData(toRefs(props).feedbackData);
 
     const currentFeedbackComments = computed(() => store.state.feedback.currentFeedbackComments);
     const currentUser = computed(() => store.state.user.userData);
@@ -130,7 +165,7 @@ export default {
         .filter((comment) => (
           comment.createdAt.seconds
             > props.feedbackData.participants[currentUser.value.uid].seenAt?.seconds
-            && comment.author.uid !== currentUser.value.uid
+            && comment.authorUid !== currentUser.value.uid
         ));
       unseenComments.value.forEach((unseenComment) => {
         commentObserver.observe(document.getElementById(unseenComment.id));
@@ -148,13 +183,31 @@ export default {
         }
       });
     });
+
+    const showMarkAsClear = computed(
+      () => (!isFeedbackClosed.value && !isFeedbackSent.value)
+        || (!isFeedbackClosed.value && isSelfFeedback.value && router.currentRoute.value.params.type !== SENT_TYPE),
+    );
+    const isMarkAsClearModalOpen = ref(false);
+    const markAsClear = async (message) => {
+      await Promise.all([
+        updateFeedbackStatus(CLOSED_STATUS),
+        addFeedbackAction(MARK_CLEAR_ACTION, message),
+      ]);
+      isMarkAsClearModalOpen.value = false;
+    };
     return {
+      showMarkAsClear,
+      isFeedbackSent,
       actionsRef,
+      isMarkAsClearModalOpen,
       unseenComments,
       currentFeedbackComments,
       feedbackAuthor,
       router,
       showActionsOnSides,
+      markAsClear,
+      isFeedbackClosed,
     };
   },
 };
@@ -167,6 +220,25 @@ export default {
 
 .feedback-view {
   position: relative;
+}
+
+.feedback-clear {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  margin-bottom: 12px;
+  background: $light;
+  border: 1px solid $grey-200;
+  border-radius: 10px;
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    margin-right: 4px;
+    stroke: $dark;
+  }
 }
 
 .feedback {

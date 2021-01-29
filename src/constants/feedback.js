@@ -24,3 +24,7 @@ export const FAVORITE_FLAG = 'FAVORITE';
 
 // firestore
 export const FEEDBACKS_COLLECTION = 'feedbacks';
+
+// Action types
+export const COMMENT_ACTION = 'COMMENT';
+export const MARK_CLEAR_ACTION = 'MARK_AS_CLEAR';

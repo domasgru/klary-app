@@ -11,7 +11,7 @@ import {
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import arraySort from 'array-sort';
 import getObjectValue from 'get-value';
-import { updateFeedback } from '@/firebase';
+import { updateFeedback, addAction } from '@/firebase';
 
 const validTypes = [RECEIVED_TYPE, SENT_TYPE, FAVORITES_TYPE, REMOVED_TYPE];
 
@@ -106,14 +106,14 @@ export const useFeedbackData = (feedbackData, inboxType) => {
   const userData = computed(() => store.state.user.userData);
   const feedbackFlags = computed(() => feedbackData.value.participants[userData.value.uid]?.flags);
   const feedbackId = computed(() => feedbackData.value.id);
+  const isSelfFeedback = computed(() => feedbackData.value.authorId === feedbackData.value.receiverId);
   const isFeedbackSent = computed(() => {
     const isAuthor = feedbackData.value.authorId === userData.value.uid;
-    const isSelfFeedback = feedbackData.value.authorId === feedbackData.value.receiverId;
 
-    if (isSelfFeedback && inboxType === RECEIVED_TYPE) {
+    if (isSelfFeedback.value && inboxType === RECEIVED_TYPE) {
       return false;
     }
-    if (isSelfFeedback && (inboxType === SENT_TYPE || inboxType === FAVORITES_TYPE)) {
+    if (isSelfFeedback.value && (inboxType === SENT_TYPE || inboxType === FAVORITES_TYPE)) {
       return true;
     }
 
@@ -144,6 +144,7 @@ export const useFeedbackData = (feedbackData, inboxType) => {
       path: `participants.${userData.value.uid}.feedbackState`,
       value: state,
   });
+  const addFeedbackAction = (type, content) => addAction(feedbackId.value, type, content, userData.value.uid);
 
   const getParticipant = (uid) => feedbackData.value.participants[uid];
 
@@ -156,9 +157,11 @@ export const useFeedbackData = (feedbackData, inboxType) => {
     isFeedbackRemoved: computed(() => feedbackData.value.participants[userData.value.uid]?.feedbackState === REMOVED_STATE),
     isFeedbackSent,
     isFeedbackLastActionSeen: computed(() => isFeedbackSeen(feedbackData.value, userData.value.uid)),
+    isSelfFeedback,
     toggleFeedbackFlag,
     updateFeedbackStatus,
     updateFeedbackState,
+    addFeedbackAction,
     getParticipant,
   };
 };

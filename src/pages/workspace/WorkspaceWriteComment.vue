@@ -13,8 +13,9 @@
 </template>
 
 <script>
-import { addComment } from '@/firebase';
+import { addAction } from '@/firebase';
 import { mapState } from 'vuex';
+import { COMMENT_ACTION } from '@/constants/feedback';
 
 export default {
   props: {
@@ -37,7 +38,7 @@ export default {
         return;
       }
 
-      addComment(this.$route.params.id, this.comment, this.userData.uid);
+      addAction(this.$route.params.id, COMMENT_ACTION, this.comment, this.userData.uid);
       this.comment = '';
     },
   },

@@ -145,7 +145,7 @@ export default {
     },
     getNotificationsCount({ storeState: feedbacksType }) {
       return feedbacksType
-        ? this[feedbacksType].filter((feedback) => !isFeedbackSeen(feedback, this.userData.uid)).length
+        ? this[feedbacksType]?.filter((feedback) => !isFeedbackSeen(feedback, this.userData.uid)).length
         : 0;
     },
     openSettings() {

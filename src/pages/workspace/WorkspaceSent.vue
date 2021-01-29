@@ -2,23 +2,20 @@
   <h4 class="title h4">
     Sent
   </h4>
-  <template v-if="isLoading || activeFeedbacks.length || closedFeedbacks.length">
+  <template v-if="isLoading || pendingFeedbacks.length || clearFeedbacks.length">
     <WorkspaceFeedbackList
-      v-if="!isLoading"
-      :feedbacks="activeFeedbacks"
+      v-if="!isLoading && pendingFeedbacks.length"
+      :feedbacks="pendingFeedbacks"
       :inbox-type="SENT_TYPE"
-      label="Active"
-      empty-state-text="No active sent feedbacks"
+      label="Waiting to be marked as clear"
       class="active-feedback-list"
       is-sent-feedback
       @open="openFeedback"
     />
     <WorkspaceFeedbackList
-      v-if="!isLoading"
-      :feedbacks="closedFeedbacks"
+      v-if="!isLoading && clearFeedbacks.length"
+      :feedbacks="clearFeedbacks"
       :inbox-type="SENT_TYPE"
-      label="Closed"
-      empty-state-text="No closed sent feedbacks"
       class="active-feedback-list"
       is-sent-feedback
       @open="openFeedback"
@@ -32,7 +29,6 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
 import { useFeedbackList } from '@/composables/useFeedback';
 import { SENT_TYPE, ACTIVE_STATUS, CLOSED_STATUS } from '@/constants/feedback';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
@@ -46,12 +42,12 @@ export default {
   setup() {
     const { isLoading, openFeedback, getFilteredAndSortedFeedbacks } = useFeedbackList(SENT_TYPE);
 
-    const activeFeedbacks = getFilteredAndSortedFeedbacks({
+    const pendingFeedbacks = getFilteredAndSortedFeedbacks({
       filterBy: 'status',
       filterValue: ACTIVE_STATUS,
       sortReverse: true,
     });
-    const closedFeedbacks = getFilteredAndSortedFeedbacks({
+    const clearFeedbacks = getFilteredAndSortedFeedbacks({
       filterBy: 'status',
       filterValue: CLOSED_STATUS,
       sortReverse: true,
@@ -59,8 +55,8 @@ export default {
 
     return {
       isLoading,
-      activeFeedbacks,
-      closedFeedbacks,
+      pendingFeedbacks,
+      clearFeedbacks,
       openFeedback,
       SENT_TYPE,
     };

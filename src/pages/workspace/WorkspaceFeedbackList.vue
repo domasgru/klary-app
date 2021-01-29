@@ -1,18 +1,13 @@
 <template>
   <div class="feedback-list">
-    <h6
-      v-if="label"
-      class="feedback-list__label h6"
-      v-text="label"
-    />
     <div
       class="feedbacks"
       :class="{'feedbacks--empty': !feedbacks.length}"
     >
-      <p
-        v-if="!feedbacks.length"
-        class="b2"
-        v-text="emptyStateText"
+      <h6
+        v-if="label"
+        class="feedback-list__label b2s"
+        v-text="label"
       />
       <div
         v-for="(feedback, index) in feedbacks"
@@ -49,10 +44,6 @@ export default {
       type: Array,
       required: true,
     },
-    emptyStateText: {
-      type: String,
-      default: '',
-    },
     inboxType: {
       type: String,
       required: true,
@@ -73,7 +64,8 @@ export default {
 <style lang="scss" scoped>
 .feedback-list {
   &__label {
-    margin-bottom: 16px;
+    padding: 16px;
+    border-bottom: 1px solid $grey-200;
   }
 }
 

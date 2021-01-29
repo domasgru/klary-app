@@ -77,6 +77,9 @@ export default {
   $this: &;
 
   display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   border: none;
   border-radius: 10px;
