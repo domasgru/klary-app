@@ -65,7 +65,10 @@ export default {
 .feedback-list {
   &__label {
     padding: 16px;
+    background: $light;
     border-bottom: 1px solid $grey-200;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
   }
 }
 
