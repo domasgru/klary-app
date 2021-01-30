@@ -177,6 +177,10 @@ export default {
     border-radius: 8px;
     transition: background 0.2s ease;
 
+    &:active {
+      color: $dark;
+    }
+
     &:hover {
       cursor: pointer;
       background: $grey-100;
