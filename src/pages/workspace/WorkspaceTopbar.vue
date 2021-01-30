@@ -16,7 +16,7 @@ export default {
 
 <style lang="scss" scoped>
 .base-topbar {
-  position: absolute;
+  position: sticky;
   top: 0;
   left: 0;
   z-index: 1000;

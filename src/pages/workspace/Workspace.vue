@@ -80,7 +80,7 @@ export default {
     flex-grow: 1;
     width: 100%;
     max-width: 900px;
-    padding-top: 112px;
+    padding-top: 56px;
     margin: auto;
   }
 }
