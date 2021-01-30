@@ -15,13 +15,11 @@
         <p class="feedback-comment__author-name base-typography--bold-button1">
           {{ author.name }}
         </p>
-        <BaseTimestamp :timestamp="comment.createdAt.seconds" />
-        <div
-          v-if="isCommentUnseen"
-          class="label-new overline"
-        >
-          NEW
-        </div>
+        <BaseTimestamp
+          class="feedback-comment__time"
+          :timestamp="comment.createdAt.seconds"
+        />
+        <BaseLabelNew v-if="isCommentUnseen" />
       </div>
     </div>
     <div class="feedback-comment__content base-typography--b-16-24">
@@ -152,6 +150,10 @@ $background-unseen: #511fdc1f;
     margin-right: 8px;
   }
 
+  &__time {
+    margin-right: 8px;
+  }
+
   &__content {
     word-break: break-word;
     white-space: pre-line;
@@ -198,13 +200,5 @@ $background-unseen: #511fdc1f;
     padding: 8px;
     cursor: pointer;
   }
-}
-
-.label-new {
-  padding: 2px 8px;
-  margin-left: 8px;
-  color: $light;
-  background: $primary;
-  border-radius: 14px;
 }
 </style>
