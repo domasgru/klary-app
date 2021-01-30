@@ -56,12 +56,11 @@
       />
     </div>
 
-    <FeedbackComment
-      v-for="comment in currentFeedbackComments"
-      :id="comment.id"
-      :key="comment.id"
-      :comment="comment"
-      :unseen-comments="unseenComments"
+    <WorkspaceFeedbackAction
+      v-for="action in currentFeedbackActions"
+      :key="action.id"
+      :action="action"
+      :unseen-actions="unseenActions"
       :feedback-data="feedbackData"
     />
 
@@ -87,7 +86,7 @@ import { CREATE_ACTION } from '@/constants';
 import { SENT_TYPE, CLOSED_STATUS, MARK_CLEAR_ACTION } from '@/constants/feedback';
 import { useFeedbackData } from '@/composables/useFeedback';
 import WorkspaceWriteComment from './WorkspaceWriteComment.vue';
-import FeedbackComment from './FeedbackComment.vue';
+import WorkspaceFeedbackAction from './WorkspaceFeedbackAction.vue';
 import WorkspaceFeedbackViewActions from './WorkspaceFeedbackViewActions.vue';
 import WorkspaceMarkAsClearModal from './WorkspaceMarkAsClearModal.vue';
 
@@ -96,7 +95,7 @@ export default {
     WorkspaceWriteComment,
     WorkspaceFeedbackViewActions,
     WorkspaceMarkAsClearModal,
-    FeedbackComment,
+    WorkspaceFeedbackAction,
   },
   props: {
     feedbackData: {
@@ -118,20 +117,20 @@ export default {
       isSelfFeedback,
     } = useFeedbackData(toRefs(props).feedbackData);
 
-    const currentFeedbackComments = computed(() => store.state.feedback.currentFeedbackComments);
+    const currentFeedbackActions = computed(() => store.state.feedback.currentFeedbackActions);
     const currentUser = computed(() => store.state.user.userData);
-    const unseenComments = ref([]);
-    const updateUnseenComments = (id) => {
-      setTimeout(() => { unseenComments.value = unseenComments.value.filter((comment) => comment.id !== id); }, 2000);
+    const unseenActions = ref([]);
+    const updateUnseenActions = (id) => {
+      setTimeout(() => { unseenActions.value = unseenActions.value.filter((comment) => comment.id !== id); }, 2000);
     };
     const commentObserver = new IntersectionObserver(([entry], observer) => {
         updateSeenAt(currentUser.value.uid, props.feedbackData.id);
-        updateUnseenComments(entry.target.id);
+        updateUnseenActions(entry.target.id);
         commentObserver.unobserve(entry.target);
       }, {
         threshold: 1.0,
     });
-    store.dispatch('feedback/bindCurrentFeedbackComments', props.feedbackData.id);
+    store.dispatch('feedback/bindCurrentFeedbackActions', props.feedbackData.id);
 
     const otherParticipantsLastAction = computed(() => {
       if (isSelfFeedback.value) {
@@ -156,10 +155,10 @@ export default {
       updateSeenAt(currentUser.value.uid, props.feedbackData.id);
     }
 
-    watch(currentFeedbackComments.value, async (newValue) => {
+    watch(currentFeedbackActions.value, async (newValue) => {
       await nextTick();
 
-      unseenComments.value = newValue
+      unseenActions.value = newValue
         .map((comment) => [comment, ...(comment.replies ? comment.replies : [])])
         .flat()
         .filter((comment) => (
@@ -167,7 +166,7 @@ export default {
             > props.feedbackData.participants[currentUser.value.uid].seenAt?.seconds
             && comment.authorUid !== currentUser.value.uid
         ));
-      unseenComments.value.forEach((unseenComment) => {
+      unseenActions.value.forEach((unseenComment) => {
         commentObserver.observe(document.getElementById(unseenComment.id));
       });
     });
@@ -201,8 +200,8 @@ export default {
       isFeedbackSent,
       actionsRef,
       isMarkAsClearModalOpen,
-      unseenComments,
-      currentFeedbackComments,
+      unseenActions,
+      currentFeedbackActions,
       feedbackAuthor,
       router,
       showActionsOnSides,

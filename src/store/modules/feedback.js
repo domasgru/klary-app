@@ -9,7 +9,7 @@ export default {
     receivedFeedbacks: null,
     sentFeedbacks: null,
     removedFeedbacks: null,
-    currentFeedbackComments: null,
+    currentFeedbackActions: null,
   },
   getters: {
     allFeedbacks(state) {
@@ -63,10 +63,10 @@ export default {
         dispatch('bindSentFeedbacks', { userId }),
       ]);
     },
-    bindCurrentFeedbackComments({ commit }, id) {
+    bindCurrentFeedbackActions({ commit }, id) {
       return bindFirestoreArrayRefAction(
         commit,
-        'currentFeedbackComments',
+        'currentFeedbackActions',
         db.collection(`${FEEDBACKS_COLLECTION}/${id}/discussion`)
         .orderBy('createdAt', 'asc'),
       );

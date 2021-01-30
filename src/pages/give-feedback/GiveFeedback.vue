@@ -5,9 +5,9 @@
   >
     <div class="give-feedback__gradient">
       <div class="give-feedback__navigation">
-        <BaseSvg
+        <BaseLogo
           class="give-feedback__logo"
-          name="logo"
+          size="sm"
         />
         <div
           v-if="userData"
@@ -106,9 +106,8 @@
     v-if="!isLoading && !request"
     class="error"
   >
-    <BaseSvg
+    <BaseLogo
       class="error__logo"
-      name="logo"
     />
     <BaseSvg
       class="error__emoji"
@@ -251,8 +250,6 @@ export default {
   }
 
   &__logo {
-    width: 44px;
-    height: 24px;
     margin-right: auto;
   }
 
@@ -362,8 +359,6 @@ export default {
     top: 20px;
     right: 0;
     left: 0;
-    width: 44px;
-    height: 24px;
     margin: auto;
   }
 

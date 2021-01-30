@@ -1,10 +1,7 @@
 <template>
   <div class="signup">
     <div class="signup__header">
-      <BaseSvg
-        class="signup__logo"
-        name="logo"
-      />
+      <BaseLogo />
     </div>
     <div class="welcome-modal">
       <Signup @success="$router.push('/')" />
@@ -41,11 +38,6 @@ export default {
     justify-content: center;
     width: 100%;
     padding: 20px 24px;
-  }
-
-  &__logo {
-    width: 44px;
-    height: 24px;
   }
 
   &__ellipse1 {
