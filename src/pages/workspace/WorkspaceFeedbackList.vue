@@ -70,7 +70,7 @@ export default {
 }
 
 .feedbacks {
-  background: $light;
+  background: $grey-100;
   border: 1px solid $grey-200;
   border-radius: $border-radius;
 
