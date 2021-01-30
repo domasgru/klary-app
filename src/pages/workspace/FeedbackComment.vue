@@ -27,10 +27,6 @@
     <div class="feedback-comment__content base-typography--b-16-24">
       {{ comment.content }}
     </div>
-    <div
-      v-if="isCommentUnseen"
-      class="feedback-comment__unseen-indicator"
-    />
   </div>
   <div
     v-if="comment.replies && comment.replies.length"
@@ -160,17 +156,6 @@ $background-unseen: #511fdc1f;
     word-break: break-word;
     white-space: pre-line;
     transition: background 0.3s;
-  }
-
-  &__unseen-indicator {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 3px;
-    height: 72%;
-    margin: auto;
-    background: $primary;
   }
 }
 

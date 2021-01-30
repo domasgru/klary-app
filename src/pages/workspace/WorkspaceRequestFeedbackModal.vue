@@ -8,7 +8,7 @@
         Share your link with colleagues to get feedback from them.
       </div>
       <div class="request__caption caption">
-        Add message inside your link (optional)
+        Add a message (optional)
       </div>
       <BaseTextarea
         :placeholder="'E.g. Hi, I am collecting feedbacks on how I am doing at work. Please share your thoughts about my work.'"
@@ -16,7 +16,7 @@
         padding="10px 12px"
         font-size="14px"
         line-height="20px"
-        rows="3"
+        rows="4"
         @update:modelValue="$emit('update:modelValue', $event)"
       />
     </div>

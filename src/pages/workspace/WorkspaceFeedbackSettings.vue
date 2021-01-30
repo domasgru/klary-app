@@ -54,7 +54,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import { updateFeedback } from '@/firebase';
 import { REMOVED_STATE } from '@/constants/feedback';
 
 export default {
@@ -76,7 +75,7 @@ export default {
     optionsItems() {
       const isRemoved = this.feedbackData.participants[this.userData.uid].feedbackState === REMOVED_STATE;
       const optionsRemoveItem = isRemoved
-      ? [{ name: 'Restore', action: 'unremove', icon: 'trash' }]
+      ? [{ name: 'Restore', action: 'unremove', icon: 'restore' }]
       : [{
           name: 'Remove for you', action: 'remove', icon: 'trash', theme: 'alarm',
       }];

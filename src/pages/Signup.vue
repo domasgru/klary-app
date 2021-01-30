@@ -20,7 +20,7 @@
       Continue with Google
     </button>
     <div class="terms b2">
-      By logging in, you agree to our
+      By continuing, you agree to our
       <BaseButton is-inline>
         Terms of Service
       </BaseButton>
