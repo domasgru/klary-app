@@ -3,12 +3,13 @@
     class="base-avatar"
     :class="computedClasses"
   >
-    <div
+    <img
+      v-if="picture"
       class="base-avatar__image-background"
-      :style="picture
-        ? {background: `url(${picture})`, backgroundSize: 'cover', backgroundPosition: 'center'}
-        : {}"
-    />
+      :src="picture"
+      :style="picture"
+      onerror="this.style.display='none'"
+    >
     <div class="base-avatar__default-initials">
       {{ name.slice(0,1) }}
     </div>
@@ -104,6 +105,7 @@ export default {
     z-index: 1;
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 
   &__default-initials {
