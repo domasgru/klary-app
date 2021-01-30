@@ -1,54 +1,44 @@
 <template>
-  <div
-    ref="actionsRef"
-    class="feedback-actions"
-  >
-    <div
-      ref="backRef"
-      class="feedback-actions__back animation-wrapper"
-    >
+  <div class="feedback-actions">
+    <div class="feedback-actions__left">
       <WorkspaceActionButton
         icon="arrow-left"
+        class="feedback-actions__action"
         @click="router.back()"
       />
     </div>
-    <div
-      ref="starRef"
-      class="feedback-actions__right-action animation-wrapper"
-    >
+    <div class="feedback-actions__right">
       <WorkspaceActionButton
         icon="star"
         theme="star"
+        class="feedback-actions__action"
         :active="isFeedbackFavorite"
         @click="toggleFeedbackFlag(FAVORITE_FLAG)"
       />
+      <WorkspaceFeedbackSettings
+        :feedback-data="feedbackData"
+        position="medium-left"
+        class="feedback_actions__action"
+        @remove="updateFeedbackStateAndClose(REMOVED_STATE)"
+        @unremove="updateFeedbackStateAndClose(ACTIVE_STATE)"
+        @delete="updateFeedbackStateAndClose(DELETED_STATE)"
+      >
+        <WorkspaceActionButton
+          class="feedback-actions__right-action"
+          icon="more-horizontal"
+        />
+      </WorkspaceFeedbackSettings>
     </div>
-    <WorkspaceFeedbackSettings
-      ref="moreRef"
-      :feedback-data="feedbackData"
-      :position="settingsPopupPosition"
-      @remove="updateFeedbackStateAndClose(REMOVED_STATE)"
-      @unremove="updateFeedbackStateAndClose(ACTIVE_STATE)"
-      @delete="updateFeedbackStateAndClose(DELETED_STATE)"
-    >
-      <WorkspaceActionButton
-        class="feedback-actions__right-action"
-        icon="more-horizontal"
-      />
-    </WorkspaceFeedbackSettings>
   </div>
 </template>
 
 <script>
-import {
- computed, ref, toRefs, onMounted, onBeforeUpdate, watch, nextTick,
-} from 'vue';
+import { toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { useFeedbackData } from '@/composables/useFeedback';
 import {
- ACTIVE_STATUS, CLOSED_STATUS, FAVORITE_FLAG, ACTIVE_STATE, REMOVED_STATE, DELETED_STATE,
+ FAVORITE_FLAG, ACTIVE_STATE, REMOVED_STATE, DELETED_STATE,
 } from '@/constants/feedback';
-import { gsap } from 'gsap';
 import WorkspaceActionButton from './WorkspaceActionButton.vue';
 import WorkspaceFeedbackSettings from './WorkspaceFeedbackSettings.vue';
 
@@ -60,10 +50,6 @@ export default {
   props: {
     feedbackData: {
       type: Object,
-      required: true,
-    },
-    showOnSides: {
-      type: Boolean,
       required: true,
     },
   },
@@ -80,92 +66,6 @@ export default {
       updateFeedbackState(state);
       router.push(`/${router.currentRoute.value.params.type}`);
     };
-    const settingsPopupPosition = computed(() => (props.showOnSides ? 'medium-left' : 'bottom-left'));
-    // ANIMATION
-    const actionsRef = ref(null);
-    const backRef = ref(null);
-    const closeRef = ref(null);
-    const starRef = ref(null);
-    const moreRef = ref(null);
-
-    let actionsAnimationData = null;
-
-    const calcAnimationData = (parentWidth) => {
-      const leftActionsRefs = [backRef.value].filter((v) => v);
-      const rightActionsRefs = [closeRef.value, starRef.value, moreRef.value].filter((v) => v);
-      const actionsWrapperWidth = actionsRef.value.offsetWidth;
-
-      const data = [];
-      const animationOptions = (x, y, index) => ({
-        keyframes: [
-          {
-            y: -30,
-            duration: 0.15,
-            opacity: 0.1,
-          },
-          {
-            x,
-            duration: 0.1,
-            opacity: 0.1,
-            delay: 0.05 * ((rightActionsRefs.length - 1) - index),
-          },
-          {
-            x,
-            y,
-            opacity: 1,
-            duration: 0.15,
-
-          },
-        ],
-        ease: 'sine.inOut',
-        // delay: 0.05 * (rightActionsRefs.length - index),
-      });
-
-      let leftCurrentIndex = 0;
-      leftActionsRefs.forEach((actionRef) => {
-        const element = actionRef.$el || actionRef;
-        const animationData = {};
-        const x = 0 - element.offsetLeft - element.offsetWidth - 24;
-        const y = ((40 + 8) * (leftCurrentIndex + 1));
-        animationData.timeline = gsap.timeline({ paused: true }).to(
-          element,
-          animationOptions(x, y, leftCurrentIndex),
-        );
-        data.push(animationData);
-        leftCurrentIndex += 1;
-      });
-
-      let rightCurrentIndex = 0;
-      rightActionsRefs.forEach((actionRef) => {
-        const element = actionRef.$el || actionRef;
-        const animationData = {};
-        const x = actionsWrapperWidth - element.offsetLeft + 24;
-        const y = ((40 + 8) * (rightCurrentIndex + 1));
-        animationData.timeline = gsap.timeline({ paused: true }).to(
-          element,
-          animationOptions(x, y, rightCurrentIndex),
-        );
-        data.push(animationData);
-        rightCurrentIndex += 1;
-      });
-      return data;
-    };
-    const controlAnimations = (control) => {
-      actionsAnimationData.forEach((animation) => {
-        animation.timeline[control](0);
-      });
-    };
-    watch(() => props.showOnSides, async (value) => {
-      await nextTick();
-      if (value) {
-        if (!actionsAnimationData) {
-          actionsAnimationData = calcAnimationData();
-        }
-        controlAnimations('play');
-      } else {
-        controlAnimations('reverse');
-      }
-    });
 
     return {
       router,
@@ -173,16 +73,10 @@ export default {
       isFeedbackRemoved,
       toggleFeedbackFlag,
       updateFeedbackStateAndClose,
-      settingsPopupPosition,
       FAVORITE_FLAG,
       REMOVED_STATE,
       ACTIVE_STATE,
       DELETED_STATE,
-      actionsRef,
-      backRef,
-      closeRef,
-      starRef,
-      moreRef,
     };
   },
 };
@@ -191,19 +85,26 @@ export default {
 <style lang="scss" scoped>
 .feedback-actions {
   position: sticky;
-  top: 57px;
+  top: 112px;
   left: 0;
   z-index: 1;
   display: flex;
-  margin-bottom: 16px;
 
-  &__back {
-    margin-right: auto;
+  &__left {
+    position: absolute;
+    top: 0;
+    left: -56px;
   }
 
-  &__right-action {
+  &__right {
+    position: absolute;
+    top: 0;
+    right: -56px;
+  }
+
+  &__action {
     &:not(:last-child) {
-      margin-right: 8px;
+      margin-bottom: 8px;
     }
   }
 }
