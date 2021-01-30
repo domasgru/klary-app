@@ -73,6 +73,8 @@ export default {
 }
 
 .feedback-list {
-  margin-bottom: 32px;
+  &:not(:last-child) {
+    margin-bottom: 32px;
+  }
 }
 </style>

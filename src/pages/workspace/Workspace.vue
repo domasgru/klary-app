@@ -64,16 +64,14 @@ export default {
     align-self: flex-start;
     height: 100%;
     max-height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
 
   &__content-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    max-height: 100%;
     padding: 0 80px 64px 80px;
-    overflow-x: hidden;
-    overflow-y: scroll;
   }
 
   &__content {

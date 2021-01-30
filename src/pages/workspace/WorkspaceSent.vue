@@ -8,7 +8,7 @@
       :feedbacks="pendingFeedbacks"
       :inbox-type="SENT_TYPE"
       label="Waiting to be marked as clear"
-      class="active-feedback-list"
+      class="feedback-list"
       is-sent-feedback
       @open="openFeedback"
     />
@@ -16,7 +16,7 @@
       v-if="!isLoading && clearFeedbacks.length"
       :feedbacks="clearFeedbacks"
       :inbox-type="SENT_TYPE"
-      class="active-feedback-list"
+      class="feedback-list"
       is-sent-feedback
       @open="openFeedback"
     />
@@ -73,8 +73,10 @@ export default {
   margin-bottom: 16px;
 }
 
-.active-feedback-list {
-  margin-bottom: 32px;
+.feedback-list {
+  &:not(:last-child) {
+    margin-bottom: 32px;
+  }
 }
 
 .closed-empty-state {
