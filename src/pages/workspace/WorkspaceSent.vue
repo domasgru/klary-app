@@ -23,8 +23,8 @@
   </template>
   <WorkspaceInboxEmptyState
     v-else
-    title="Here is a place for your given feedbacks"
-    description="When someone asks you for feedback and you write it, they will all show up here."
+    title="No sent feedbacks"
+    illustration="sent-il"
   />
 </template>
 

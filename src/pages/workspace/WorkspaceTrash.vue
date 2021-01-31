@@ -12,11 +12,16 @@
     />
   </div>
   <WorkspaceFeedbackList
-    v-if="!isLoading"
+    v-if="!isLoading && removedFeedbacks.length"
     :feedbacks="removedFeedbacks"
     :inbox-type="REMOVED_TYPE"
     empty-state-text="You have no removed feedbacks"
     @open="openFeedback"
+  />
+  <WorkspaceInboxEmptyState
+    v-if="!isLoading && !removedFeedbacks.length"
+    title="Nothing in trash"
+    illustration="trash-il"
   />
   <BaseModal
     :show-modal="showEmptyTrashModal"
@@ -57,10 +62,12 @@ import { useFeedbackList } from '@/composables/useFeedback';
 import { REMOVED_STATE, REMOVED_TYPE, DELETED_STATE } from '@/constants/feedback';
 import { updateFeedback } from '@/firebase';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
+import WorkspaceInboxEmptyState from './WorkspaceInboxEmptyState.vue';
 
 export default {
   components: {
     WorkspaceFeedbackList,
+    WorkspaceInboxEmptyState,
   },
   setup() {
     const store = useStore();

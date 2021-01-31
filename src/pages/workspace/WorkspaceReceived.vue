@@ -20,8 +20,8 @@
   </template>
   <WorkspaceInboxEmptyState
     v-else
-    title="Get your first feedback"
-    description="It can be about anything, quarterly or yearly review or just ask others how you align with company values."
+    title="No received feedbacks"
+    illustration="received-il"
   >
     <WorkspaceRequestFeedbackUI>
       <BaseButton

@@ -10,6 +10,7 @@ import WorkspaceSent from '@/pages/workspace/WorkspaceSent.vue';
 import WorkspaceFavorites from '@/pages/workspace/WorkspaceFavorites.vue';
 import WorkspaceTrash from '@/pages/workspace/WorkspaceTrash.vue';
 import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
+import WorkspaceHighlights from '@/pages/workspace/WorkspaceHighlights.vue';
 import { NAME_TYPE_MAP } from '@/constants/feedback';
 import { capitalize } from '@/utils/stringUtils';
 
@@ -55,7 +56,7 @@ export const router = createRouter({
         },
         {
           path: 'highlights',
-          component: ComingSoon,
+          component: WorkspaceHighlights,
         },
         {
           path: 'trash',

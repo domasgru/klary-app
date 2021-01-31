@@ -60,6 +60,8 @@ export default {
 
   &__main {
     position: relative;
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
     align-self: flex-start;
     height: 100%;
@@ -71,6 +73,7 @@ export default {
   &__content-container {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     padding: 0 80px 64px 80px;
   }
 
@@ -80,7 +83,7 @@ export default {
     flex-grow: 1;
     width: 100%;
     max-width: 900px;
-    padding-top: 56px;
+    padding-top: 48px;
     margin: auto;
   }
 }
