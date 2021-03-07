@@ -1,4 +1,4 @@
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
@@ -15,6 +15,8 @@ const firebaseConfig = {
   appId: '1:38331897250:web:b391be3a9581eb27b70efb',
   measurementId: 'G-STRL62FGP9',
 };
+
+console.log(firebase, COMMENT_ACTION);
 firebase.initializeApp(firebaseConfig);
 
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
