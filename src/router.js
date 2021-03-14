@@ -16,7 +16,7 @@ import { capitalize } from '@/utils/stringUtils';
 
 import { getCurrentUser } from '@/firebase';
 
-const Workspace = defineAsyncComponent(() => import('@/pages/workspace/Workspace.vue'));
+import Workspace from '@/pages/workspace/Workspace.vue';
 
 export const router = createRouter({
   history: createWebHistory(),

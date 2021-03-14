@@ -1,5 +1,9 @@
 <template>
-  <div class="feedback-view">
+  <div
+    ref="feedbackViewRef"
+    class="feedback-view"
+    @mouseup="handleSelect"
+  >
     <WorkspaceFeedbackViewActions
       ref="actionsRef"
       :feedback-data="feedbackData"
@@ -72,6 +76,26 @@
       @markAsClear="markAsClear"
       @close="isMarkAsClearModalOpen = false"
     />
+    <div
+      v-if="selectionPosition"
+      ref="selectedAreaRef"
+      class="quote-selected-area"
+      :style="{
+        width: `${selectionPosition.width}px`,
+        height: `${selectionPosition.height}px`,
+        top: `${selectionPosition.top}px`,
+        left: `${selectionPosition.left}px`
+      }"
+    />
+    <div
+      ref="commentActionRef"
+      class="quote-comment-action"
+    >
+      <BaseSvg
+        class="quote-comment-action__icon"
+        name="comment"
+      />
+    </div>
   </div>
 </template>
 
@@ -85,6 +109,7 @@ import { updateSeenAt } from '@/firebase';
 import { CREATE_ACTION } from '@/constants';
 import { SENT_TYPE, CLOSED_STATUS, MARK_CLEAR_ACTION } from '@/constants/feedback';
 import { useFeedbackData } from '@/composables/useFeedback';
+import { createPopper } from '@popperjs/core';
 import WorkspaceWriteComment from './WorkspaceWriteComment.vue';
 import WorkspaceFeedbackAction from './WorkspaceFeedbackAction.vue';
 import WorkspaceFeedbackViewActions from './WorkspaceFeedbackViewActions.vue';
@@ -195,6 +220,37 @@ export default {
       ]);
       isMarkAsClearModalOpen.value = false;
     };
+
+    const selectedAreaRef = ref(null);
+    const commentActionRef = ref(null);
+    const feedbackViewRef = ref(null);
+    const selectionPosition = ref(null);
+    const handleSelect = async () => {
+      const selection = window.getSelection();
+      if (selection.anchorOffset === selection.focusOffset) {
+        return;
+      }
+      const feedbackViewPosition = feedbackViewRef.value.getBoundingClientRect();
+
+      const position = selection.getRangeAt(0).getBoundingClientRect();
+      if (!position) {
+        return;
+      }
+
+      selectionPosition.value = {
+        top: position.top - feedbackViewPosition.top,
+        left: position.left - feedbackViewPosition.left,
+        height: position.height,
+        width: position.width,
+      };
+
+      await nextTick();
+      console.log(selectedAreaRef.value, commentActionRef.value);
+      createPopper(selectedAreaRef.value, commentActionRef.value, {
+        placement: 'top',
+      });
+    };
+
     return {
       showMarkAsClear,
       isFeedbackSent,
@@ -207,6 +263,11 @@ export default {
       showActionsOnSides,
       markAsClear,
       isFeedbackClosed,
+      feedbackViewRef,
+      selectedAreaRef,
+      commentActionRef,
+      handleSelect,
+      selectionPosition,
     };
   },
 };
@@ -275,6 +336,29 @@ export default {
   &__content {
     word-break: break-word;
     white-space: pre-line;
+  }
+}
+
+.quote-selected-area {
+  position: absolute;
+  background: red;
+  opacity: 0.3;
+  pointer-events: none;
+}
+.quote-comment-action {
+  width: 40px;
+  height: 40px;
+  background: $light;
+  border: 1px solid $grey-200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+    padding: 2.5px;
   }
 }
 </style>
