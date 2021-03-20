@@ -1,5 +1,8 @@
 <template>
-  <BasePopup v-bind="$attrs">
+  <BasePopup
+    v-bind="$attrs"
+    @close="$emit('close')"
+  >
     <slot />
     <template #content>
       <div
@@ -12,7 +15,7 @@
           :class="{
             'dropdown__item--alarm': theme === 'alarm'
           }"
-          @click="$emit(action)"
+          @click="$emit(action), $emit('close')"
         >
           <BaseSvg
             v-if="icon"
@@ -43,7 +46,7 @@ export default {
       required: true,
     },
   },
-  emits: ['delete', 'remove', 'restore'],
+  emits: ['delete', 'remove', 'restore', 'close'],
 };
 </script>
 

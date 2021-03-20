@@ -16,6 +16,7 @@ app.use(router);
 app.use(store);
 app.use(VuelidatePlugin);
 
+app.config.isCustomElement = (tag) => tag.startsWith('emoji');
 app.directive('click-outside', clickOutsideDirective);
 
 const globalComponents = require.context('./components/global', false, /Base[A-Z]\w+\.(vue|js)$/);

@@ -70,10 +70,21 @@ export const useFeedbackList = (type) => {
   };
 
   const getFilteredAndSortedFeedbacks = ({
-    filterBy, filterValue, sortBy = 'createdAt.seconds', sortReverse = false,
+    filter, filterBy, filterValue, sortBy = 'createdAt.seconds', sortReverse = false,
   }) => computed(() => {
     try {
       let preparedFeedbacks = null;
+      if (filter) {
+        preparedFeedbacks = feedbacks.value.filter((feedback) => Object.entries(filter).every(([filterBy, filterValue]) => {
+            const valueToFilter = getObjectValue(feedback, filterBy);
+
+            if (typeof filterValue === 'object') {
+              return filterValue.value === valueToFilter;
+            }
+            return filterValue === valueToFilter;
+          }));
+      }
+
       if (filterBy && filterValue) {
         preparedFeedbacks = feedbacks.value.filter((feedback) => {
           const valueToFilter = getObjectValue(feedback, filterBy);

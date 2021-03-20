@@ -2,6 +2,7 @@
   <router-view />
   <LoaderFullscreen v-if="loading" />
   <div id="modals" />
+  <div id="popup-portal" />
 </template>
 
 <script>

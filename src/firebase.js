@@ -159,5 +159,6 @@ export const createFeedbackRequest = (requestData) => {
   const requestRef = db.collection('feedbackRequests');
   return requestRef.add(feedbackRequest);
 };
+export const deleteFeedbackRequest = (requestId) => db.collection('feedbackRequests').doc(requestId).delete();
 
 export const updateFeedbackRequest = (feedbackId, data) => db.doc(`feedbackRequests/${feedbackId}`).update(data);

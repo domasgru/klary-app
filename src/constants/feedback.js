@@ -24,6 +24,7 @@ export const FAVORITE_FLAG = 'FAVORITE';
 
 // firestore
 export const FEEDBACKS_COLLECTION = 'feedbacks';
+export const FEEDBACK_REQUESTS_COLLECTION = 'feedbackRequests';
 
 // Action types
 export const COMMENT_ACTION = 'COMMENT';

@@ -21,5 +21,17 @@ module.exports = {
       .use('svgo-loader')
       .loader('svgo-loader')
       .end();
+
+      config.module
+      .rule('vue')
+      .use('vue-loader')
+      .loader('vue-loader')
+      .tap((options) => {
+        options.compilerOptions = {
+          ...(options.compilerOptions || {}),
+          isCustomElement: (tag) => /^emoji-/.test(tag),
+        };
+        return options;
+      });
   },
 };

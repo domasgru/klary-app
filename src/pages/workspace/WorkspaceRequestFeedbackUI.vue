@@ -23,23 +23,32 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useFeedbackRequest } from '@/composables/useFeedbackRequest';
+import { ref, computed, watch } from 'vue';
+import { useStore } from 'vuex';
 import { debounce } from '@/utils/debounce';
+import { updateFeedbackRequest } from '@/firebase';
 import WorkspaceRequestFeedbackModal from './WorkspaceRequestFeedbackModal.vue';
 
 export default {
   components: {
     WorkspaceRequestFeedbackModal,
   },
-  setup() {
-    const {
-      message,
-      link,
-      isLoading,
-      updateFeedbackRequestData,
-    } = useFeedbackRequest();
+  props: {
+    feedbackRequestId: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
+    const store = useStore();
+    const feedbackRequest = computed(() => store.state.feedback.feedbackRequests.find((fr) => fr.id === props.feedbackRequestId));
+    const link = computed(() => `${window.origin}/give-feedback/${feedbackRequest.value.id}`);
     const showRequestModal = ref(false);
+
+    const message = ref(feedbackRequest.value.message);
+    watch(feedbackRequest, (newValue) => {
+      message.value = newValue.message;
+    });
 
     const closeRequestModal = () => {
       showRequestModal.value = false;
@@ -53,7 +62,9 @@ export default {
     };
 
     const saveMessage = debounce(() => {
-      updateFeedbackRequestData();
+      updateFeedbackRequest(feedbackRequest.value.id, {
+        message: message.value,
+      });
     }, 800);
 
     return {
@@ -61,7 +72,6 @@ export default {
       closeRequestModal,
       message,
       link,
-      isLoading,
       copyFeedbackRequestLink,
       openFeedbackRequestLink,
       saveMessage,

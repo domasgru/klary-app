@@ -198,6 +198,7 @@ export default {
         title: 'Personal feedback',
         content: message.value.replace(/^\s+|\s+$/g, ''),
         status: ACTIVE_STATUS,
+        feedbackRequestId: requestId,
       });
       sentFeedbackId.value = sentFeedback.id;
       showSuccessMessage.value = true;

@@ -1,27 +1,83 @@
 <template>
-  <router-link
-    class="sidebar-button base-typography--button2"
-    :to="to"
-    :class="{
-      'sidebar-button--is-fluid': isFluid,
-      'sidebar-button--is-active': isActive,
-    }"
+  <BasePopup
+    :is-open="showFeedbackRequestRenamePopup"
+    :position="'bottom-start'"
+    :offset="[0, 4]"
+    @close="showFeedbackRequestRenamePopup = false"
   >
-    <BaseSvg
-      v-if="icon"
-      :name="icon"
-      :stroke-color="isActive ? '#511FDC' : '#17171A'"
-      class="sidebar-button__icon"
-    />
-    <div v-if="text">
-      {{ text }} {{ notificationsCount ? `(${notificationsCount})` : '' }}
-    </div>
-    <slot />
-  </router-link>
+    <router-link
+      class="sidebar-button base-typography--button2"
+      :to="to"
+      :class="{
+        'is-fluid': isFluid,
+        'is-active': isActive,
+        'is-selected': showOptions || showFeedbackRequestRenamePopup
+      }"
+    >
+      <WorkspaceSidebarButtonIcon
+        :is-active="isActive"
+        :emoji="emoji"
+        :icon="icon"
+        :is-editable="!!options"
+        @update-emoji="$emit('update-emoji', $event)"
+      />
+      <div
+        v-if="text"
+        class="sidebar-button__title"
+      >
+        {{ text }} {{ notificationsCount ? `(${notificationsCount})` : '' }}
+      </div>
+      <BaseDropdown
+        v-if="options"
+        class="sidebar-button__options"
+        :items="options"
+        :is-open="showOptions"
+        position="bottom-start"
+        :offset="[0, 10]"
+        @close="showOptions = false"
+        @rename="showFeedbackRequestRenamePopup = true"
+        @duplicate="$emit('duplicate')"
+        @copy-link="$emit('copy-link')"
+        @delete="$emit('delete')"
+        @click.stop.prevent
+      >
+        <BaseSvg
+          name="more-horizontal"
+          :stroke-color="isActive ? '#511FDC' : '#17171A'"
+          class="sidebar-button__dots-icon"
+          @click="handleOptionsClick"
+        />
+      </BaseDropdown>
+      <slot />
+    </router-link>
+    <template #content>
+      <div class="settings">
+        <WorkspaceSidebarButtonIcon
+          :is-active="isActive"
+          :emoji="emoji"
+          :icon="icon"
+          :is-editable="!!options"
+          emoji-select-theme
+          @update-emoji="$emit('update-emoji', $event)"
+        />
+        <BaseInput
+          class="settings__title"
+          autofocus
+          :model-value="text"
+          @input="$emit('update-title', $event.target.value)"
+        />
+      </div>
+    </template>
+  </BasePopup>
 </template>
 
 <script>
+import WorkspaceSidebarButtonIcon from './WorkspaceSidebarButtonIcon.vue';
+
 export default {
+  components: {
+    WorkspaceSidebarButtonIcon,
+  },
   props: {
     to: {
       type: String,
@@ -32,6 +88,10 @@ export default {
       default: '',
     },
     icon: {
+      type: String,
+      default: '',
+    },
+    emoji: {
       type: String,
       default: '',
     },
@@ -46,6 +106,27 @@ export default {
     notificationsCount: {
       type: Number,
       default: 0,
+    },
+    options: {
+      type: Array,
+      default: null,
+    },
+  },
+  emits: ['delete', 'update-emoji', 'rename', 'close', 'update-title', 'duplicate', 'copy-link'],
+  data() {
+    return {
+      showOptions: false,
+      showFeedbackRequestRenamePopup: false,
+    };
+  },
+  methods: {
+    handleOptionsClick() {
+      if (this.showFeedbackRequestRenamePopup) {
+        this.showFeedbackRequestRenamePopup = false;
+        return;
+      }
+
+      this.showOptions = !this.showOptions;
     },
   },
 };
@@ -62,24 +143,69 @@ export default {
   cursor: pointer;
   border-radius: 6px;
   transition: all 0.2s;
-
-  &--is-active {
-    color: $primary-100 !important;
-    background: rgba($primary, 0.1) !important;
-  }
+  position: relative;
 
   &:hover {
     background: $grey-100;
+  }
+
+  &.is-selected {
+    background: $grey-100;
+  }
+
+  &.is-active {
+    color: $primary-100;
+    background: rgba($primary, 0.1);
   }
 
   &--is-fluid {
     width: 100%;
   }
 
+  &__title {
+    max-width: 152px;
+    @include text-overflow-ellipsis;
+  }
+
+  &__options {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+  }
+
+  &__dots-icon {
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    border-radius: 4px;
+
+    &:hover {
+       background:$grey-200;
+    }
+
+    #{$this}.is-active &:hover {
+      background: $primary-light-20;
+    }
+
+    #{$this}.is-selected & {
+      background: $grey-200;
+    }
+
+    #{$this}.is-selected.is-active & {
+      background: $primary-light-20;
+    }
+  }
+}
+
+.settings {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  width: 360px;
+
   &__icon {
     width: 16px;
     height: 16px;
-    margin-right: 8px;
     fill: none;
   }
 }

@@ -11,6 +11,7 @@ import WorkspaceFavorites from '@/pages/workspace/WorkspaceFavorites.vue';
 import WorkspaceTrash from '@/pages/workspace/WorkspaceTrash.vue';
 import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
 import WorkspaceHighlights from '@/pages/workspace/WorkspaceHighlights.vue';
+import WorkspaceFeedbackRequest from '@/pages/workspace/WorkspaceFeedbackRequest.vue';
 import { NAME_TYPE_MAP } from '@/constants/feedback';
 import { capitalize } from '@/utils/stringUtils';
 
@@ -38,7 +39,10 @@ export const router = createRouter({
       },
       beforeEnter: async (to, from, next) => {
         const { uid } = store.state.user.userData;
-        await store.dispatch('feedback/bindAllFeedbacks', { userId: uid });
+        await Promise.all([
+          store.dispatch('feedback/bindAllFeedbacks', { userId: uid }),
+          store.dispatch('feedback/bindFeedbackRequests', { userId: uid }),
+        ]);
         return next();
       },
       children: [
@@ -61,6 +65,18 @@ export const router = createRouter({
         {
           path: 'trash',
           component: WorkspaceTrash,
+        },
+        {
+          path: 'form/:id',
+          component: WorkspaceFeedbackRequest,
+          beforeEnter: async (to, form, next) => {
+            const { id } = to.params;
+            if (!store.state.feedback?.feedbackRequests.some((fr) => fr.id === id)) {
+              next('/not-found');
+            }
+            next();
+          },
+          props: (route) => ({ feedbackRequestData: store.state.feedback.feedbackRequests.find((fr) => fr.id === route.params.id) }),
         },
         {
           path: ':type/:id',

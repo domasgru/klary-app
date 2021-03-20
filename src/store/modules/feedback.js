@@ -1,6 +1,8 @@
 import { firestoreAction } from 'vuexfire';
 import { db } from '@/firebase';
-import { FEEDBACKS_COLLECTION, ACTIVE_STATE, REMOVED_STATE } from '@/constants/feedback';
+import {
+ FEEDBACKS_COLLECTION, FEEDBACK_REQUESTS_COLLECTION, ACTIVE_STATE, REMOVED_STATE,
+} from '@/constants/feedback';
 import { bindFirestoreArrayRefMutations, bindFirestoreArrayRefAction } from '../utils/bindFirestoreRef';
 
 export default {
@@ -10,6 +12,7 @@ export default {
     sentFeedbacks: null,
     removedFeedbacks: null,
     currentFeedbackActions: null,
+    feedbackRequests: null,
   },
   getters: {
     allFeedbacks(state) {
@@ -78,6 +81,15 @@ export default {
         'removedFeedbacks',
         db.collection(FEEDBACKS_COLLECTION)
           .where(`participants.${userId}.feedbackState`, '==', REMOVED_STATE),
+      );
+    },
+    bindFeedbackRequests({ commit }, { userId }) {
+      return bindFirestoreArrayRefAction(
+        commit,
+        'feedbackRequests',
+        db.collection(FEEDBACK_REQUESTS_COLLECTION)
+          .where('uid', '==', userId)
+          .orderBy('createdAt', 'asc'),
       );
     },
   },

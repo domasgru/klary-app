@@ -1,57 +1,91 @@
 <template>
   <div class="workspace-sidebar">
-    <BaseDropdown
-      v-click-outside="{
-        handler: () => showUserDropdown = false,
-        events: ['mousedown']
-      }"
-      class="workspace-sidebar__user-wrapper"
-      :is-open="showUserDropdown"
-      :items="$options.userDropdownItems"
-      side="left"
-      margin-top="-12"
-      width="256px"
-      position="bottom-right"
-      @open-settings="openSettings"
-      @logout="logoutAndRedirectToHomepage"
-    >
-      <button
-        class="workspace-sidebar__user base-typography--b-14-20"
-        @click="showUserDropdown = !showUserDropdown"
+    <div class="workspace-sidebar__top">
+      <!-- USER PROFILE DROPDOWN -->
+      <BaseDropdown
+        class="workspace-sidebar__user-wrapper"
+        :is-open="showUserDropdown"
+        :items="$options.userDropdownItems"
+        width="256px"
+        position="bottom-start"
+        :offset="[0, 4]"
+        @open-settings="openSettings"
+        @logout="logoutAndRedirectToHomepage"
+        @close="showUserDropdown = false"
       >
-        <BaseAvatar
-          size="sm"
-          :name="userData.name"
-          :picture="userData.picture"
-          class="workspace-sidebar__user-avatar"
+        <button
+          class="workspace-sidebar__user base-typography--b-14-20"
+          @click="showUserDropdown = !showUserDropdown"
+        >
+          <BaseAvatar
+            size="sm"
+            :name="userData.name"
+            :picture="userData.picture"
+            class="workspace-sidebar__user-avatar"
+          />
+          {{ userData.name }}
+          <BaseSvg
+            name="arrow-down"
+            class="workspace-sidebar__user-icon"
+          />
+        </button>
+      </BaseDropdown>
+      <div class="workspace-sidebar__buttons">
+        <WorkspaceSidebarButton
+          v-for="(ITEM, ITEM_ID) in $options.INBOX"
+          :key="ITEM_ID"
+          :icon="ITEM.icon"
+          :text="ITEM.text"
+          :to="ITEM.path"
+          :is-active="isActive(ITEM.path, $route.path)"
+          :notifications-count="getNotificationsCount(ITEM)"
+          class="workspace-sidebar__button"
         />
-        {{ userData.name }}
-        <BaseSvg
-          name="arrow-down"
-          class="workspace-sidebar__user-icon"
-        />
-      </button>
-    </BaseDropdown>
-    <div class="workspace-sidebar__buttons">
-      <WorkspaceSidebarButton
-        v-for="(ITEM, ITEM_ID) in $options.INBOX"
-        :key="ITEM_ID"
-        :icon="ITEM.icon"
-        :text="ITEM.text"
-        :to="ITEM.path"
-        :is-active="isActive(ITEM.path, $route.path)"
-        :notifications-count="getNotificationsCount(ITEM)"
-        class="workspace-sidebar__button"
-      />
+      </div>
     </div>
-    <WorkspaceRequestFeedbackUI>
-      <BaseButton
-        size="md"
-        fluid
-        v-text="'Request feedback'"
-      />
-    </WorkspaceRequestFeedbackUI>
 
+    <div class="workspace-sidebar__my-forms overline">
+      My forms:
+    </div>
+    <div class="workspace-sidebar__forms-scroll">
+      <WorkspaceSidebarButton
+        v-for="request in feedbackRequests"
+        :key="request.id"
+        :icon="request.icon || 'blank'"
+        :text="request.title"
+        :emoji="request.emoji"
+        :to="`/form/${request.id}`"
+        :is-active="isActive(request.id, $route.path)"
+        :options="$options.feedbackRequestOptions"
+        class="workspace-sidebar__form-button"
+        @copy-link="copyFeedbackRequestLink(request)"
+        @duplicate="duplicateFeedbackRequest(request)"
+        @delete="deleteForm(request.id)"
+        @update-emoji="updateFormEmoji(request.id, $event)"
+        @update-title="updateFeedbackRequestTitle(request.id, $event)"
+      />
+
+      <div
+        class="workspace-sidebar__create-form btn2"
+        @click="createForm"
+      >
+        <BaseSvg
+          class="workspace-sidebar__plus-icon"
+          name="plus"
+        />
+        Create new form
+      </div>
+    </div>
+    <div
+      class="workspace-sidebar__create btn2"
+      @click="createForm"
+    >
+      <BaseSvg
+        class="workspace-sidebar__plus"
+        name="plus"
+      />
+      Create new form
+    </div>
     <BaseModal
       :show-modal="showAccountSettingsModal"
       max-width="600px"
@@ -65,42 +99,26 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import {
- logout, createFeedbackRequest, getFeedbackRequest, updateFeedbackRequest,
+ logout, updateFeedbackRequest, createFeedbackRequest, deleteFeedbackRequest,
 } from '@/firebase';
-import WorkspaceSidebarButton from './WorkspaceSidebarButton.vue';
 import WorkspaceAccountSettings from './WorkspaceAccountSettings.vue';
-import WorkspaceRequestFeedbackUI from './WorkspaceRequestFeedbackUI.vue';
+import WorkspaceSidebarButton from './WorkspaceSidebarButton.vue';
 
 const INBOX = {
   RECEIVED: {
     icon: 'received',
-    text: 'Received',
+    text: 'All Received',
     storeState: 'receivedFeedbacks',
     path: '/received',
   },
   SENT: {
     icon: 'sent',
-    text: 'Sent',
+    text: 'All Sent',
     storeState: 'sentFeedbacks',
     path: '/sent',
-  },
-  FAVORITES: {
-    icon: 'favorites',
-    text: 'Favorites',
-    path: '/favorites',
-  },
-  HIGHLIGHTS: {
-    icon: 'highlights',
-    text: 'Highlights',
-    path: '/highlights',
-  },
-  TRASH: {
-    icon: 'trash',
-    text: 'Trash',
-    path: '/trash',
   },
 };
 
@@ -118,11 +136,25 @@ const userDropdownItems = [
   },
 ];
 
+const feedbackRequestOptions = [
+  {
+    name: 'Rename', icon: 'edit', action: 'rename',
+  },
+  {
+    name: 'Duplicate', icon: 'duplicate', action: 'duplicate',
+  },
+  {
+    name: 'Copy form link', icon: 'link', action: 'copy-link',
+  },
+  {
+    name: 'Delete', icon: 'trash', action: 'delete', theme: 'alarm',
+  },
+];
+
 export default {
   components: {
-    WorkspaceSidebarButton,
-    WorkspaceRequestFeedbackUI,
     WorkspaceAccountSettings,
+    WorkspaceSidebarButton,
   },
   data() {
     return {
@@ -137,9 +169,11 @@ export default {
   },
   computed: {
     ...mapState('user', ['userData']),
+    ...mapState('feedback', ['feedbackRequests']),
     ...mapGetters('feedback', ['receivedFeedbacks', 'sentFeedbacks']),
   },
   methods: {
+    ...mapActions('feedback', ['bindFeedbackRequests']),
     isActive(path, currentRoute) {
       return currentRoute.includes(path);
     },
@@ -155,18 +189,68 @@ export default {
       logout();
       window.location.replace(window.location.origin);
     },
+    async createForm() {
+      const { id } = await createFeedbackRequest({
+        uid: this.userData.uid,
+        name: this.userData.name,
+        title: 'Untitled',
+        message: '',
+        picture: this.userData.picture || '',
+      });
+      this.$router.push(`/form/${id}`);
+    },
+    deleteForm(id) {
+      if (this.$router.currentRoute.value.params.id === id) {
+        const requestsAfterDelete = this.feedbackRequests.filter((request) => request.id !== id);
+        if (!requestsAfterDelete.length) {
+          this.$router.push('/received');
+        }
+
+        this.$router.push(`/form/${requestsAfterDelete[0].id}`);
+      }
+      deleteFeedbackRequest(id);
+    },
+    updateFormEmoji(requestId, emoji) {
+      updateFeedbackRequest(requestId, {
+        emoji,
+      });
+    },
+    updateFeedbackRequestTitle(requestId, title) {
+      updateFeedbackRequest(requestId, {
+        title,
+      });
+    },
+    duplicateFeedbackRequest(request) {
+      const { id, ...requestCopy } = request;
+      createFeedbackRequest({
+        ...requestCopy,
+        title: `Copy of ${request.title}`,
+      });
+    },
+    copyFeedbackRequestLink(request) {
+      navigator.clipboard.writeText(`${window.origin}/give-feedback/${request.id}`);
+    },
   },
   INBOX,
   userDropdownItems,
+  deleteFeedbackRequest,
+  feedbackRequestOptions,
 };
 </script>
 
 <style lang="scss" scoped>
 .workspace-sidebar {
-  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+
+  &__top {
+    padding: 8px;
+    margin-bottom: 16px;
+  }
 
   &__user-wrapper {
     margin-bottom: 16px;
+    width: 100%;
   }
 
   &__user {
@@ -200,13 +284,74 @@ export default {
   }
 
   &__buttons {
-    margin-bottom: 24px;
+    //margin-bottom: 24px;
   }
 
   &__button {
     &:not(:last-child) {
       margin-bottom: 4px;
     }
+  }
+
+  &__forms-scroll {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 0 8px 20px 8px;
+  }
+
+  &__my-forms {
+    margin-bottom: 8px;
+    color: $grey-600;
+    padding: 0 16px;
+  }
+
+  &__form-button {
+    margin-bottom: 4px;
+  }
+
+  &__create-form {
+    display: flex;
+    padding: 6px 8px;
+    align-items: center;
+    color: $grey-600;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+
+    &:hover {
+    background: $grey-100;
+  }
+  }
+
+  &__plus-icon {
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    margin-right: 8px;
+  }
+
+  &__create {
+    display: flex;
+    align-items: center;
+    padding: 22px 16px;
+    color: $grey-600;
+    border-top: 1px solid $grey-200;
+    transition: all 0.2s ease;
+
+    &:hover {
+      cursor: pointer;
+      background: $grey-100;
+    }
+
+    &:active {
+      background: $grey-150;
+    }
+  }
+
+  &__plus {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
   }
 }
 </style>
