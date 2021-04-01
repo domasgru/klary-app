@@ -142,7 +142,6 @@ export default {
   color: $dark;
   cursor: pointer;
   border-radius: 6px;
-  transition: all 0.2s;
   position: relative;
 
   &:hover {
@@ -178,9 +177,15 @@ export default {
     height: 20px;
     padding: 2px;
     border-radius: 4px;
+    display: none;
+
+    #{$this}:hover &, #{$this}.is-selected & {
+      display: block;
+    }
 
     &:hover {
        background:$grey-200;
+       display: block;
     }
 
     #{$this}.is-active &:hover {

@@ -70,9 +70,15 @@ export default {
           {
             name: 'flip',
             options: {
-              fallbackPlacements: ['top', 'right'],
+              fallbackPlacements: ['right'],
             },
           },
+    //       {
+    //   name: 'preventOverflow',
+    //   options: {
+    //     altAxis: true, // false by default
+    //   },
+    // },
           ...(this.offset ? [{
             name: 'offset',
             options: {
@@ -100,41 +106,11 @@ export default {
 
 <style lang="scss" scoped>
 .base-popup {
-  position: relative;
   display: flex;
 
   &__trigger {
     cursor: pointer;
     width: 100%;
-  }
-
-  &__content {
-    position: absolute;
-    z-index: 2000;
-    padding: 4px;
-
-    &--top-right {
-      top: 0;
-      left: translateX(100%)
-    }
-
-    &--bottom-left {
-      right: 0;
-      bottom: -4px;
-      transform: translateY(100%);
-    }
-
-    &--bottom-right {
-      bottom: -4px;
-      left: 0;
-      transform: translateY(100%);
-    }
-
-    &--medium-left {
-      top: 0;
-      left: -4px;
-      transform: translateX(-100%);
-    }
   }
 }
 </style>

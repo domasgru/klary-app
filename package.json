@@ -29,6 +29,8 @@
     "get-value": "^3.0.1",
     "gsap": "^3.5.1",
     "lodash.difference": "^4.5.0",
+    "lodash.set": "^4.3.2",
+    "nanoid": "^3.1.22",
     "node-sass": "^4.14.0",
     "sass-loader": "^8.0.2",
     "shortid": "^2.2.15",

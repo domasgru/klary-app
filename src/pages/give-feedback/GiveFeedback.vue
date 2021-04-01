@@ -1,9 +1,9 @@
 <template>
-  <div
+  <WorkspaceFormLayout
     v-if="!isLoading && request"
     class="give-feedback"
   >
-    <div class="give-feedback__gradient">
+    <template #header>
       <div class="give-feedback__navigation">
         <BaseLogo
           class="give-feedback__logo"
@@ -22,71 +22,48 @@
           {{ userData.name }}
         </div>
       </div>
-    </div>
-    <div
-      v-if="request"
-      class="give-feedback__content"
-    >
-      <!-- Success message -->
+    </template>
+    <template #form>
       <div
-        v-if="showSuccessMessage"
-        class="give-feedback__background"
+        v-if="request"
+        class="give-feedback__content"
       >
-        <div class="give-feedback__avatar give-feedback__avatar--sent">
-          <BaseSvg
-            class="give-feedback__icon"
-            name="paper-plain"
+        <!-- Success message -->
+        <div
+          v-if="showSuccessMessage"
+          class="give-feedback__background"
+        >
+          <div class="give-feedback__avatar give-feedback__avatar--sent">
+            <BaseSvg
+              class="give-feedback__icon"
+              name="paper-plain"
+            />
+          </div>
+          <div class="give-feedback__title give-feedback__title--success h5">
+            Your feedback for {{ request.name }} has been sent
+          </div>
+          <div class="give-feedback__message--success b1">
+            You can view your given feedback and discuss about it through the Kuri platform.
+          </div>
+          <div class="give-feedback__button-wrapper">
+            <BaseButton
+              fluid
+              size="lg"
+              @click="openFeedback"
+              v-text="'View feedback'"
+            />
+          </div>
+        </div>
+        <!-- Feedback request message -->
+        <template v-else>
+          <WorkspaceFeedbackForm
+            v-if="form"
+            :feedback-request-data="form"
+            view-mode="active"
           />
-        </div>
-        <div class="give-feedback__title give-feedback__title--success h5">
-          Your feedback for {{ request.name }} has been sent
-        </div>
-        <div class="give-feedback__message--success b1">
-          You can view your given feedback and discuss about it through the Kuri platform.
-        </div>
-        <div class="give-feedback__button-wrapper">
-          <BaseButton
-            fluid
-            size="lg"
-            @click="openFeedback"
-            v-text="'View feedback'"
-          />
-        </div>
+        </template>
       </div>
-      <!-- Feedback request message -->
-      <template v-else>
-        <div class="give-feedback__background">
-          <BaseAvatar
-            class="give-feedback__avatar"
-            size="lg"
-            :name="request.name"
-            :picture="request.picture"
-          />
-
-          <div class="give-feedback__title h5">
-            Give feedback for {{ request.name }}
-          </div>
-          <div
-            v-if="request.message"
-            class="give-feedback__message b1"
-          >
-            {{ request.message }}
-          </div>
-        </div>
-        <BaseTextarea
-          v-model="message"
-          class="give-feedback__message"
-          padding="16px 24px"
-          rows="9"
-          placeholder="Write feedback..."
-          has-submit
-          autofocus
-          submit-button-text="Send"
-          :allow-shortcut-submit="false"
-          @submit="submitMessage"
-        />
-      </template>
-    </div>
+    </template>
     <BaseModal
       :show-modal="showSignupModal"
       max-width="592px"
@@ -101,7 +78,7 @@
         </div>
       </template>
     </BaseModal>
-  </div>
+  </WorkspaceFormLayout>
   <div
     v-if="!isLoading && !request"
     class="error"
@@ -126,13 +103,18 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { useForm } from '@/composables/useForm';
 import { getFeedbackRequestById, createFeedback, getTimeNow } from '@/firebase';
 import { CREATE_ACTION } from '@/constants';
 import { ACTIVE_STATE, ACTIVE_STATUS } from '@/constants/feedback';
 import Signup from '@/pages/Signup.vue';
+import WorkspaceFormLayout from '@/pages/workspace/WorkspaceFormLayout.vue';
+import WorkspaceFeedbackForm from '@/pages/workspace/WorkspaceFeedbackForm.vue';
 
 export default {
   components: {
+    WorkspaceFormLayout,
+    WorkspaceFeedbackForm,
     Signup,
   },
   setup() {
@@ -148,6 +130,9 @@ export default {
 
     const showSignupModal = ref(false);
     const showSuccessMessage = ref(false);
+
+    const { form, getForm } = useForm(router.currentRoute.value.params.requestId);
+    getForm();
 
     const loadRequestData = async () => {
       try {
@@ -228,6 +213,7 @@ export default {
       message,
       request,
       userData,
+      form,
     };
   },
 };
@@ -248,6 +234,10 @@ export default {
     display: flex;
     align-items: center;
     padding: 16px 32px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    left: 0;
   }
 
   &__logo {

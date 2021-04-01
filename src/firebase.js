@@ -149,15 +149,17 @@ export const getFeedbackRequest = async (uid) => {
   }
     return null;
 };
-export const getFeedbackRequestById = async (id) => (await db.doc(`feedbackRequests/${id}`).get()).data();
+export const getFeedbackRequestById = async (id) => {
+  const feedbackRequest = await db.doc(`feedbackRequests/${id}`).get();
+  return { ...feedbackRequest.data(), id: feedbackRequest.id };
+};
 
-export const createFeedbackRequest = (requestData) => {
+export const createFeedbackRequest = (id, requestData) => {
   const feedbackRequest = {
     createdAt: getTimeNow(),
     ...requestData,
   };
-  const requestRef = db.collection('feedbackRequests');
-  return requestRef.add(feedbackRequest);
+  return db.collection('feedbackRequests').doc(id).set(feedbackRequest);
 };
 export const deleteFeedbackRequest = (requestId) => db.collection('feedbackRequests').doc(requestId).delete();
 

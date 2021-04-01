@@ -1,23 +1,23 @@
 /* eslint-disable no-use-before-define */
-import { defineAsyncComponent } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import { store } from '@/store';
 import GiveFeedback from '@/pages/give-feedback/GiveFeedback.vue';
 import Login from '@/pages/get-started/Login.vue';
 import WorkspaceReceived from '@/pages/workspace/WorkspaceReceived.vue';
 import ComingSoon from '@/pages/ComingSoon.vue';
+import Workspace from '@/pages/workspace/Workspace.vue';
 import WorkspaceSent from '@/pages/workspace/WorkspaceSent.vue';
 import WorkspaceFavorites from '@/pages/workspace/WorkspaceFavorites.vue';
 import WorkspaceTrash from '@/pages/workspace/WorkspaceTrash.vue';
 import WorkspaceFeedbackView from '@/pages/workspace/WorkspaceFeedbackView.vue';
 import WorkspaceHighlights from '@/pages/workspace/WorkspaceHighlights.vue';
 import WorkspaceFeedbackRequest from '@/pages/workspace/WorkspaceFeedbackRequest.vue';
+import WorkspaceEditFeedbackRequest from '@/pages/workspace/WorkspaceEditFeedbackRequest.vue';
+import WorkspacePreviewFeedbackRequest from '@/pages/workspace/WorkspacePreviewFeedbackRequest.vue';
 import { NAME_TYPE_MAP } from '@/constants/feedback';
 import { capitalize } from '@/utils/stringUtils';
 
 import { getCurrentUser } from '@/firebase';
-
-const Workspace = defineAsyncComponent(() => import('@/pages/workspace/Workspace.vue'));
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -27,8 +27,22 @@ export const router = createRouter({
       component: Login,
     },
     {
-      path: '/give-feedback/:requestId',
+      path: '/f/:requestId',
       component: GiveFeedback,
+    },
+    {
+      path: '/edit-form/:id',
+      component: WorkspaceEditFeedbackRequest,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/preview-form/:id',
+      component: WorkspacePreviewFeedbackRequest,
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/',
@@ -39,6 +53,11 @@ export const router = createRouter({
       },
       beforeEnter: async (to, from, next) => {
         const { uid } = store.state.user.userData;
+        const { feedbackRequests, sentFeedbacks, receivedFeedbacks } = store.state.feedback;
+        if (feedbackRequests && sentFeedbacks && receivedFeedbacks) {
+          return next();
+        }
+
         await Promise.all([
           store.dispatch('feedback/bindAllFeedbacks', { userId: uid }),
           store.dispatch('feedback/bindFeedbackRequests', { userId: uid }),

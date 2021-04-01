@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import { nanoid } from 'nanoid';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import {
@@ -190,14 +191,15 @@ export default {
       window.location.replace(window.location.origin);
     },
     async createForm() {
-      const { id } = await createFeedbackRequest({
+      const id = nanoid(10);
+      await createFeedbackRequest(id, {
         uid: this.userData.uid,
         name: this.userData.name,
         title: 'Untitled',
         message: '',
         picture: this.userData.picture || '',
       });
-      this.$router.push(`/form/${id}`);
+      this.$router.push(`/edit-form/${id}`);
     },
     deleteForm(id) {
       if (this.$router.currentRoute.value.params.id === id) {

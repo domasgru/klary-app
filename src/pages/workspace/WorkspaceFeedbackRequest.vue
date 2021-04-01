@@ -12,11 +12,11 @@
     >
       {{ feedbackRequestData.title || 'Untitled' }}
     </h4>
-    <WorkspaceRequestFeedbackUI :feedback-request-id="feedbackRequestData.id">
-      <BaseButton
-        v-text="'Request feedback'"
-      />
-    </WorkspaceRequestFeedbackUI>
+
+    <BaseButton
+      @click="$router.push(`/edit-form/${feedbackRequestData.id}`)"
+      v-text="'Edit form'"
+    />
   </div>
 
   <template v-if="isLoading || pendingFeedbacks.length || clearFeedbacks.length">
