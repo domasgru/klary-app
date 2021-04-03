@@ -13,13 +13,13 @@
         class="opinion-scale__option"
       >
         <input
-          :id="`option${index - 1}`"
+          :id="`option${index - 1}-${id}`"
           type="radio"
-          name="opinion-scale"
-          :value="`option${index - 1}`"
+          :name="`opinion-scale-${id}`"
+          :value="`option${index - 1}-${id}`"
         >
         <label
-          :for="`option${index - 1}`"
+          :for="`option${index - 1}-${id}`"
           class="btn1s"
         >
           {{ index - 1 }}
@@ -27,9 +27,11 @@
       </div>
     </div>
     <div
+      v-if="showScaleLabels"
       class="opinion-scale-labels caption"
     >
       <div
+        v-if="options.scaleLabels.low"
         class="opinion-scale-labels__label editable"
         contenteditable="true"
         data-placeholder="Type a label"
@@ -39,6 +41,7 @@
         {{ options.scaleLabels.low }}
       </div>
       <div
+        v-if="options.scaleLabels.medium"
         class="opinion-scale-labels__label editable"
         contenteditable="true"
         data-placeholder="Type a label"
@@ -48,6 +51,7 @@
         {{ options.scaleLabels.medium }}
       </div>
       <div
+        v-if="options.scaleLabels.high"
         class="opinion-scale-labels__label editable"
         contenteditable="true"
         data-placeholder="Type a label"
@@ -85,6 +89,10 @@ export default {
   computed: {
     isEditMode() {
       return this.viewMode === 'edit';
+    },
+    showScaleLabels() {
+      const { low, medium, high } = this.options.scaleLabels;
+      return low || medium || high;
     },
   },
 };
