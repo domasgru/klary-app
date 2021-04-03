@@ -112,5 +112,9 @@ export default {
     cursor: pointer;
     width: 100%;
   }
+
+  &__content {
+    z-index: 1000;
+  }
 }
 </style>

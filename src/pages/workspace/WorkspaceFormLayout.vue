@@ -20,7 +20,7 @@
   padding-bottom: 120px;
 
   &__cover {
-    height: 288px;
+    height: 200px;
     width: 100%;
     background: linear-gradient(267.05deg, #8EC5FC 0%, #E0C3FC 100%);
   }

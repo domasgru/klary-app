@@ -3,6 +3,30 @@
     v-if="showFormInitials"
     class="form__initials"
   >
+    <div class="form__author">
+      <button
+        v-if="isEditMode"
+        class="form__author-toggle btn2s"
+        @click="$emit('update-form', {path: 'showAuthor', value: !feedbackRequestData.showAuthor})"
+      >
+        {{ feedbackRequestData.showAuthor ? 'Hide my name' : 'Show my name' }}
+      </button>
+      <div
+        v-if="feedbackRequestData.showAuthor"
+        class="form__author-initials"
+      >
+        <BaseAvatar
+          class="form__avatar"
+          :picture="feedbackRequestData.picture"
+          :name="feedbackRequestData.name"
+        />
+        <div
+          class="b1s"
+          v-text="feedbackRequestData.name"
+        />
+      </div>
+    </div>
+
     <div
       v-if="showFormTitle"
       class="form__initial form__title h4 editable"
@@ -106,6 +130,28 @@ export default {
     background: $light;
     border-radius: $border-radius;
     border: $stroke;
+  }
+
+  &__author-toggle {
+    background: $light;
+    border: 1px solid $grey-200;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-bottom: 16px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__author-initials {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  &__avatar {
+    margin-right: 8px;
   }
 
   &__questions {
