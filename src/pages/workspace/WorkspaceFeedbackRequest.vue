@@ -14,9 +14,23 @@
     </h4>
 
     <BaseButton
+      class="header__button"
+      type="secondary"
       @click="$router.push(`/edit-form/${feedbackRequestData.id}`)"
       v-text="'Edit form'"
     />
+    <WorkspaceShareFormPopup
+      class="header__button"
+    />
+    <BaseButton
+      type="secondary"
+      size="icon"
+    >
+      <BaseSvg
+        class="header__more-icon"
+        name="more-horizontal"
+      />
+    </BaseButton>
   </div>
 
   <template v-if="isLoading || pendingFeedbacks.length || clearFeedbacks.length">
@@ -39,13 +53,7 @@
     v-else
     title="No received feedbacks"
     illustration="received-il"
-  >
-    <WorkspaceRequestFeedbackUI :feedback-request-id="feedbackRequestData.id">
-      <BaseButton
-        v-text="'Request first feedback'"
-      />
-    </WorkspaceRequestFeedbackUI>
-  </WorkspaceInboxEmptyState>
+  />
 </template>
 
 <script>
@@ -55,13 +63,13 @@ import { RECEIVED_TYPE, ACTIVE_STATUS, CLOSED_STATUS } from '@/constants/feedbac
 import { updateFeedbackRequest } from '@/firebase';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
 import WorkspaceInboxEmptyState from './WorkspaceInboxEmptyState.vue';
-import WorkspaceRequestFeedbackUI from './WorkspaceRequestFeedbackUI.vue';
+import WorkspaceShareFormPopup from './WorkspaceShareFormPopup.vue';
 
 export default {
   components: {
     WorkspaceFeedbackList,
     WorkspaceInboxEmptyState,
-    WorkspaceRequestFeedbackUI,
+    WorkspaceShareFormPopup,
   },
   props: {
     feedbackRequestData: {
@@ -111,6 +119,19 @@ export default {
   display: flex;
   align-items: center;
   z-index: 1;
+
+  &__button {
+    &:not(:last-child) {
+      margin-right: 8px;
+    }
+  }
+
+  &__more-icon {
+    width: 24px;
+    height: 24px;
+    padding: 2px;
+    stroke: $dark;
+  }
 }
 
 .title {

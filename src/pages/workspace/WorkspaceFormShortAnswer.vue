@@ -8,6 +8,8 @@
   >
     <BaseInput
       placeholder="Short answer"
+      :mode-value="value"
+      @input="$emit('input', $event.target.value)"
     />
   </WorksapceFormQuestionBase>
 </template>
@@ -24,8 +26,12 @@ export default {
       type: String,
       required: true,
     },
+    value: {
+      type: String,
+      default: null,
+    },
   },
-  emits: ['update', 'save', 'duplicate', 'delete'],
+  emits: ['update', 'save', 'duplicate', 'delete', 'input'],
   computed: {
     isEditMode() {
       return this.viewMode === 'edit';

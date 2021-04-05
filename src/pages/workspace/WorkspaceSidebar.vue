@@ -15,6 +15,7 @@
       >
         <button
           class="workspace-sidebar__user base-typography--b-14-20"
+          :class="{'workspace-sidebar__user--active': showUserDropdown}"
           @click="showUserDropdown = !showUserDropdown"
         >
           <BaseAvatar
@@ -202,6 +203,7 @@ export default {
       this.$router.push(`/edit-form/${id}`);
     },
     deleteForm(id) {
+      deleteFeedbackRequest(id);
       if (this.$router.currentRoute.value.params.id === id) {
         const requestsAfterDelete = this.feedbackRequests.filter((request) => request.id !== id);
         if (!requestsAfterDelete.length) {
@@ -210,7 +212,6 @@ export default {
 
         this.$router.push(`/form/${requestsAfterDelete[0].id}`);
       }
-      deleteFeedbackRequest(id);
     },
     updateFormEmoji(requestId, emoji) {
       updateFeedbackRequest(requestId, {
@@ -224,7 +225,7 @@ export default {
     },
     duplicateFeedbackRequest(request) {
       const { id, ...requestCopy } = request;
-      createFeedbackRequest({
+      createFeedbackRequest(nanoid(10), {
         ...requestCopy,
         title: `Copy of ${request.title}`,
       });
@@ -262,6 +263,10 @@ export default {
     padding: 4px;
     border-radius: 8px;
     transition: background 0.2s ease;
+
+    &--active {
+      background: $grey-100;
+    }
 
     &:active {
       color: $dark;

@@ -18,15 +18,15 @@
           v-for="item in $options.QUESTION_TYPES"
           :key="item.type"
           class="add-question__item"
-          @click="$emit('add-form-question', item.data), showAddQuestion = false"
+          @click="$emit('add-form-question', item), showAddQuestion = false"
         >
           <div class="add-question__icon" />
           <div class="add-question__right">
             <div class="add-question__title b2s">
-              {{ item.questionName }}
+              {{ $options.QUESTION_INFO[item.type].questionName }}
             </div>
             <div class="add-question__description b2">
-              {{ item.questionDescription }}
+              {{ $options.QUESTION_INFO[item.type].questionDescription }}
             </div>
           </div>
         </div>
@@ -36,50 +36,56 @@
 </template>
 
 <script>
-const QUESTION_TYPES = [
-  {
+const QUESTION_INFO = {
+  shortAnswer: {
     questionName: 'Short answer',
     questionDescription: 'Use this for question.',
-    data: {
-      type: 'shortAnswer',
-      options: {
-        title: '',
-        decription: '',
-        placeholder: 'Type your answer',
-        isRequired: false,
-      },
-    },
   },
-  {
+  longAnswer: {
     questionName: 'Long answer',
     questionDescription: 'Use this for question.',
-    data: {
-      type: 'longAnswer',
-      options: {
-        title: '',
-        decription: '',
-        placeholder: 'Type your answer',
-        isRequired: false,
-      },
-    },
   },
-  {
+  opinionScale: {
     questionName: 'Opinion scale',
     questionDescription: 'Use this for question.',
-    data: {
-      type: 'opinionScale',
-      options: {
-        title: '',
-        description: '',
-        scaleSize: 10,
-        scaleLabels: {
-          low: '',
-          medium: '',
-          high: '',
-        },
-        isRequired: false,
-      },
+  },
+};
+
+const QUESTION_TYPES = [
+  {
+    type: 'shortAnswer',
+    options: {
+      title: '',
+      decription: '',
+      placeholder: 'Type your answer',
+      isRequired: false,
     },
+    value: null,
+  },
+  {
+    type: 'longAnswer',
+    options: {
+      title: '',
+      decription: '',
+      placeholder: 'Type your answer',
+      isRequired: false,
+    },
+    value: null,
+  },
+  {
+    type: 'opinionScale',
+    options: {
+      title: '',
+      description: '',
+      scaleSize: 10,
+      scaleLabels: {
+        low: '',
+        medium: '',
+        high: '',
+      },
+      isRequired: false,
+    },
+    value: null,
   },
 ];
 
@@ -91,6 +97,7 @@ export default {
     };
   },
   QUESTION_TYPES,
+  QUESTION_INFO,
 };
 </script>
 

@@ -16,7 +16,8 @@
           :id="`option${index - 1}-${id}`"
           type="radio"
           :name="`opinion-scale-${id}`"
-          :value="`option${index - 1}-${id}`"
+          :value="index - 1"
+          @input="$emit('input', $event.target.value)"
         >
         <label
           :for="`option${index - 1}-${id}`"
@@ -85,7 +86,7 @@ export default {
       required: true,
     },
   },
-  emits: ['update', 'save', 'duplicate', 'delete'],
+  emits: ['update', 'save', 'duplicate', 'delete', 'input'],
   computed: {
     isEditMode() {
       return this.viewMode === 'edit';

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-const VALID_BUTTON_TYPES = ['sm', 'md', 'lg', 'xlg'];
+const VALID_BUTTON_TYPES = ['sm', 'md', 'lg', 'xlg', 'icon'];
 
 export default {
   props: {
@@ -151,6 +151,10 @@ export default {
     &#{$this}--secondary {
       padding: 9px 20px;
     }
+
+    &#{$this}--singleIcon {
+      padding: 8px;
+    }
   }
 
   &--lg {
@@ -159,6 +163,10 @@ export default {
     &#{$this}--secondary {
       padding: 11px 20px;
     }
+  }
+
+  &--icon {
+    padding: 7px;
   }
 
   &--fluid {

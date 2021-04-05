@@ -48,12 +48,17 @@ export default {
       type: String,
       default: 'auto',
     },
+    padding: {
+      type: String,
+      default: '4px 4px',
+    },
   },
   emits: ['close'],
   computed: {
     popupStyles() {
       return {
         width: this.width,
+        padding: this.padding,
       };
     },
   },

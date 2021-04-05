@@ -60,6 +60,7 @@
             v-if="form"
             :feedback-request-data="form"
             view-mode="active"
+            @input="updateForm"
           />
         </template>
       </div>
@@ -203,6 +204,11 @@ export default {
       router.push(`/sent/${sentFeedbackId.value}`);
     };
 
+    const updateForm = (e) => {
+      console.log('updateForm', e);
+      // debugger;
+    };
+
     return {
       submitAfterLogin,
       showSignupModal,
@@ -214,6 +220,7 @@ export default {
       request,
       userData,
       form,
+      updateForm,
     };
   },
 };

@@ -1,17 +1,16 @@
 <template>
   <div class="feedback-settings">
     <BaseDropdown
-      v-click-outside="{
-        handler: () => showOptions = false,
-        events: ['mousedown']
-      }"
       v-bind="$attrs"
       :is-open="showOptions"
       :items="optionsItems"
+      position="bottom-end"
+      :offset="[0, 4]"
       @click.stop
       @remove="$emit('remove'), showOptions = false"
       @unremove="$emit('unremove'), showOptions = false"
       @delete="showDeleteModal = true"
+      @close="showOptions = false"
     >
       <div
         class="trigger"

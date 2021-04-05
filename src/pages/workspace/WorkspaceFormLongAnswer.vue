@@ -11,6 +11,8 @@
       padding="12px 16px"
       :is-disabled="viewMode === 'edit'"
       placeholder="Long answer"
+      :model-value="value"
+      @input="$emit('input', $event.target.value)"
     />
   </WorksapceFormQuestionBase>
 </template>
@@ -27,7 +29,12 @@ export default {
       type: String,
       required: true,
     },
+    value: {
+      type: String,
+      default: null,
+    },
   },
+  emits: ['update', 'save', 'duplicate', 'delete', 'input'],
 };
 </script>
 

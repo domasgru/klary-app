@@ -85,10 +85,10 @@ export default {
 <style lang="scss" scoped>
 .feedback-actions {
   position: sticky;
-  top: 112px;
   left: 0;
   z-index: 1;
   display: flex;
+  top: 104px;
 
   &__left {
     position: absolute;

@@ -65,10 +65,12 @@
       :options="question.options"
       :view-mode="viewMode"
       class="form__question"
+      :value="question.value"
       @update="$emit('update-form-question', $event)"
       @save="$emit('save', $event)"
       @duplicate="$emit('duplicate', question.id)"
       @delete="$emit('delete', question.id)"
+      @input="$emit('input', {id: question.id, value: $event})"
     />
   </div>
 
@@ -103,7 +105,7 @@ export default {
       required: true,
     },
   },
-  emits: ['update-form', 'update-form-question', 'save', 'submit', 'delete', 'duplicate'],
+  emits: ['update-form', 'update-form-question', 'save', 'submit', 'delete', 'duplicate', 'input'],
   computed: {
     isEditMode() {
       return this.viewMode === 'edit';
