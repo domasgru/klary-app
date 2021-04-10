@@ -1,5 +1,8 @@
 <template>
-  <div class="line-top" />
+  <div
+    v-show="index !== 0"
+    class="line-top"
+  />
   <div
     class="content"
     v-bind="$attrs"
@@ -42,6 +45,10 @@ import { useFeedbackData } from '@/composables/useFeedback';
 
 export default {
   props: {
+    index: {
+      type: Number,
+      required: true,
+    },
     notification: {
       type: Object,
       required: true,

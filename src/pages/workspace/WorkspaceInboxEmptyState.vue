@@ -40,7 +40,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
-  margin-top: -56px;
+  margin-top: -4px;
 }
 
 .empty-state {

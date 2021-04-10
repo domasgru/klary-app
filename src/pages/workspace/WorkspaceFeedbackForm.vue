@@ -1,86 +1,100 @@
 <template>
-  <div
-    v-if="showFormInitials"
-    class="form__initials"
-  >
-    <div class="form__author">
-      <button
-        v-if="isEditMode"
-        class="form__author-toggle btn2s"
-        @click="$emit('update-form', {path: 'showAuthor', value: !feedbackRequestData.showAuthor})"
-      >
-        {{ feedbackRequestData.showAuthor ? 'Hide my name' : 'Show my name' }}
-      </button>
-      <div
-        v-if="feedbackRequestData.showAuthor"
-        class="form__author-initials"
-      >
-        <BaseAvatar
-          class="form__avatar"
-          :picture="feedbackRequestData.picture"
-          :name="feedbackRequestData.name"
-        />
+  <div class="form">
+    <div
+      v-if="showFormInitials"
+      class="form__initials"
+    >
+      <div class="form__initial form__author">
+        <button
+          v-if="isEditMode"
+          class="form__author-toggle btn2s"
+          @click="$emit('update-form', { path: 'showAuthor', value: !feedbackRequestData.showAuthor })"
+        >
+          {{ feedbackRequestData.showAuthor ? 'Hide my name' : 'Show my name' }}
+        </button>
         <div
-          class="b1s"
-          v-text="feedbackRequestData.name"
-        />
+          v-if="feedbackRequestData.showAuthor"
+          class="form__author-initials"
+        >
+          <BaseAvatar
+            class="form__avatar"
+            :picture="feedbackRequestData.picture"
+            :name="feedbackRequestData.name"
+          />
+          <div
+            class="b1s"
+            v-text="feedbackRequestData.name"
+          />
+        </div>
+      </div>
+
+      <div
+        v-if="showFormTitle"
+        class="form__initial form__title h4 editable"
+        :contenteditable="isEditMode"
+        data-placeholder="Type a form title"
+        @input="$emit('update-form', { path: 'formTitle', value: $event.target.textContent })"
+        @blur="$emit('save')"
+      >
+        {{ feedbackRequestData.formTitle }}
+      </div>
+
+      <div
+        v-if="showFormDescription"
+        class="form__initial form__description b1 editable"
+        :contenteditable="isEditMode"
+        data-placeholder="Type a form description (optional)"
+        @input="$emit('update-form', {path: 'formDescription', value: $event.target.textContent})"
+        @blur="$emit('save')"
+      >
+        {{ feedbackRequestData.formDescription }}
+      </div>
+      <div
+        v-if="!isEditMode && hasRequiredQuestions"
+        class="form__initial form__required b2"
+      >
+        * Required
       </div>
     </div>
 
-    <div
-      v-if="showFormTitle"
-      class="form__initial form__title h4 editable"
-      :contenteditable="isEditMode"
-      data-placeholder="Type a form title"
-      @input="$emit('update-form', {path: 'formTitle', value: $event.target.textContent})"
-      @blur="$emit('save')"
-    >
-      {{ feedbackRequestData.formTitle }}
+    <div class="form__questions">
+      <component
+        :is="`WorkspaceForm${$options.capitalize(question.type)}`"
+        v-for="question in feedbackRequestData.questions"
+        :id="question.id"
+        :key="question.id"
+        :options="question.options"
+        :view-mode="viewMode"
+        :is-disabled="viewMode === 'view'"
+        class="form__question"
+        :value="question.value"
+        @update="$emit('update-form-question', $event)"
+        @save="$emit('save', $event)"
+        @duplicate="$emit('duplicate', question.id)"
+        @delete="$emit('delete', question.id)"
+        @input="$emit('input', {id: question.id, value: $event})"
+      />
     </div>
 
-    <div
-      v-if="showFormDescription"
-      class="form__initial form__description b1 editable"
-      :contenteditable="isEditMode"
-      data-placeholder="Type a form description (optional)"
-      @input="$emit('update-form', {path: 'formDescription', value: $event.target.textContent})"
-      @blur="$emit('save')"
-    >
-      {{ feedbackRequestData.formDescription }}
-    </div>
-    <div
-      v-if="!isEditMode"
-      class="form__initia form__required b2"
-    >
-      * Required
-    </div>
+    <template v-if="viewMode === 'active'">
+      <BaseButton
+        size="lg"
+        class="submit-button"
+        @click="$emit('submit')"
+        v-text="'Submit'"
+      />
+
+      <div class="form__kuri b1">
+        Made with
+        <BaseLogo
+          name="logo"
+          color="grey"
+          size="lg"
+          class="form__logo"
+        />
+      </div>
+    </template>
   </div>
-
-  <div class="form__questions">
-    <component
-      :is="`WorkspaceForm${$options.capitalize(question.type)}`"
-      v-for="question in feedbackRequestData.questions"
-      :id="question.id"
-      :key="question.id"
-      :options="question.options"
-      :view-mode="viewMode"
-      class="form__question"
-      :value="question.value"
-      @update="$emit('update-form-question', $event)"
-      @save="$emit('save', $event)"
-      @duplicate="$emit('duplicate', question.id)"
-      @delete="$emit('delete', question.id)"
-      @input="$emit('input', {id: question.id, value: $event})"
-    />
-  </div>
-
-  <BaseButton
-    v-if="viewMode === 'active'"
-    size="lg"
-    class="submit-button"
-    @click="$emit('submit')"
-    v-text="'Submit'"
-  />
 </template>
 
 <script>
@@ -117,7 +131,10 @@ export default {
       return this.feedbackRequestData.formDescription || this.isEditMode;
     },
     showFormInitials() {
-      return this.showFormTitle || this.showFormDescription;
+      return this.feedbackRequestData.showAuthor || this.showFormTitle || this.showFormDescription;
+    },
+    hasRequiredQuestions() {
+      return this.feedbackRequestData.questions.some(({ options }) => options.isRequired);
     },
   },
   capitalize,
@@ -126,6 +143,11 @@ export default {
 
 <style lang="scss" scoped>
 .form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   &__initials {
     width: 100%;
     padding: 48px 64px;
@@ -146,10 +168,13 @@ export default {
     }
   }
 
+  &__author {
+    margin-bottom: 24px;
+  }
+
   &__author-initials {
     display: flex;
     align-items: center;
-    margin-bottom: 24px;
   }
 
   &__avatar {
@@ -182,10 +207,21 @@ export default {
       margin-bottom: 16px;
     }
   }
+
+  &__kuri {
+    color: $grey-600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &__logo {
+    margin-top: 10px;
+  }
 }
 
 .submit-button {
   width: 208px;
   margin-top: 48px;
+  margin-bottom: 88px;
 }
 </style>

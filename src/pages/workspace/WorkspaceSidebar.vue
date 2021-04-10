@@ -231,7 +231,7 @@ export default {
       });
     },
     copyFeedbackRequestLink(request) {
-      navigator.clipboard.writeText(`${window.origin}/give-feedback/${request.id}`);
+      navigator.clipboard.writeText(`${window.origin}/f/${request.id}`);
     },
   },
   INBOX,

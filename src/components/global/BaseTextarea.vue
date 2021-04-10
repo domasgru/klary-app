@@ -1,17 +1,11 @@
 <template>
-  <div class="base-textarea">
-    <label
-      v-if="label"
-      :for="id"
-      class="base-textarea__label base-typography--caption"
-      v-text="label"
-    />
+  <BaseInputBase v-bind="$props">
     <textarea
       :id="id"
       ref="textarea"
-      class="base-textarea__textarea base-typography--b-16-24"
+      class="textarea base-typography--b-16-24"
       :style="textareaStyle"
-      :class="{'base-textarea__textarea--enlarged': textareaEnlarged}"
+      :class="{'textarea--enlarged': textareaEnlarged}"
       :placeholder="placeholder"
       :value="modelValue"
       :rows="rows"
@@ -21,7 +15,7 @@
     />
     <div
       v-if="showSubmit"
-      class="base-textarea__submit base-typography--b-14-20"
+      class="submit base-typography--b-14-20"
       :style="submitPosition"
     >
       <p
@@ -31,17 +25,12 @@
         Or press ⌘+Enter
       </p>
       <BaseButton
-        class="base-textarea__submit-button"
+        class="submit__button"
         @click="$emit('submit')"
         v-text="submitButtonText"
       />
     </div>
-    <span
-      v-if="!noHint"
-      class="base-textarea__hint"
-      v-text="hint || error || success"
-    />
-  </div>
+  </BaseInputBase>
 </template>
 
 <script>
@@ -72,33 +61,13 @@ export default {
       type: String,
       default: '',
     },
-    label: {
-      type: String,
-      default: '',
-    },
     placeholder: {
-      type: String,
-      default: '',
-    },
-    hint: {
-      type: String,
-      default: '',
-    },
-     error: {
-      type: String,
-      default: '',
-    },
-    success: {
       type: String,
       default: '',
     },
     rows: {
       type: [Number, String],
       default: 1,
-    },
-    noHint: {
-      type: Boolean,
-      default: true,
     },
     hasSubmit: {
       type: Boolean,
@@ -165,72 +134,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.base-textarea {
-  $this: &;
+.textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  font-family: 'Inter';
+  line-height: 24px;
+  resize: none;
+  outline: none;
+  border: none;
+  background: transparent;
 
-  position: relative;
+  &::placeholder {
+    color: $grey-500;
+  }
+}
+
+.submit {
+  position: absolute;
   display: flex;
-  flex-direction: column;
-  text-align: start;
+  align-items: center;
+  color: $grey-500;
 
-  &__label {
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  &__textarea {
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-    font-family: 'Inter';
-    line-height: 24px;
-    resize: vertical;
-    resize: none;
-    background: $light;
-    border: 1px solid $grey-200;
-    border-radius: 8px;
-    outline: none;
-    transition: box-shadow 0.15s ease;
-
-    &::placeholder {
-      color: $grey-500;
-    }
-
-    &:hover {
-      border: 1px solid $grey-300;
-    }
-
-    &:focus {
-      border: 1px solid $primary;
-      box-shadow: 0 0 0 4px rgba(81, 31, 220, 0.2);
-    }
-  }
-
-  &__submit {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    color: $grey-500;
-  }
-
-  &__submit-button {
+  &__button {
     margin-left: 16px;
-  }
-
-  &__hint {
-    height: 14px;
-    margin-top: 4px;
-    font-size: 12px;
-    font-weight: 500;
-    color: $grey-500;
-
-    #{$this}--success & {
-      color: $success;
-    }
-
-    #{$this}--error & {
-      color: $error;
-    }
   }
 }
 </style>

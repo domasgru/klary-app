@@ -1,7 +1,8 @@
 <template>
   <BasePopup
     position="bottom"
-    width="360px"
+    width="216px"
+    padding="8px"
     :offset="[0, 4]"
     :is-open="showAddQuestion"
     @close="showAddQuestion = false"
@@ -20,13 +21,13 @@
           class="add-question__item"
           @click="$emit('add-form-question', item), showAddQuestion = false"
         >
-          <div class="add-question__icon" />
+          <BaseSvg
+            :name="$options.QUESTION_INFO[item.type].illustration"
+            class="add-question__icon"
+          />
           <div class="add-question__right">
             <div class="add-question__title b2s">
               {{ $options.QUESTION_INFO[item.type].questionName }}
-            </div>
-            <div class="add-question__description b2">
-              {{ $options.QUESTION_INFO[item.type].questionDescription }}
             </div>
           </div>
         </div>
@@ -39,15 +40,15 @@
 const QUESTION_INFO = {
   shortAnswer: {
     questionName: 'Short answer',
-    questionDescription: 'Use this for question.',
+    illustration: 'short-answer',
   },
   longAnswer: {
     questionName: 'Long answer',
-    questionDescription: 'Use this for question.',
+    illustration: 'long-answer',
   },
   opinionScale: {
     questionName: 'Opinion scale',
-    questionDescription: 'Use this for question.',
+    illustration: 'opinion-scale',
   },
 };
 
@@ -103,18 +104,15 @@ export default {
 
 <style lang="scss" scoped>
 .add-question {
-  padding: 16px;
-
   &__item {
     display: flex;
     align-items: center;
-
-    &:not(:last-child) {
-      margin-bottom: 16px;
-    }
+    padding: 8px;
+    border-radius: 8px;
 
     &:hover {
       cursor: pointer;
+      background: $grey-100;
     }
   }
   &__icon {

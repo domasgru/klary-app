@@ -8,7 +8,9 @@
   >
     <BaseInput
       placeholder="Short answer"
-      :mode-value="value"
+      :model-value="value"
+      :is-disabled="isDisabled"
+      size="lg"
       @input="$emit('input', $event.target.value)"
     />
   </WorksapceFormQuestionBase>
@@ -30,13 +32,12 @@ export default {
       type: String,
       default: null,
     },
-  },
-  emits: ['update', 'save', 'duplicate', 'delete', 'input'],
-  computed: {
-    isEditMode() {
-      return this.viewMode === 'edit';
+    isDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
+  emits: ['update', 'save', 'duplicate', 'delete', 'input'],
 };
 </script>
 

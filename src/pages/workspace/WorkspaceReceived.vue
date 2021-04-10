@@ -22,13 +22,7 @@
     v-else
     title="No received feedbacks"
     illustration="received-il"
-  >
-    <WorkspaceRequestFeedbackUI>
-      <BaseButton
-        v-text="'Request first feedback'"
-      />
-    </WorkspaceRequestFeedbackUI>
-  </WorkspaceInboxEmptyState>
+  />
 </template>
 
 <script>
@@ -36,13 +30,11 @@ import { useFeedbackList } from '@/composables/useFeedback';
 import { RECEIVED_TYPE, ACTIVE_STATUS, CLOSED_STATUS } from '@/constants/feedback';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
 import WorkspaceInboxEmptyState from './WorkspaceInboxEmptyState.vue';
-import WorkspaceRequestFeedbackUI from './WorkspaceRequestFeedbackUI.vue';
 
 export default {
   components: {
     WorkspaceFeedbackList,
     WorkspaceInboxEmptyState,
-    WorkspaceRequestFeedbackUI,
   },
   setup() {
     const { isLoading, openFeedback, getFilteredAndSortedFeedbacks } = useFeedbackList(RECEIVED_TYPE);

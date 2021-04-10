@@ -1,34 +1,38 @@
 <template>
-  <div class="form">
-    <div class="form__content">
-      <div class="form__title-wrapper h6">
+  <div class="base-question">
+    <div class="base-question__content">
+      <div class="text">
         <div
           v-if="showFormTitle"
-          class="form__text editable"
+          class="base-question__text-item h6"
+        >
+          <div
+            class="editable"
+            :contenteditable="isEditMode"
+            data-placeholder="Type a question"
+            :class="{'display-inline-block': !isEditMode}"
+            @input="$emit('update', {id, key: 'options.title', value: $event.target.textContent})"
+            @blur="$emit('save')"
+          >
+            {{ options.title }}
+          </div>
+          <span
+            v-if="!isEditMode && options.isRequired"
+            class="base-question__star-required"
+          >
+            *
+          </span>
+        </div>
+        <div
+          v-if="showFormDescription"
+          class="base-question__text-item b1 editable"
           :contenteditable="isEditMode"
-          data-placeholder="Type a question"
-          :class="{'display-inline-block': !isEditMode}"
-          @input="$emit('update', {id, key: 'options.title', value: $event.target.textContent})"
+          data-placeholder="Type a description (optional)"
+          @input="$emit('update', {id, key: 'options.description', value: $event.target.textContent})"
           @blur="$emit('save')"
         >
-          {{ options.title }}
+          {{ options.description }}
         </div>
-        <span
-          v-if="!isEditMode && options.isRequired"
-          class="form__star-required"
-        >
-          *
-        </span>
-      </div>
-      <div
-        v-if="showFormDescription"
-        class="form__text b1 editable"
-        :contenteditable="isEditMode"
-        data-placeholder="Type a description (optional)"
-        @input="$emit('update', {id, key: 'options.description', value: $event.target.textContent})"
-        @blur="$emit('save')"
-      >
-        {{ options.description }}
       </div>
 
       <div :class="{'pointer-events-none': isEditMode}">
@@ -37,26 +41,27 @@
     </div>
     <div
       v-if="isEditMode"
-      class="form__settings"
+      class="base-question__settings"
     >
       <BaseSwitch
-        class="form__required"
+        class="base-question__required"
         label="Required"
         :value="options.isRequired"
         @change="$emit('update', {id, key: 'options.isRequired', value: $event.target.checked}), $emit('save')"
       />
       <BaseSvg
-        class="form__settings-icon"
+        class="base-question__settings-icon"
         name="duplicate"
         @click="$emit('duplicate')"
       />
       <BaseSvg
-        class="form__settings-icon"
+        class="base-question__settings-icon"
         name="trash"
         @click="$emit('delete')"
       />
       <BaseSvg
-        class="form__settings-icon"
+        v-show="false"
+        class="base-question__settings-icon"
         name="more-horizontal"
         @click="showMoreOptions = true"
       />
@@ -101,7 +106,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.form {
+.base-question {
   width: 100%;
   border-radius: $border-radius;
   border: $stroke;
@@ -112,10 +117,10 @@ export default {
     padding: 48px 64px;
   }
 
-  &__text {
+  &__text-item {
     margin-bottom: 16px;
 
-    &:last-child {
+    &:last-of-type {
       margin-bottom: 24px;
     }
   }

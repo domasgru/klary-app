@@ -9,7 +9,7 @@
     <BaseTextarea
       rows="4"
       padding="12px 16px"
-      :is-disabled="viewMode === 'edit'"
+      :is-disabled="isDisabled"
       placeholder="Long answer"
       :model-value="value"
       @input="$emit('input', $event.target.value)"
@@ -32,6 +32,10 @@ export default {
     value: {
       type: String,
       default: null,
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ['update', 'save', 'duplicate', 'delete', 'input'],

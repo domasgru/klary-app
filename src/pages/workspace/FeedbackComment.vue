@@ -1,5 +1,8 @@
 <template>
-  <div class="feedback-line-top" />
+  <div
+    v-show="index !== 0"
+    class="feedback-line-top"
+  />
   <div
     class="feedback-comment"
     v-bind="$attrs"
@@ -63,6 +66,10 @@ export default {
     FeedbakCommentReply,
   },
   props: {
+    index: {
+      type: Number,
+      required: true,
+    },
     comment: {
       type: Object,
       required: true,
@@ -119,6 +126,10 @@ $background-unseen: #511fdc1f;
   height: 36px;
   margin-left: 34px;
   background: $grey-200;
+
+  &:first-child {
+    display: none;
+  }
 }
 
 .feedback-comment {

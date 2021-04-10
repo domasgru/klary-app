@@ -6,7 +6,10 @@
     @duplicate="$emit('duplicate')"
     @delete="$emit('delete')"
   >
-    <div class="opinion-scale">
+    <div
+      class="opinion-scale"
+      :class="{'pointer-events-none': isDisabled}"
+    >
       <div
         v-for="index in (options.scaleSize + 1)"
         :key="`option${index - 1}`"
@@ -17,6 +20,7 @@
           type="radio"
           :name="`opinion-scale-${id}`"
           :value="index - 1"
+          :checked="parseInt(value, 10) === index - 1"
           @input="$emit('input', $event.target.value)"
         >
         <label
@@ -84,6 +88,14 @@ export default {
     options: {
       type: Object,
       required: true,
+    },
+    value: {
+      type: String,
+      default: null,
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ['update', 'save', 'duplicate', 'delete', 'input'],

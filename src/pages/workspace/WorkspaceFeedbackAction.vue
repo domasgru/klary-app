@@ -2,6 +2,7 @@
   <FeedbackComment
     v-if="action.type === $options.COMMENT_ACTION"
     :id="action.id"
+    :index="index"
     :comment="action"
     :unseen-comments="unseenActions"
     :feedback-data="feedbackData"
@@ -9,6 +10,7 @@
   <WorkspaceFeedbackNotification
     v-else-if="action.type === $options.MARK_CLEAR_ACTION"
     :id="action.id"
+    :index="index"
     :notification="action"
     :unseen-actions="unseenActions"
     :feedback-data="feedbackData"
@@ -26,6 +28,10 @@ export default {
     WorkspaceFeedbackNotification,
   },
   props: {
+    index: {
+      type: Number,
+      required: true,
+    },
     action: {
       type: Object,
       required: true,
@@ -43,7 +49,3 @@ export default {
   MARK_CLEAR_ACTION,
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

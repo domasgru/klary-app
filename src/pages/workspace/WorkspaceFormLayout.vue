@@ -20,13 +20,13 @@
   padding-bottom: 120px;
 
   &__cover {
-    height: 200px;
+    height: 320px;
     width: 100%;
-    background: linear-gradient(267.05deg, #8EC5FC 0%, #E0C3FC 100%);
+    background: linear-gradient(180deg, rgba(245, 245, 247, 0) 0%, #F5F5F7 100%), linear-gradient(267.05deg, #8EC5FC 0%, #E0C3FC 100%);
   }
 
    &__content{
-    margin-top: -56px;
+    margin-top: -160px;
   }
 
   &__container {

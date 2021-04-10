@@ -7,7 +7,6 @@
     rows="3"
     has-submit
     submit-button-text="Send"
-    autofocus
     @submit="addComment"
   />
 </template>

@@ -58,6 +58,7 @@
 
 <script>
 import { ref, toRefs, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { useFeedbackList } from '@/composables/useFeedback';
 import { RECEIVED_TYPE, ACTIVE_STATUS, CLOSED_STATUS } from '@/constants/feedback';
 import { updateFeedbackRequest } from '@/firebase';
@@ -78,27 +79,31 @@ export default {
     },
   },
   setup(props) {
-    const { isLoading, openFeedback, getFilteredAndSortedFeedbacks } = useFeedbackList(RECEIVED_TYPE);
+    const { isLoading, getFilteredAndSortedFeedbacks } = useFeedbackList(RECEIVED_TYPE);
+    const router = useRouter();
+    const feedbackRequestId = computed(() => props.feedbackRequestData.id);
 
     const pendingFeedbacks = getFilteredAndSortedFeedbacks({
       filter: {
         status: ACTIVE_STATUS,
-        feedbackRequestId: computed(() => props.feedbackRequestData.id),
+        feedbackRequestId,
       },
     });
     const clearFeedbacks = getFilteredAndSortedFeedbacks({
       filter: {
         status: CLOSED_STATUS,
-        feedbackRequestId: computed(() => props.feedbackRequestData.id),
+        feedbackRequestId,
       },
     });
 
     const feedbackRequestName = ref(null);
     const editName = (e) => {
-      updateFeedbackRequest(props.feedbackRequestData.id, {
+      updateFeedbackRequest(feedbackRequestId.value, {
         title: e.target.textContent,
       });
     };
+
+    const openFeedback = (id) => router.push({ path: `/form/${feedbackRequestId.value}/${id}` });
 
     return {
       pendingFeedbacks,

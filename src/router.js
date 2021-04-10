@@ -98,6 +98,26 @@ export const router = createRouter({
           props: (route) => ({ feedbackRequestData: store.state.feedback.feedbackRequests.find((fr) => fr.id === route.params.id) }),
         },
         {
+          path: 'form/:formId/:id',
+          component: WorkspaceFeedbackView,
+          beforeEnter: async (to, from, next) => {
+            const { formId, id } = to.params;
+            if (!store.getters['feedback/receivedFeedbacks']?.some((fb) => fb.id === id)) {
+              try {
+                await store.dispatch(
+                  'feedback/bindReceivedFeedbacks',
+                  { userId: store.state.user.userData.uid },
+                );
+              } catch (e) {
+                console.error(e);
+              }
+            }
+            next();
+          },
+          // eslint-disable-next-line max-len
+          props: (route) => ({ feedbackData: store.getters['feedback/receivedFeedbacks']?.find((fb) => fb.id === route.params.id) }),
+        },
+        {
           path: ':type/:id',
           component: WorkspaceFeedbackView,
           beforeEnter: async (to, from, next) => {

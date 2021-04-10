@@ -25,41 +25,22 @@
         Mark as clear
       </BaseButton>
     </div>
-    <div class="feedback">
-      <div class="feedback__info">
-        <BaseAvatar
-          class="feedback__author-initial"
-          size="md"
-          :name="feedbackAuthor.name"
-          :picture="feedbackAuthor.picture"
-        />
-        <div class="feedback__info-wrapper">
-          <div class="feedback__author-and-time">
-            <div
-              class="feedback__author base-typography--bold-button1"
-              v-text="feedbackAuthor.name"
-            />
-            <BaseTimestamp
-              class="feedback__time"
-              :timestamp="feedbackData.createdAt.seconds"
-            />
-          </div>
-          <div
-            class="feedback__title base-typography--b-14-20"
-            v-text="feedbackData.title"
-          />
-        </div>
-      </div>
-      <div
-        class="feedback__content base-typography--b-16-24"
-        v-text="feedbackData.content"
-      />
+
+    <WorkspaceFeedbackForm
+      :feedback-request-data="feedbackData.form"
+      view-mode="view"
+      class="feedback-view__form"
+    />
+
+    <div class="overline feedback-view__discussion-title">
+      Discussion
     </div>
 
     <WorkspaceFeedbackAction
-      v-for="action in currentFeedbackActions"
+      v-for="(action, index) in currentFeedbackActions"
       :key="action.id"
       :action="action"
+      :index="index"
       :unseen-actions="unseenActions"
       :feedback-data="feedbackData"
     />
@@ -89,6 +70,7 @@ import WorkspaceWriteComment from './WorkspaceWriteComment.vue';
 import WorkspaceFeedbackAction from './WorkspaceFeedbackAction.vue';
 import WorkspaceFeedbackViewActions from './WorkspaceFeedbackViewActions.vue';
 import WorkspaceMarkAsClearModal from './WorkspaceMarkAsClearModal.vue';
+import WorkspaceFeedbackForm from './WorkspaceFeedbackForm.vue';
 
 export default {
   components: {
@@ -96,6 +78,7 @@ export default {
     WorkspaceFeedbackViewActions,
     WorkspaceMarkAsClearModal,
     WorkspaceFeedbackAction,
+    WorkspaceFeedbackForm,
   },
   props: {
     feedbackData: {
@@ -219,6 +202,15 @@ export default {
 
 .feedback-view {
   position: relative;
+
+  &__form {
+    margin-bottom: 48px;
+  }
+
+  &__discussion-title {
+    margin-bottom: 16px;
+    color: $grey-600;
+  }
 }
 
 .feedback-clear {
@@ -226,7 +218,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: 16px 24px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   background: $light;
   border: 1px solid $grey-200;
   border-radius: 10px;

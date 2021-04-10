@@ -5,10 +5,6 @@
   >
     <template #header>
       <div class="give-feedback__navigation">
-        <BaseLogo
-          class="give-feedback__logo"
-          size="sm"
-        />
         <div
           v-if="userData"
           class="give-feedback__user b2s"
@@ -57,10 +53,11 @@
         <!-- Feedback request message -->
         <template v-else>
           <WorkspaceFeedbackForm
-            v-if="form"
-            :feedback-request-data="form"
+            v-if="request"
+            :feedback-request-data="request"
             view-mode="active"
-            @input="updateForm"
+            @input="updateQuestionAnswer"
+            @submit="submitMessage"
           />
         </template>
       </div>
@@ -104,6 +101,7 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import set from 'lodash.set';
 import { useForm } from '@/composables/useForm';
 import { getFeedbackRequestById, createFeedback, getTimeNow } from '@/firebase';
 import { CREATE_ACTION } from '@/constants';
@@ -132,9 +130,6 @@ export default {
     const showSignupModal = ref(false);
     const showSuccessMessage = ref(false);
 
-    const { form, getForm } = useForm(router.currentRoute.value.params.requestId);
-    getForm();
-
     const loadRequestData = async () => {
       try {
         isLoading.value = true;
@@ -148,6 +143,7 @@ export default {
     loadRequestData();
 
     const submitMessage = async () => {
+      console.log('submit');
       if (!userData.value) {
         showSignupModal.value = true;
         return;
@@ -181,8 +177,8 @@ export default {
             seenAt: null,
           },
         },
-        title: 'Personal feedback',
-        content: message.value.replace(/^\s+|\s+$/g, ''),
+        title: request.value.title,
+        form: JSON.parse(JSON.stringify(request.value)),
         status: ACTIVE_STATUS,
         feedbackRequestId: requestId,
       });
@@ -204,9 +200,9 @@ export default {
       router.push(`/sent/${sentFeedbackId.value}`);
     };
 
-    const updateForm = (e) => {
-      console.log('updateForm', e);
-      // debugger;
+    const updateQuestionAnswer = ({ id, value }) => {
+      const questionIndex = request.value.questions.findIndex((question) => question.id === id);
+      set(request.value, `questions[${questionIndex}].value`, value);
     };
 
     return {
@@ -219,8 +215,7 @@ export default {
       message,
       request,
       userData,
-      form,
-      updateForm,
+      updateQuestionAnswer,
     };
   },
 };
@@ -258,6 +253,7 @@ export default {
   &__user {
     display: flex;
     align-items: center;
+    margin-left: auto;
   }
 
   &__user-avatar {
@@ -279,7 +275,6 @@ export default {
     width: 100%;
     max-width: 592px;
     padding: 60px 40px 32px 40px;
-    margin-top: -125px;
     margin-bottom: 24px;
     text-align: center;
     background: $light;

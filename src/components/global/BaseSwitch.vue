@@ -53,8 +53,7 @@ export default {
   &__label {
     width: 40px;
     height: 24px;
-    border: 1px solid $grey-200;
-    background: $light;
+    background: $grey-200;
     border-radius: 20px;
     display: block;
     position: relative;
@@ -65,10 +64,10 @@ export default {
       content: '';
       width: 16px;
       height: 16px;
-      background: $grey-300;
+      background: $light;
       position: absolute;
-      top: 3px;
-      left: 3px;
+      top: 4px;
+      left: 4px;
       border-radius: 50%;
       transition: all 0.2s ease;
     }
@@ -84,13 +83,11 @@ export default {
     position: absolute;
 
     &:checked + .base-switch__label {
-      border: 1px solid $primary;
       background: $primary;
     }
 
     &:checked + .base-switch__label::after {
-      transform: translateX(16px);
-      background: $light;
+      transform: translateX(15px);
     }
   }
 }

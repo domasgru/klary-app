@@ -82,7 +82,7 @@ export default {
     flex-direction: column;
     flex-grow: 1;
     width: 100%;
-    max-width: 900px;
+    max-width: 788px;
     padding-top: 48px;
     margin: auto;
   }

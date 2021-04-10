@@ -177,15 +177,15 @@ export default {
     height: 20px;
     padding: 2px;
     border-radius: 4px;
-    display: none;
+    opacity: 0;
 
     #{$this}:hover &, #{$this}.is-selected & {
-      display: block;
+      opacity: 1;
     }
 
     &:hover {
        background:$grey-200;
-       display: block;
+       opacity: 1;
     }
 
     #{$this}.is-active &:hover {
