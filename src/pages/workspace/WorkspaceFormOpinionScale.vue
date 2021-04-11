@@ -66,6 +66,12 @@
         {{ options.scaleLabels.high }}
       </div>
     </div>
+    <div
+      v-if="error"
+      class="opinion-scale-error"
+    >
+      {{ error }}
+    </div>
   </WorksapceFormQuestionBase>
 </template>
 
@@ -96,6 +102,10 @@ export default {
     isDisabled: {
       type: Boolean,
       default: false,
+    },
+    error: {
+      type: Boolean,
+      default: null,
     },
   },
   emits: ['update', 'save', 'duplicate', 'delete', 'form-input'],
@@ -166,5 +176,9 @@ export default {
       text-align: right;
     }
   }
+}
+.opinion-scale-error {
+  margin-top: 24px;
+  color: $error;
 }
 </style>

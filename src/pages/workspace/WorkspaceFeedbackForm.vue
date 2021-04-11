@@ -66,6 +66,7 @@
         :options="question.options"
         :view-mode="viewMode"
         :is-disabled="viewMode === 'view'"
+        :error="(errors && errors[question.id]) || null"
         class="form__question"
         :value="question.value"
         @update="$emit('update-form-question', $event)"
@@ -117,6 +118,10 @@ export default {
     feedbackRequestData: {
       type: Object,
       required: true,
+    },
+    errors: {
+      type: Object,
+      default: null,
     },
   },
   emits: ['update-form', 'update-form-question', 'save', 'submit', 'delete', 'duplicate', 'form-input'],

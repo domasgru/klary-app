@@ -55,8 +55,9 @@
           <WorkspaceFeedbackForm
             v-if="request"
             :feedback-request-data="request"
+            :errors="errors"
             view-mode="active"
-            @form-input="updateQuestionAnswer"
+            @form-input="updateQuestionAnswer($event), handleError($event)"
             @submit="submitMessage"
           />
         </template>
@@ -125,6 +126,15 @@ export default {
     const { requestId } = router.currentRoute.value.params;
     const userData = computed(() => store.state.user.userData);
 
+    const errors = ref({});
+    const handleError = ({ id }) => {
+      if (!errors.value[id]) {
+        return;
+      }
+
+      delete errors.value[id];
+    };
+
     const sentFeedbackId = ref(null);
 
     const showSignupModal = ref(false);
@@ -143,7 +153,16 @@ export default {
     loadRequestData();
 
     const submitMessage = async () => {
-      console.log('submit');
+      // Check if required questions have answers
+      const unansweredRequiredQuestions = request.value.questions.filter((question) => question.options.isRequired && !question.value);
+      if (unansweredRequiredQuestions?.length) {
+        errors.value = unansweredRequiredQuestions.reduce((errorsObject, value) => {
+          errorsObject[value.id] = 'This question is required';
+          return errorsObject;
+        }, {});
+        return;
+      }
+
       if (!userData.value) {
         showSignupModal.value = true;
         return;
@@ -214,6 +233,8 @@ export default {
       isLoading,
       message,
       request,
+      errors,
+      handleError,
       userData,
       updateQuestionAnswer,
     };

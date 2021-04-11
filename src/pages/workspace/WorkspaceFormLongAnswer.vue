@@ -10,6 +10,7 @@
       rows="4"
       padding="12px 16px"
       :is-disabled="isDisabled"
+      :error="error"
       placeholder="Long answer"
       :model-value="value"
       @input="$emit('form-input', $event.target.value)"
@@ -36,6 +37,10 @@ export default {
     isDisabled: {
       type: Boolean,
       default: false,
+    },
+    error: {
+      type: String,
+      default: null,
     },
   },
   emits: ['update', 'save', 'duplicate', 'delete', 'form-input'],

@@ -124,8 +124,9 @@ export default {
   }
 
   &__hint {
+    display: block;
     height: 20px;
-    margin-top: 4px;
+    margin-top: 8px;
     font-size: 14px;
     color: $grey-500;
 
@@ -145,7 +146,7 @@ export default {
     border-radius: 10px;
     box-shadow: 0 0 0 0 var(--outlineColor);
     border: 1px solid $grey-200;
-    transition: box-shadow 0.15s ease;
+    transition: all 0.15s ease;
     border-radius: 10px;
     overflow: hidden;
     background: $light;
