@@ -21,7 +21,7 @@
           :name="`opinion-scale-${id}`"
           :value="index - 1"
           :checked="parseInt(value, 10) === index - 1"
-          @input="$emit('input', $event.target.value)"
+          @input="$emit('form-input', $event.target.value)"
         >
         <label
           :for="`option${index - 1}-${id}`"
@@ -98,7 +98,7 @@ export default {
       default: false,
     },
   },
-  emits: ['update', 'save', 'duplicate', 'delete', 'input'],
+  emits: ['update', 'save', 'duplicate', 'delete', 'form-input'],
   computed: {
     isEditMode() {
       return this.viewMode === 'edit';

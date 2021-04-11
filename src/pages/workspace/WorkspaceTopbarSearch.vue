@@ -47,7 +47,7 @@ export default {
   align-items: center;
   width: 100%;
   max-width: 248px;
-  padding: 10px 8px;
+  padding: 10px 12px 10px 8px;
   color: $grey-500;
   background: transparent;
   border-radius: 8px;

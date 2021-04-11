@@ -11,7 +11,7 @@
       :model-value="value"
       :is-disabled="isDisabled"
       size="lg"
-      @input="$emit('input', $event.target.value)"
+      @input="$emit('form-input', $event.target.value)"
     />
   </WorksapceFormQuestionBase>
 </template>
@@ -37,7 +37,7 @@ export default {
       default: false,
     },
   },
-  emits: ['update', 'save', 'duplicate', 'delete', 'input'],
+  emits: ['update', 'save', 'duplicate', 'delete', 'form-input'],
 };
 </script>
 

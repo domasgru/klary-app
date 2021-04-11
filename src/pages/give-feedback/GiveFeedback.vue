@@ -56,7 +56,7 @@
             v-if="request"
             :feedback-request-data="request"
             view-mode="active"
-            @input="updateQuestionAnswer"
+            @form-input="updateQuestionAnswer"
             @submit="submitMessage"
           />
         </template>

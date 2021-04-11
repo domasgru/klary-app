@@ -72,7 +72,7 @@
         @save="$emit('save', $event)"
         @duplicate="$emit('duplicate', question.id)"
         @delete="$emit('delete', question.id)"
-        @input="$emit('input', {id: question.id, value: $event})"
+        @form-input="$emit('form-input', {id: question.id, value: $event})"
       />
     </div>
 
@@ -119,7 +119,7 @@ export default {
       required: true,
     },
   },
-  emits: ['update-form', 'update-form-question', 'save', 'submit', 'delete', 'duplicate', 'input'],
+  emits: ['update-form', 'update-form-question', 'save', 'submit', 'delete', 'duplicate', 'form-input'],
   computed: {
     isEditMode() {
       return this.viewMode === 'edit';

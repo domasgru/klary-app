@@ -155,7 +155,7 @@ export const useFeedbackData = (feedbackData, inboxType) => {
       path: `participants.${userData.value.uid}.feedbackState`,
       value: state,
   });
-  const addFeedbackAction = (type, content) => addAction(feedbackId.value, type, content, userData.value.uid);
+  const addFeedbackAction = (type, message) => addAction(feedbackId.value, type, message, userData.value.uid);
 
   const getParticipant = (uid) => feedbackData.value.participants[uid];
 

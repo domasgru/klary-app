@@ -24,7 +24,7 @@
         <BaseButton
           class="modal__button"
           @click="$emit('mark-as-clear', message)"
-          v-text="'Comment and mark as clear'"
+          v-text="'Mark as clear'"
         />
       </div>
     </template>
