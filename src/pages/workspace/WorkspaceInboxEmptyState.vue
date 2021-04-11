@@ -1,10 +1,10 @@
 <template>
   <div class="full-height-wrapper">
     <div class="empty-state">
-      <BaseSvg
+      <component
+        :is="`${$options.capitalize(illustration)}Illustration`"
         v-if="illustration"
         class="empty-state__illustration"
-        :name="illustration"
       />
       <h5
         class="empty-state__title h6"
@@ -16,7 +16,15 @@
 </template>
 
 <script>
+import SentIllustration from '@/components/illustrations/SentIllustration.vue';
+import ReceivedIllustration from '@/components/illustrations/ReceivedIllustration.vue';
+import { capitalize } from '@/utils/stringUtils';
+
 export default {
+  components: {
+    SentIllustration,
+    ReceivedIllustration,
+  },
  props: {
    illustration: {
      type: String,
@@ -31,6 +39,7 @@ export default {
      default: '',
    },
  },
+ capitalize,
 };
 </script>
 

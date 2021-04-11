@@ -24,7 +24,7 @@
   <WorkspaceInboxEmptyState
     v-else
     title="No sent feedbacks"
-    illustration="sent-il"
+    illustration="sent"
   />
 </template>
 
