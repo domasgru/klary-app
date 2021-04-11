@@ -5,7 +5,6 @@ import clickOutsideDirective from '@/plugins/click-outside';
 import * as Sentry from '@sentry/vue';
 import { Integrations } from '@sentry/tracing';
 import { Vue as VueIntegration } from '@sentry/integrations';
-import contenteditable from 'vue-contenteditable';
 import App from './App.vue';
 import { router } from './router';
 import { store } from './store';
@@ -16,7 +15,6 @@ const app = createApp(App);
 app.use(router);
 app.use(store);
 app.use(VuelidatePlugin);
-app.use(contenteditable);
 
 app.config.isCustomElement = (tag) => tag.startsWith('emoji');
 app.directive('click-outside', clickOutsideDirective);

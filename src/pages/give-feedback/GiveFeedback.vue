@@ -1,16 +1,15 @@
 <template>
   <WorkspaceFormLayout
     v-if="!isLoading && request"
-    class="give-feedback"
   >
     <template #header>
-      <div class="give-feedback__navigation">
+      <div class="navigation">
         <div
           v-if="userData"
-          class="give-feedback__user b2s"
+          class="navigation__user b2s"
         >
           <BaseAvatar
-            class="give-feedback__user-avatar"
+            class="navigation__user-avatar"
             size="sm"
             :name="userData.name"
             :picture="userData.picture"
@@ -20,63 +19,42 @@
       </div>
     </template>
     <template #form>
+      <!-- Success message -->
       <div
-        v-if="request"
-        class="give-feedback__content"
+        v-if="showSuccessMessage"
+        class="success-message"
       >
-        <!-- Success message -->
-        <div
-          v-if="showSuccessMessage"
-          class="give-feedback__background"
-        >
-          <div class="give-feedback__avatar give-feedback__avatar--sent">
-            <BaseSvg
-              class="give-feedback__icon"
-              name="paper-plain"
-            />
-          </div>
-          <div class="give-feedback__title give-feedback__title--success h5">
-            Your feedback for {{ request.name }} has been sent
-          </div>
-          <div class="give-feedback__message--success b1">
-            You can view your given feedback and discuss about it through the Kuri platform.
-          </div>
-          <div class="give-feedback__button-wrapper">
-            <BaseButton
-              fluid
-              size="lg"
-              @click="openFeedback"
-              v-text="'View feedback'"
-            />
-          </div>
+        <div class="success-message__illustration success-message__illustration--sent">
+          <img
+            class="success-message__icon"
+            :src="require('@/assets/illustrations/sent.png')"
+          >
         </div>
-        <!-- Feedback request message -->
-        <template v-else>
-          <WorkspaceFeedbackForm
-            v-if="request"
-            :feedback-request-data="request"
-            :errors="errors"
-            view-mode="active"
-            @form-input="updateQuestionAnswer($event), handleError($event)"
-            @submit="submitMessage"
+        <div class="success-message__title success-message__title--success h5">
+          Your feedback has been sent
+        </div>
+        <div class="success-message__message--success b1">
+          You can view your given feedback and discuss about it through the Kuri platform.
+        </div>
+        <div class="success-message__button-wrapper">
+          <BaseButton
+            fluid
+            size="lg"
+            @click="openFeedback"
+            v-text="'View feedback'"
           />
-        </template>
+        </div>
       </div>
+      <!-- Feedback form -->
+      <WorkspaceFeedbackForm
+        v-else
+        :feedback-request-data="request"
+        :errors="formErrors"
+        view-mode="active"
+        @form-input="updateQuestionAnswer($event), removeFormError($event)"
+        @submit="submitMessage"
+      />
     </template>
-    <BaseModal
-      :show-modal="showSignupModal"
-      max-width="592px"
-      @close="showSignupModal = false"
-    >
-      <template #content>
-        <div class="signup-modal">
-          <Signup
-            completion-text="Send feedback"
-            @success="submitAfterLogin"
-          />
-        </div>
-      </template>
-    </BaseModal>
   </WorkspaceFormLayout>
   <div
     v-if="!isLoading && !request"
@@ -96,6 +74,20 @@
       Make sure you use the correct link.
     </div>
   </div>
+  <BaseModal
+    :show-modal="showSignupModal"
+    max-width="592px"
+    @close="showSignupModal = false"
+  >
+    <template #content>
+      <div class="signup-modal">
+        <Signup
+          completion-text="Send feedback"
+          @success="submitAfterLogin"
+        />
+      </div>
+    </template>
+  </BaseModal>
 </template>
 
 <script>
@@ -103,7 +95,6 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import set from 'lodash.set';
-import { useForm } from '@/composables/useForm';
 import { getFeedbackRequestById, createFeedback, getTimeNow } from '@/firebase';
 import { CREATE_ACTION } from '@/constants';
 import { ACTIVE_STATE, ACTIVE_STATUS } from '@/constants/feedback';
@@ -119,26 +110,29 @@ export default {
   },
   setup() {
     const router = useRouter();
+
     const store = useStore();
-    const isLoading = ref(false);
-    const message = ref('');
-    const request = ref(null);
-    const { requestId } = router.currentRoute.value.params;
     const userData = computed(() => store.state.user.userData);
 
-    const errors = ref({});
-    const handleError = ({ id }) => {
-      if (!errors.value[id]) {
+    const formErrors = ref({});
+    const removeFormError = ({ id }) => {
+      if (!formErrors.value[id]) {
         return;
       }
 
-      delete errors.value[id];
+      delete formErrors.value[id];
     };
 
+    // For saving newly created feedback ID
     const sentFeedbackId = ref(null);
 
     const showSignupModal = ref(false);
-    const showSuccessMessage = ref(false);
+    const showSuccessMessage = ref(true);
+
+    // INIT feedback request data
+    const isLoading = ref(false);
+    const { requestId } = router.currentRoute.value.params;
+    const request = ref(null);
 
     const loadRequestData = async () => {
       try {
@@ -156,7 +150,7 @@ export default {
       // Check if required questions have answers
       const unansweredRequiredQuestions = request.value.questions.filter((question) => question.options.isRequired && !question.value);
       if (unansweredRequiredQuestions?.length) {
-        errors.value = unansweredRequiredQuestions.reduce((errorsObject, value) => {
+        formErrors.value = unansweredRequiredQuestions.reduce((errorsObject, value) => {
           errorsObject[value.id] = 'This question is required';
           return errorsObject;
         }, {});
@@ -231,10 +225,9 @@ export default {
       submitMessage,
       openFeedback,
       isLoading,
-      message,
       request,
-      errors,
-      handleError,
+      formErrors,
+      removeFormError,
       userData,
       updateQuestionAnswer,
     };
@@ -243,33 +236,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.give-feedback {
-  min-height: 100%;
-  padding-bottom: 64px;
-  background: $grey-100;
-
-  &__gradient {
-    height: 240px;
-    background: linear-gradient(267.05deg, #8ec5fc 0%, #e0c3fc 100%);
-  }
-
-  &__navigation {
-    display: flex;
-    align-items: center;
-    padding: 16px 32px;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    left: 0;
-  }
-
-  &__logo {
-    margin-right: auto;
-  }
-
-  &__nav-items {
-    display: flex;
-  }
+.navigation {
+  display: flex;
+  align-items: center;
+  padding: 16px 32px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  left: 0;
 
   &__user {
     display: flex;
@@ -280,30 +254,23 @@ export default {
   &__user-avatar {
     margin-right: 8px;
   }
+}
 
-  &__content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
+.success-message {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 728px;
+  padding: 64px 64px 48px 64px;
+  margin-bottom: 24px;
+  text-align: center;
+  background: $light;
+  border: 1px solid $grey-200;
+  border-radius: $border-radius;
 
-  &__background {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 592px;
-    padding: 60px 40px 32px 40px;
-    margin-bottom: 24px;
-    text-align: center;
-    background: $light;
-    border: 1px solid $grey-200;
-    border-radius: $border-radius;
-  }
-
-  &__avatar {
+  &__illustration {
     position: absolute !important;
     top: -36px;
     right: 0;
@@ -317,20 +284,13 @@ export default {
       justify-content: center;
       width: 72px;
       height: 72px;
-      background: #ede8fa;
+      background: $grey-100;
       border-radius: 50%;
     }
   }
 
-  &__button-wrapper {
-    width: 100%;
-    max-width: 384px;
-    margin-top: 32px;
-  }
-
   &__icon {
-    width: 32px;
-    height: 32px;
+    width: 40px;
   }
 
   &__title {
@@ -341,7 +301,7 @@ export default {
     }
 
     &--success {
-      max-width: 464px;
+      max-width: 600px;
     }
   }
 
@@ -350,8 +310,14 @@ export default {
     max-width: 592px;
 
     &--success {
-      max-width: 464px;
+      max-width: 460px;
     }
+  }
+
+  &__button-wrapper {
+    width: 100%;
+    max-width: 208px;
+    margin-top: 32px;
   }
 }
 

@@ -151,6 +151,10 @@ export const getFeedbackRequest = async (uid) => {
 };
 export const getFeedbackRequestById = async (id) => {
   const feedbackRequest = await db.doc(`feedbackRequests/${id}`).get();
+  if (!feedbackRequest.exists) {
+    return null;
+  }
+
   return { ...feedbackRequest.data(), id: feedbackRequest.id };
 };
 

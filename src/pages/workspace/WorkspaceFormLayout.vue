@@ -30,7 +30,7 @@
   }
 
   &__container {
-    max-width: 728px;
+    max-width: 788px;
     width: 100%;
     margin: 0 auto;
     display: flex;
