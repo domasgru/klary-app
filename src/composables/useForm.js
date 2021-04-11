@@ -8,6 +8,10 @@ export const useForm = (formId) => {
   const id = formId;
   const isLoading = ref(false);
 
+  const saveForm = () => updateFeedbackRequest(id, {
+    ...forms.value[id],
+  });
+
   const getForm = async () => {
     if (forms.value[id]) {
       return;
@@ -33,11 +37,8 @@ export const useForm = (formId) => {
     }
 
     set(forms.value, `${id}.${path}`, value);
+    saveForm();
   };
-
-  const saveForm = () => updateFeedbackRequest(id, {
-      ...forms.value[id],
-  });
 
   return {
     form: computed(() => forms.value[id]),

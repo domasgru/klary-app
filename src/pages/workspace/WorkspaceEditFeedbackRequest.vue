@@ -69,7 +69,6 @@ export default {
         path: 'questions',
         value: [...questions, { ...JSON.parse(JSON.stringify(questionData)), id: nanoid(10) }],
       });
-      this.saveForm();
     },
     duplicateQuestion(id) {
       const arrayWithDuplicatedQuestion = this.form.questions.flatMap(

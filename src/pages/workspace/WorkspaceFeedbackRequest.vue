@@ -8,10 +8,9 @@
       class="title h4"
       contenteditable="true"
       @keydown.enter.prevent
-      @input="editName"
-    >
-      {{ feedbackRequestData.title || 'Untitled' }}
-    </h4>
+      @blur="editName"
+      v-text="feedbackRequestData.title || 'Untitled'"
+    />
 
     <BaseButton
       class="header__button"

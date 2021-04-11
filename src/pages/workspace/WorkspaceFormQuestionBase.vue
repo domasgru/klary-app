@@ -11,8 +11,7 @@
             :contenteditable="isEditMode"
             data-placeholder="Type a question"
             :class="{'display-inline-block': !isEditMode}"
-            @input="$emit('update', {id, key: 'options.title', value: $event.target.textContent})"
-            @blur="$emit('save')"
+            @blur="$emit('update', {id, key: 'options.title', value: $event.target.textContent})"
           >
             {{ options.title }}
           </div>
@@ -28,8 +27,7 @@
           class="base-question__text-item b1 editable"
           :contenteditable="isEditMode"
           data-placeholder="Type a description (optional)"
-          @input="$emit('update', {id, key: 'options.description', value: $event.target.textContent})"
-          @blur="$emit('save')"
+          @blur="$emit('update', {id, key: 'options.description', value: $event.target.textContent})"
         >
           {{ options.description }}
         </div>
@@ -47,7 +45,7 @@
         class="base-question__required"
         label="Required"
         :value="options.isRequired"
-        @change="$emit('update', {id, key: 'options.isRequired', value: $event.target.checked}), $emit('save')"
+        @change="$emit('update', {id, key: 'options.isRequired', value: $event.target.checked})"
       />
       <BaseSvg
         class="base-question__settings-icon"

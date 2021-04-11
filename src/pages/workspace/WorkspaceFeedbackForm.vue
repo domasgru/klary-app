@@ -33,8 +33,7 @@
         class="form__initial form__title h4 editable"
         :contenteditable="isEditMode"
         data-placeholder="Type a form title"
-        @input="$emit('update-form', { path: 'formTitle', value: $event.target.textContent })"
-        @blur="$emit('save')"
+        @blur="$emit('update-form', { path: 'formTitle', value: $event.target.textContent })"
       >
         {{ feedbackRequestData.formTitle }}
       </div>
@@ -44,8 +43,7 @@
         class="form__initial form__description b1 editable"
         :contenteditable="isEditMode"
         data-placeholder="Type a form description (optional)"
-        @input="$emit('update-form', {path: 'formDescription', value: $event.target.textContent})"
-        @blur="$emit('save')"
+        @blur="$emit('update-form', {path: 'formDescription', value: $event.target.textContent})"
       >
         {{ feedbackRequestData.formDescription }}
       </div>
@@ -70,7 +68,6 @@
         class="form__question"
         :value="question.value"
         @update="$emit('update-form-question', $event)"
-        @save="$emit('save', $event)"
         @duplicate="$emit('duplicate', question.id)"
         @delete="$emit('delete', question.id)"
         @form-input="$emit('form-input', {id: question.id, value: $event})"

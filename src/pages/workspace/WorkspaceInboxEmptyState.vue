@@ -40,6 +40,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
+  flex-grow: 1;
   margin-top: -4px;
 }
 
