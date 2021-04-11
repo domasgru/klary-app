@@ -127,7 +127,7 @@ export default {
     const sentFeedbackId = ref(null);
 
     const showSignupModal = ref(false);
-    const showSuccessMessage = ref(true);
+    const showSuccessMessage = ref(false);
 
     // INIT feedback request data
     const isLoading = ref(false);

@@ -31,10 +31,10 @@
       <BaseLabelNew v-if="isNotificationUnseen" />
     </div>
     <div
-      v-if="notification.message"
+      v-if="notification.content"
       class="content__message"
     >
-      {{ notification.message }}
+      {{ notification.content }}
     </div>
   </div>
 </template>

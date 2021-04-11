@@ -100,10 +100,10 @@ export const getFeedback = async (id) => {
   return { id: feedback.id, ...feedback.data() };
 };
 
-export const addAction = async (feedbackId, type, message, authorUid) => {
+export const addAction = async (feedbackId, type, content, authorUid) => {
   const comment = {
     type,
-    message: message.replace(/^\s+|\s+$/g, ''),
+    content: content.replace(/^\s+|\s+$/g, ''),
     authorUid,
     createdAt: getTimeNow(),
   };
