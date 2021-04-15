@@ -1,5 +1,8 @@
 <template>
-  <div class="form">
+  <div
+    class="form"
+    @paste="$options.pasteAsPlainText"
+  >
     <div
       v-if="showFormInitials"
       class="form__initials"
@@ -42,7 +45,7 @@
         v-if="showFormDescription"
         class="form__initial form__description b1 editable"
         :contenteditable="isEditMode"
-        data-placeholder="Type a form description (optional)"
+        data-placeholder="Type a form description"
         @blur="$emit('update-form', {path: 'formDescription', value: $event.target.textContent})"
       >
         {{ feedbackRequestData.formDescription }}
@@ -97,6 +100,7 @@
 
 <script>
 import { capitalize } from '@/utils/stringUtils';
+import { pasteAsPlainText } from '@/utils/pasteAsPlainText';
 import WorkspaceFormShortAnswer from './WorkspaceFormShortAnswer.vue';
 import WorkspaceFormLongAnswer from './WorkspaceFormLongAnswer.vue';
 import WorkspaceFormOpinionScale from './WorkspaceFormOpinionScale.vue';
@@ -140,6 +144,7 @@ export default {
     },
   },
   capitalize,
+  pasteAsPlainText,
 };
 </script>
 

@@ -9,11 +9,11 @@
           Mark as clear
         </div>
         <div class="modal__subtitle b2">
-          Let {{ authorName }} know what you think about his feedback.
+          Let {{ authorName }} know what you think about the feedback.
         </div>
         <BaseTextarea
           v-model="message"
-          label="Message"
+          label="Your message"
           class="modal__message"
           placeholder="E.g. &quot;Thanks for your feedback&quot;"
           rows="4"
@@ -67,7 +67,7 @@ export default {
   }
 
   &__message {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   &__button {

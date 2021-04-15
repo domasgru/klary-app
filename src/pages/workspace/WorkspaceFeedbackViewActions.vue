@@ -18,13 +18,12 @@
       <WorkspaceFeedbackSettings
         :feedback-data="feedbackData"
         position="medium-left"
-        class="feedback_actions__action"
         @remove="updateFeedbackStateAndClose(REMOVED_STATE)"
         @unremove="updateFeedbackStateAndClose(ACTIVE_STATE)"
         @delete="updateFeedbackStateAndClose(DELETED_STATE)"
       >
         <WorkspaceActionButton
-          class="feedback-actions__right-action"
+          class="feedback-actions__right-action feedback-actions__action"
           icon="more-horizontal"
         />
       </WorkspaceFeedbackSettings>
@@ -103,6 +102,8 @@ export default {
   }
 
   &__action {
+    background: $light;
+
     &:not(:last-child) {
       margin-bottom: 8px;
     }

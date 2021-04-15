@@ -26,7 +26,7 @@
           v-if="showFormDescription"
           class="base-question__text-item b1 editable"
           :contenteditable="isEditMode"
-          data-placeholder="Type a description (optional)"
+          data-placeholder="Type a description"
           @blur="$emit('update', {id, key: 'options.description', value: $event.target.textContent})"
         >
           {{ options.description }}
@@ -110,6 +110,7 @@ export default {
   border: $stroke;
   color: $dark;
   background: $light;
+  overflow: hidden;
 
   &__content {
     padding: 48px 64px;

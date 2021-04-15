@@ -1,11 +1,14 @@
 <template>
   <div class="header">
-    <h4 class="emoji h4">
+    <h4
+      class="header__emoji h4"
+      @paste="pasteAsPlainText"
+    >
       {{ feedbackRequestData.emoji }}&nbsp;
     </h4>
     <h4
       ref="feedbackRequestName"
-      class="title h4"
+      class="header__title h4"
       contenteditable="true"
       @keydown.enter.prevent
       @blur="editName"
@@ -22,6 +25,7 @@
       class="header__button"
     />
     <BaseButton
+      class="header__button"
       type="secondary"
       size="icon"
     >
@@ -61,6 +65,7 @@ import { useRouter } from 'vue-router';
 import { useFeedbackList } from '@/composables/useFeedback';
 import { RECEIVED_TYPE, ACTIVE_STATUS, CLOSED_STATUS } from '@/constants/feedback';
 import { updateFeedbackRequest } from '@/firebase';
+import { pasteAsPlainText } from '@/utils/pasteAsPlainText';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
 import WorkspaceInboxEmptyState from './WorkspaceInboxEmptyState.vue';
 import WorkspaceShareFormPopup from './WorkspaceShareFormPopup.vue';
@@ -112,6 +117,7 @@ export default {
       RECEIVED_TYPE,
       feedbackRequestName,
       editName,
+      pasteAsPlainText,
     };
   },
 };
@@ -124,7 +130,18 @@ export default {
   align-items: center;
   z-index: 1;
 
+  &__emoji {
+    flex-shrink: 0;
+  }
+
+  &__title {
+    margin-right: auto;
+    padding-right: 12px;
+  }
+
   &__button {
+    flex-shrink: 0;
+
     &:not(:last-child) {
       margin-right: 8px;
     }
@@ -136,10 +153,6 @@ export default {
     padding: 2px;
     stroke: $dark;
   }
-}
-
-.title {
-  margin-right: auto;
 }
 
 .feedback-list {

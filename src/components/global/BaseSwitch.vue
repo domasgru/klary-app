@@ -87,7 +87,7 @@ export default {
     }
 
     &:checked + .base-switch__label::after {
-      transform: translateX(15px);
+      transform: translateX(16px);
     }
   }
 }

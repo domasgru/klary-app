@@ -13,6 +13,7 @@
         'is-active': isActive,
         'is-selected': showOptions || showFeedbackRequestRenamePopup
       }"
+      @dblclick="showFeedbackRequestRenamePopup = true"
     >
       <WorkspaceSidebarButtonIcon
         :is-active="isActive"

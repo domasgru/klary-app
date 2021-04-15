@@ -30,7 +30,7 @@
             :src="require('@/assets/illustrations/sent.png')"
           >
         </div>
-        <div class="success-message__title success-message__title--success h5">
+        <div class="success-message__title success-message__title--success h4">
           Your feedback has been sent
         </div>
         <div class="success-message__message--success b1">
@@ -297,7 +297,7 @@ export default {
     max-width: 290px;
 
     &:not(:last-child) {
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
 
     &--success {

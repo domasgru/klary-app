@@ -4,6 +4,7 @@
     position="bottom-end"
     :offset="[0, 4]"
     width="472px"
+    padding="20px"
     @close="showShare = false"
   >
     <BaseButton
@@ -62,8 +63,6 @@
 
 <style lang="scss" scoped>
 .share-popup {
-  padding: 20px;
-
   &__title {
     display: flex;
     align-items: center;

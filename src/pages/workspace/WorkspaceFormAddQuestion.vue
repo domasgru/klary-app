@@ -117,9 +117,9 @@ export default {
   }
   &__icon {
     background: $grey-100;
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
     margin-right: 16px;
   }
   &__right {

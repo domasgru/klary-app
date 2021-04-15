@@ -14,6 +14,7 @@
       :placeholder="placeholder"
       :autofocus="autofocus"
       :autocomplete="autocomplete ? null : 'off'"
+      :disabled="isDisabled"
       @input="$emit('update:modelValue', $event.target.value)"
       @keydown.enter="handleSubmitKeyDown"
       @keydown.esc="$refs.input.blur()"
@@ -43,6 +44,10 @@ export default {
     size: {
       type: String,
       default: 'md',
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ['focus', 'update:modelValue'],

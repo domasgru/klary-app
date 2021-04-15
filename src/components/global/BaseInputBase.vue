@@ -114,10 +114,6 @@ export default {
   $this: &;
   width: 100%;
 
-  &--disabled {
-    pointer-events: none;
-  }
-
   &__label {
     display: block;
     padding-bottom: 8px;

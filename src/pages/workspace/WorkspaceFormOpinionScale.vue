@@ -68,7 +68,7 @@
     </div>
     <div
       v-if="error"
-      class="opinion-scale-error"
+      class="opinion-scale-error caption"
     >
       {{ error }}
     </div>
