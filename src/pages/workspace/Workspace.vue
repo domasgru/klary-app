@@ -74,8 +74,8 @@ export default {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: 0 80px 64px 80px;
     min-height: min-content;
+    padding: 0 80px 64px 80px;
   }
 
   &__content {

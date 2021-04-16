@@ -82,19 +82,19 @@ export const createUserProfileDocument = async (user, additionalData) => {
   return getUserDocument(user.uid);
 };
 export const updateUserProfileDocument = (uid, userData) => db.collection('users').doc(uid).update({
-    ...userData,
-  });
+  ...userData,
+});
 
 // Feedback
 export const updateFeedback = ({ feedbackId, path, value }) => db.collection('feedbacks').doc(feedbackId).update({ [path]: value });
 export const updateFeedbackLastAction = ({ userId, feedbackId, actionType }) => updateFeedback({
-    feedbackId,
-    path: `participants.${userId}.lastAction`,
-    value: {
-      createdAt: getTimeNow(),
-      type: actionType,
-    },
-  });
+  feedbackId,
+  path: `participants.${userId}.lastAction`,
+  value: {
+    createdAt: getTimeNow(),
+    type: actionType,
+  },
+});
 export const getFeedback = async (id) => {
   const feedback = await db.doc(`feedbacks/${id}`).get();
   return { id: feedback.id, ...feedback.data() };
@@ -147,7 +147,7 @@ export const getFeedbackRequest = async (uid) => {
   if (feedbackRequest.docs[0]) {
     return { ...feedbackRequest.docs[0].data(), id: feedbackRequest.docs[0].id };
   }
-    return null;
+  return null;
 };
 export const getFeedbackRequestById = async (id) => {
   const feedbackRequest = await db.doc(`feedbackRequests/${id}`).get();

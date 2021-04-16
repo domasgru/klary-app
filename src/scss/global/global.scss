@@ -10,12 +10,12 @@
 }
 
 .editable {
-  outline: 0px solid transparent;
   cursor: text;
+  outline: 0 solid transparent;
 
-  &:empty:before {
-    content: attr(data-placeholder);
+  &:empty::before {
     color: $grey-600;
+    content: attr(data-placeholder);
   }
 }
 
