@@ -171,14 +171,8 @@ export default {
     position: absolute;
     top: 6px;
     right: 8px;
-  }
-
-  &__dots-icon {
-    width: 20px;
-    height: 20px;
-    padding: 2px;
-    border-radius: 4px;
     opacity: 0;
+    border-radius: 4px;
 
     #{$this}:hover &, #{$this}.is-selected & {
       opacity: 1;
@@ -200,6 +194,12 @@ export default {
     #{$this}.is-selected.is-active & {
       background: $primary-light-20;
     }
+  }
+
+  &__dots-icon {
+    width: 20px;
+    height: 20px;
+    padding: 2px;
   }
 }
 
