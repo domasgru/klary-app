@@ -12,6 +12,7 @@
       :is-disabled="isDisabled"
       :error="error"
       placeholder="Long answer"
+      has-scale-interaction-on-focus
       :model-value="value"
       @input="$emit('form-input', $event.target.value)"
     />

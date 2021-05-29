@@ -1,5 +1,8 @@
 <template>
-  <BaseInputBase v-bind="$props">
+  <BaseInputBase
+    ref="inputBaseRef"
+    v-bind="$props"
+  >
     <input
       :id="`input${$.uid}`"
       ref="input"
@@ -18,6 +21,8 @@
       @input="$emit('update:modelValue', $event.target.value)"
       @keydown.enter="handleSubmitKeyDown"
       @keydown.esc="$refs.input.blur()"
+      @blur="$refs.inputBaseRef.blur()"
+      @focus="$refs.inputBaseRef.focus()"
     >
   </BaseInputBase>
 </template>
@@ -67,8 +72,8 @@ export default {
   color: $dark;
   cursor: text;
   resize: none;
-  outline: none;
   background: transparent;
+  outline: none;
 
   &--lg {
     padding: 12px 16px;

@@ -5,7 +5,8 @@
       'base-input--error': error,
       'base-input--success': success,
       'base-input--disabled': isDisabled,
-      'base-input--liftUpAnimation': animateLiftUp
+      'base-input--liftUpAnimation': animateLiftUp,
+      'base-input--hasScaleInteractionOnFocus': hasScaleInteractionOnFocus
     }"
     @animationend="animateLiftUp = false"
   >
@@ -53,6 +54,10 @@ export default {
       default: undefined,
     },
     isDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    hasScaleInteractionOnFocus: {
       type: Boolean,
       default: false,
     },
@@ -105,6 +110,13 @@ export default {
       this.animateLiftUp = true;
       this.inputPulseAnimation = true;
     },
+    // Are called from child input component
+    blur() {
+
+    },
+    focus() {
+
+    },
   },
 };
 </script>
@@ -114,6 +126,14 @@ export default {
   $this: &;
 
   width: 100%;
+  transition: all 0.2s ease;
+  transform-origin: center center;
+
+  &--hasScaleInteractionOnFocus {
+    &:focus-within {
+      transform: scale(1.01);
+    }
+  }
 
   &__label {
     display: block;

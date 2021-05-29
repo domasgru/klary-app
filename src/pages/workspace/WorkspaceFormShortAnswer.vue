@@ -12,6 +12,7 @@
       :is-disabled="isDisabled"
       :error="error"
       size="lg"
+      has-scale-interaction-on-focus
       @input="$emit('form-input', $event.target.value)"
     />
   </WorksapceFormQuestionBase>
