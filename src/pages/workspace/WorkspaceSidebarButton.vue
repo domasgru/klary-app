@@ -137,13 +137,13 @@ export default {
 .sidebar-button {
   $this: &;
 
+  position: relative;
   display: flex;
   align-items: center;
   padding: 6px 8px;
   color: $dark;
   cursor: pointer;
   border-radius: 6px;
-  position: relative;
 
   &:hover {
     background: $grey-100;
@@ -164,6 +164,7 @@ export default {
 
   &__title {
     max-width: 152px;
+
     @include text-overflow-ellipsis;
   }
 
@@ -171,16 +172,16 @@ export default {
     position: absolute;
     top: 6px;
     right: 8px;
-    opacity: 0;
     border-radius: 4px;
+    opacity: 0;
 
     #{$this}:hover &, #{$this}.is-selected & {
       opacity: 1;
     }
 
     &:hover {
-       background:$grey-200;
-       opacity: 1;
+      background: $grey-200;
+      opacity: 1;
     }
 
     #{$this}.is-active &:hover {
@@ -206,8 +207,8 @@ export default {
 .settings {
   display: flex;
   align-items: center;
-  padding: 4px;
   width: 360px;
+  padding: 4px;
 
   &__icon {
     width: 16px;

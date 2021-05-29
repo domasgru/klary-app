@@ -40,7 +40,7 @@ export default {
       type: String,
       default: '',
     },
-     hint: {
+    hint: {
       type: String,
       default: undefined,
     },
@@ -112,6 +112,7 @@ export default {
 <style lang="scss" scoped>
 .base-input {
   $this: &;
+
   width: 100%;
 
   &__label {
@@ -138,14 +139,12 @@ export default {
   &__input-wrapper {
     position: relative;
     display: flex;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    box-shadow: 0 0 0 0 var(--outlineColor);
-    border: 1px solid $grey-200;
-    transition: all 0.15s ease;
-    border-radius: 10px;
     overflow: hidden;
     background: $light;
+    border: 1px solid $grey-200;
+    border-radius: 10px;
+    box-shadow: 0 0 0 0 var(--outlineColor);
+    transition: all 0.15s ease;
 
     &:hover {
       border: 1px solid $grey-300;
