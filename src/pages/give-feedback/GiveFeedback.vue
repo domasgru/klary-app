@@ -237,13 +237,13 @@ export default {
 
 <style lang="scss" scoped>
 .navigation {
-  display: flex;
-  align-items: center;
-  padding: 16px 32px;
   position: absolute;
   top: 0;
-  width: 100%;
   left: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 16px 32px;
 
   &__user {
     display: flex;
