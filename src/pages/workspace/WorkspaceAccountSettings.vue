@@ -65,7 +65,7 @@
 <script>
 import { mapState } from 'vuex';
 import {
- updateUserProfileDocument, storage, getFeedbackRequest, updateFeedbackRequest,
+  updateUserProfileDocument, storage, getFeedbackRequest, updateFeedbackRequest,
 } from '@/firebase';
 
 export default {

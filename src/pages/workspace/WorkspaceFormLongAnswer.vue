@@ -11,7 +11,7 @@
       padding="12px 16px"
       :is-disabled="isDisabled"
       :error="error"
-      placeholder="Long answer"
+      :placeholder="placeholder"
       has-scale-interaction-on-focus
       :model-value="value"
       @input="$emit('form-input', $event.target.value)"
@@ -45,9 +45,9 @@ export default {
     },
   },
   emits: ['update', 'save', 'duplicate', 'delete', 'form-input'],
+  computed: {
+    isEditMode: ({ viewMode }) => viewMode === 'edit',
+    placeholder: ({ isEditMode }) => (isEditMode ? 'Short answer' : 'Your answer'),
+  },
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

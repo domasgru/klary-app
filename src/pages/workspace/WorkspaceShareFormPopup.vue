@@ -42,13 +42,13 @@
 </template>
 
 <script>
-  export default {
-    data() {
+export default {
+  data() {
     return {
       showShare: false,
     };
   },
- computed: {
+  computed: {
     shareLink() {
       return `${window.origin}/f/${this.$route.params.id}`;
     },
@@ -58,7 +58,7 @@
       navigator.clipboard.writeText(this.shareLink);
     },
   },
-  };
+};
 </script>
 
 <style lang="scss" scoped>

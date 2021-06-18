@@ -78,12 +78,12 @@ export default {
               fallbackPlacements: ['right'],
             },
           },
-    //       {
-    //   name: 'preventOverflow',
-    //   options: {
-    //     altAxis: true, // false by default
-    //   },
-    // },
+          //       {
+          //   name: 'preventOverflow',
+          //   options: {
+          //     altAxis: true, // false by default
+          //   },
+          // },
           ...(this.offset ? [{
             name: 'offset',
             options: {

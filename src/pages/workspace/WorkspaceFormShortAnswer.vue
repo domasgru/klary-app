@@ -7,7 +7,7 @@
     @delete="$emit('delete')"
   >
     <BaseInput
-      placeholder="Short answer"
+      :placeholder="placeholder"
       :model-value="value"
       :is-disabled="isDisabled"
       :error="error"
@@ -44,9 +44,9 @@ export default {
     },
   },
   emits: ['update', 'save', 'duplicate', 'delete', 'form-input'],
+  computed: {
+    isEditMode: ({ viewMode }) => viewMode === 'edit',
+    placeholder: ({ isEditMode }) => (isEditMode ? 'Short answer' : 'Your answer'),
+  },
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

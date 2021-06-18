@@ -33,41 +33,41 @@ export const bindFirestoreArrayRefAction = async (commit, stateKey, firestoreRef
   let unbind;
   const promise = new Promise((resolve, reject) => {
     unbind = firestoreRef
-    .onSnapshot((snapshot) => {
-      if (!snapshot.docChanges().length) {
-        commit('bindEmptyArray', stateKey);
-        resolve([]);
-      }
-      snapshot.docChanges().forEach(({
-        type, newIndex, oldIndex, doc,
-      }) => {
-        const value = { id: doc.id, ...doc.data() };
-        if (type === 'added') {
-          commit('pureSpliceArrayStateMutation', {
-            stateKey,
-            index: newIndex,
-            removeValues: 0,
-            value,
-          });
+      .onSnapshot((snapshot) => {
+        if (!snapshot.docChanges().length) {
+          commit('bindEmptyArray', stateKey);
+          resolve([]);
         }
-        if (type === 'modified') {
-          commit('pureSpliceArrayStateMutation', {
-            stateKey,
-            index: newIndex,
-            removeValues: 1,
-            value,
-          });
-        }
-        if (type === 'removed') {
-          commit('pureSpliceArrayStateMutation', {
-            stateKey,
-            index: oldIndex,
-            removeValues: 1,
-          });
-        }
-        resolve(doc);
-      });
-    }, reject);
+        snapshot.docChanges().forEach(({
+          type, newIndex, oldIndex, doc,
+        }) => {
+          const value = { id: doc.id, ...doc.data() };
+          if (type === 'added') {
+            commit('pureSpliceArrayStateMutation', {
+              stateKey,
+              index: newIndex,
+              removeValues: 0,
+              value,
+            });
+          }
+          if (type === 'modified') {
+            commit('pureSpliceArrayStateMutation', {
+              stateKey,
+              index: newIndex,
+              removeValues: 1,
+              value,
+            });
+          }
+          if (type === 'removed') {
+            commit('pureSpliceArrayStateMutation', {
+              stateKey,
+              index: oldIndex,
+              removeValues: 1,
+            });
+          }
+          resolve(doc);
+        });
+      }, reject);
   });
   bindings[stateKey] = unbind;
   return promise;

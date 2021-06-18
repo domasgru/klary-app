@@ -7,10 +7,16 @@
       v-if="showFormInitials"
       class="form__initials"
     >
-      <div class="form__initial form__author">
+      <div
+        v-if="isEditMode || (!isEditMode && feedbackRequestData.showAuthor)"
+        class="form__initial form__author"
+      >
         <button
           v-if="isEditMode"
           class="form__author-toggle btn2s"
+          :class="{
+            'mb-16px': feedbackRequestData.showAuthor
+          }"
           @click="$emit('update-form', { path: 'showAuthor', value: !feedbackRequestData.showAuthor })"
         >
           {{ feedbackRequestData.showAuthor ? 'Hide my name' : 'Show my name' }}
@@ -150,25 +156,24 @@ export default {
 
 <style lang="scss" scoped>
 .form {
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 
   &__initials {
     width: 100%;
     padding: 48px 64px;
     background: $light;
-    border-radius: $border-radius;
     border: $stroke;
+    border-radius: $border-radius;
   }
 
   &__author-toggle {
+    padding: 4px 8px;
     background: $light;
     border: 1px solid $grey-200;
     border-radius: 4px;
-    padding: 4px 8px;
-    margin-bottom: 16px;
 
     &:hover {
       cursor: pointer;
@@ -216,11 +221,12 @@ export default {
   }
 
   &__kuri {
-    color: $grey-600;
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: $grey-600;
   }
+
   &__logo {
     margin-top: 10px;
   }

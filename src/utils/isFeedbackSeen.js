@@ -17,8 +17,8 @@ export const isFeedbackSeen = (feedbackData, userId) => {
     .map(([id, value]) => value)
     .reduce((max, participant) => (
       max.lastAction.createdAt?.seconds > participant.lastAction.createdAt?.seconds
-      ? max
-      : participant
+        ? max
+        : participant
     ));
 
   // No actions from other users

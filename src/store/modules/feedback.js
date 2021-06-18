@@ -1,7 +1,7 @@
 import { firestoreAction } from 'vuexfire';
 import { db } from '@/firebase';
 import {
- FEEDBACKS_COLLECTION, FEEDBACK_REQUESTS_COLLECTION, ACTIVE_STATE, REMOVED_STATE,
+  FEEDBACKS_COLLECTION, FEEDBACK_REQUESTS_COLLECTION, ACTIVE_STATE, REMOVED_STATE,
 } from '@/constants/feedback';
 import { bindFirestoreArrayRefMutations, bindFirestoreArrayRefAction } from '../utils/bindFirestoreRef';
 
@@ -45,7 +45,7 @@ export default {
     bindReceivedFeedbacks({ commit }, { userId }) {
       return bindFirestoreArrayRefAction(
         commit,
-       'receivedFeedbacks',
+        'receivedFeedbacks',
         db.collection(FEEDBACKS_COLLECTION)
           .where('receiverId', '==', userId)
           .where(`participants.${userId}.feedbackState`, '==', ACTIVE_STATE),
@@ -54,7 +54,7 @@ export default {
     bindSentFeedbacks({ commit }, { userId }) {
       return bindFirestoreArrayRefAction(
         commit,
-       'sentFeedbacks',
+        'sentFeedbacks',
         db.collection(FEEDBACKS_COLLECTION)
           .where('authorId', '==', userId)
           .where(`participants.${userId}.feedbackState`, '==', ACTIVE_STATE),
@@ -71,7 +71,7 @@ export default {
         commit,
         'currentFeedbackActions',
         db.collection(`${FEEDBACKS_COLLECTION}/${id}/discussion`)
-        .orderBy('createdAt', 'asc'),
+          .orderBy('createdAt', 'asc'),
       );
     },
     // Separate handling for removed feedabcks

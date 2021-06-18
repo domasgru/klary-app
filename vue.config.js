@@ -1,4 +1,7 @@
 module.exports = {
+  pluginOptions: {
+    windicss: {},
+  },
   css: {
     loaderOptions: {
       sass: {
@@ -22,7 +25,7 @@ module.exports = {
       .loader('svgo-loader')
       .end();
 
-      config.module
+    config.module
       .rule('vue')
       .use('vue-loader')
       .loader('vue-loader')

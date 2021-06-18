@@ -25,21 +25,21 @@ export default {
     SentIllustration,
     ReceivedIllustration,
   },
- props: {
-   illustration: {
-     type: String,
-     default: null,
-   },
-   title: {
-     type: String,
-     default: '',
-   },
-   description: {
-     type: String,
-     default: '',
-   },
- },
- capitalize,
+  props: {
+    illustration: {
+      type: String,
+      default: null,
+    },
+    title: {
+      type: String,
+      default: '',
+    },
+    description: {
+      type: String,
+      default: '',
+    },
+  },
+  capitalize,
 };
 </script>
 

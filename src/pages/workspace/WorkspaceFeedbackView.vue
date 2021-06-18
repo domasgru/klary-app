@@ -60,7 +60,7 @@
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import {
- ref, computed, watch, nextTick, toRefs, onMounted,
+  ref, computed, watch, nextTick, toRefs, onMounted,
 } from 'vue';
 import { updateSeenAt } from '@/firebase';
 import { CREATE_ACTION } from '@/constants';
@@ -107,11 +107,11 @@ export default {
       setTimeout(() => { unseenActions.value = unseenActions.value.filter((comment) => comment.id !== id); }, 2000);
     };
     const commentObserver = new IntersectionObserver(([entry], observer) => {
-        updateSeenAt(currentUser.value.uid, props.feedbackData.id);
-        updateUnseenActions(entry.target.id);
-        commentObserver.unobserve(entry.target);
-      }, {
-        threshold: 1.0,
+      updateSeenAt(currentUser.value.uid, props.feedbackData.id);
+      updateUnseenActions(entry.target.id);
+      commentObserver.unobserve(entry.target);
+    }, {
+      threshold: 1.0,
     });
     store.dispatch('feedback/bindCurrentFeedbackActions', props.feedbackData.id);
 
@@ -120,13 +120,13 @@ export default {
         return props.feedbackData.participants[props.feedbackData.authorId].lastAction;
       }
 
-       const { lastAction, name } = Object.entries(props.feedbackData.participants)
+      const { lastAction, name } = Object.entries(props.feedbackData.participants)
         .filter(([id, participant]) => id !== currentUser.value.uid)
         .map(([id, value]) => value)
         .reduce((max, participant) => (
           max.lastAction.createdAt.seconds > participant.lastAction.createdAt.seconds
-          ? max
-          : participant
+            ? max
+            : participant
         ));
 
       return lastAction;

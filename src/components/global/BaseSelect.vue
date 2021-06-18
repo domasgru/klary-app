@@ -125,7 +125,7 @@ export default {
         if (this.activeResultIndex === this.results.length - 1) {
           this.activeResultIndex = 0;
         } else {
-            this.activeResultIndex += 1;
+          this.activeResultIndex += 1;
         }
       } else if (direction === 'up') {
         if (this.activeResultIndex === 0) {

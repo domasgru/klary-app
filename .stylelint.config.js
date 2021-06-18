@@ -5,6 +5,6 @@ module.exports = {
     'stylelint-config-recess-order',
   ],
   rules: {
-    'at-rule-no-unknown': null
-  }
+    'at-rule-no-unknown': null,
+  },
 };

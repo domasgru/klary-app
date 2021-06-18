@@ -100,11 +100,11 @@ export default {
     },
     async createFullName() {
       const picture = this.userAuth.additionalUserInfo.profile?.picture
-          ? { picture: this.userAuth.additionalUserInfo.profile?.picture } : {};
+        ? { picture: this.userAuth.additionalUserInfo.profile?.picture } : {};
       await createUserProfileDocument(this.userAuth, {
-            ...picture,
-            name: this.fullName,
-            status: 'NEW',
+        ...picture,
+        name: this.fullName,
+        status: 'NEW',
       });
       this.$emit('success');
     },

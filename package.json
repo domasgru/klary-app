@@ -61,6 +61,7 @@
     "stylelint-config-standard": "^20.0.0",
     "svgo": "^1.1.0",
     "svgo-loader": "^2.1.0",
+    "vue-cli-plugin-windicss": "~1.0.0",
     "vue-loader": "^16.1.2"
   },
   "eslintConfig": {
@@ -114,9 +115,15 @@
           "ignoreStrings": true
         }
       ],
-      "indent": ["warn", 2, {
-        "ignoredNodes": ["TemplateLiteral"]
-      }]
+      "indent": [
+        "warn",
+        2,
+        {
+          "ignoredNodes": [
+            "TemplateLiteral"
+          ]
+        }
+      ]
     }
   },
   "browserslist": [

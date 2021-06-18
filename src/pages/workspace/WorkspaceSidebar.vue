@@ -104,7 +104,7 @@ import { nanoid } from 'nanoid';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import {
- logout, updateFeedbackRequest, createFeedbackRequest, deleteFeedbackRequest,
+  logout, updateFeedbackRequest, createFeedbackRequest, deleteFeedbackRequest,
 } from '@/firebase';
 import WorkspaceAccountSettings from './WorkspaceAccountSettings.vue';
 import WorkspaceSidebarButton from './WorkspaceSidebarButton.vue';

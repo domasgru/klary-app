@@ -74,16 +74,16 @@ export default {
     optionsItems() {
       const isRemoved = this.feedbackData.participants[this.userData.uid].feedbackState === REMOVED_STATE;
       const optionsRemoveItem = isRemoved
-      ? [{ name: 'Restore', action: 'unremove', icon: 'restore' }]
-      : [{
+        ? [{ name: 'Restore', action: 'unremove', icon: 'restore' }]
+        : [{
           name: 'Remove for you', action: 'remove', icon: 'trash', theme: 'alarm',
-      }];
+        }];
 
       const optionsDeleteItem = isRemoved
-      ? [{
-        name: 'Delete for you', action: 'delete', icon: 'trash', theme: 'alarm',
-      }]
-      : [];
+        ? [{
+          name: 'Delete for you', action: 'delete', icon: 'trash', theme: 'alarm',
+        }]
+        : [];
 
       return [
         ...optionsRemoveItem,

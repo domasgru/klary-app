@@ -8,14 +8,14 @@ export const handleLoginAndReturnRedirect = async (authResult) => {
   store.dispatch('user/setUserAuth', { email: user.email, uid: user.uid });
 
   const profilePicture = additionalUserInfo.profile?.picture
-      ? { googlePicture: additionalUserInfo.profile?.picture } : {};
+    ? { googlePicture: additionalUserInfo.profile?.picture } : {};
 
   // Create new user profile
   if (additionalUserInfo.isNewUser) {
     const { name, given_name } = additionalUserInfo.profile;
     await createUserProfileDocument(user, {
-        ...profilePicture,
-        status: 'NEW',
+      ...profilePicture,
+      status: 'NEW',
     });
   } else {
     try {

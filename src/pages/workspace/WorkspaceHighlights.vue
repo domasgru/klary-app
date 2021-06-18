@@ -15,11 +15,11 @@
 <script>
 import WorkspaceInboxEmptyState from './WorkspaceInboxEmptyState.vue';
 
-  export default {
-components: {
-  WorkspaceInboxEmptyState,
-},
-  };
+export default {
+  components: {
+    WorkspaceInboxEmptyState,
+  },
+};
 </script>
 
 <style lang="scss" scoped>

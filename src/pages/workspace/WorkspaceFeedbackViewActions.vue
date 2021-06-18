@@ -36,7 +36,7 @@ import { toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { useFeedbackData } from '@/composables/useFeedback';
 import {
- FAVORITE_FLAG, ACTIVE_STATE, REMOVED_STATE, DELETED_STATE,
+  FAVORITE_FLAG, ACTIVE_STATE, REMOVED_STATE, DELETED_STATE,
 } from '@/constants/feedback';
 import WorkspaceActionButton from './WorkspaceActionButton.vue';
 import WorkspaceFeedbackSettings from './WorkspaceFeedbackSettings.vue';

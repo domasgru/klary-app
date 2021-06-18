@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-shadow */
 import {
- computed, ref, toRefs, watch,
+  computed, ref, toRefs, watch,
 } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -76,13 +76,13 @@ export const useFeedbackList = (type) => {
       let preparedFeedbacks = null;
       if (filter) {
         preparedFeedbacks = feedbacks.value.filter((feedback) => Object.entries(filter).every(([filterBy, filterValue]) => {
-            const valueToFilter = getObjectValue(feedback, filterBy);
+          const valueToFilter = getObjectValue(feedback, filterBy);
 
-            if (typeof filterValue === 'object') {
-              return filterValue.value === valueToFilter;
-            }
-            return filterValue === valueToFilter;
-          }));
+          if (typeof filterValue === 'object') {
+            return filterValue.value === valueToFilter;
+          }
+          return filterValue === valueToFilter;
+        }));
       }
 
       if (filterBy && filterValue) {
@@ -101,9 +101,9 @@ export const useFeedbackList = (type) => {
 
       return preparedFeedbacks;
     } catch (e) {
-    console.error('Feedbacks didnt load yet', e);
-    return [];
-  }
+      console.error('Feedbacks didnt load yet', e);
+      return [];
+    }
   });
   const openFeedback = (id) => router.push({ path: `/${type === REMOVED_TYPE ? 'trash' : type.toLowerCase()}/${id}` });
 
@@ -136,8 +136,8 @@ export const useFeedbackData = (feedbackData, inboxType) => {
 
   const toggleFeedbackFlag = (flag) => {
     const updatedFlags = feedbackFlags.value.includes(flag)
-        ? feedbackFlags.value.filter((feedbackFlag) => feedbackFlag !== flag)
-        : [...feedbackFlags.value, flag];
+      ? feedbackFlags.value.filter((feedbackFlag) => feedbackFlag !== flag)
+      : [...feedbackFlags.value, flag];
 
     return updateFeedback({
       feedbackId: feedbackId.value,
@@ -151,9 +151,9 @@ export const useFeedbackData = (feedbackData, inboxType) => {
     value: status,
   });
   const updateFeedbackState = (state) => updateFeedback({
-      feedbackId: feedbackId.value,
-      path: `participants.${userData.value.uid}.feedbackState`,
-      value: state,
+    feedbackId: feedbackId.value,
+    path: `participants.${userData.value.uid}.feedbackState`,
+    value: state,
   });
   const addFeedbackAction = (type, message) => addAction(feedbackId.value, type, message, userData.value.uid);
 
