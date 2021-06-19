@@ -106,14 +106,18 @@ export default {
 <style lang="scss" scoped>
 .base-question {
   width: 100%;
-  border-radius: $border-radius;
-  border: $stroke;
+  overflow: hidden;
   color: $dark;
   background: $light;
-  overflow: hidden;
+  border: $stroke;
+  border-radius: $border-radius;
 
   &__content {
     padding: 48px 64px;
+
+    @media screen and (max-width: 836px) {
+      padding: 32px;
+    }
   }
 
   &__text-item {
@@ -131,8 +135,8 @@ export default {
   &__settings {
     display: flex;
     padding: 12px 64px;
-    border-top: $stroke;
     background: $grey-50;
+    border-top: $stroke;
   }
 
   &__required {
@@ -142,14 +146,14 @@ export default {
   &__settings-icon {
     width: 32px;
     height: 32px;
-    stroke: $grey-600;
     padding: 6px;
-    transition: all 0.2s ease;
     border-radius: 8px;
+    stroke: $grey-600;
+    transition: all 0.2s ease;
 
     &:hover {
-      background: $grey-150;
       cursor: pointer;
+      background: $grey-150;
     }
 
     &:not(:last-child) {

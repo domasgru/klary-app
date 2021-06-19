@@ -94,7 +94,7 @@
       <div class="form__kuri b1">
         Made with
         <BaseLogo
-          name="logo"
+          type="full"
           color="grey"
           size="lg"
           class="form__logo"
@@ -110,12 +110,14 @@ import { pasteAsPlainText } from '@/utils/pasteAsPlainText';
 import WorkspaceFormShortAnswer from './WorkspaceFormShortAnswer.vue';
 import WorkspaceFormLongAnswer from './WorkspaceFormLongAnswer.vue';
 import WorkspaceFormOpinionScale from './WorkspaceFormOpinionScale.vue';
+import WorkspaceFormChecklist from './WorkspaceFormChecklist.vue';
 
 export default {
   components: {
     WorkspaceFormShortAnswer,
     WorkspaceFormLongAnswer,
     WorkspaceFormOpinionScale,
+    WorkspaceFormChecklist,
   },
   props: {
     viewMode: {
@@ -224,7 +226,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: $grey-600;
+    color: $grey-400;
   }
 
   &__logo {
@@ -236,5 +238,9 @@ export default {
   width: 208px;
   margin-top: 48px;
   margin-bottom: 88px;
+
+  @media screen and (max-width: 838px) {
+    margin-bottom: 64px;
+  }
 }
 </style>

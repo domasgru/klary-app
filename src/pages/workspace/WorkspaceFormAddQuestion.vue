@@ -50,6 +50,10 @@ const QUESTION_INFO = {
     questionName: 'Opinion scale',
     illustration: 'opinion-scale',
   },
+  checklist: {
+    questionName: 'Checklist',
+    illustration: '',
+  },
 };
 
 const QUESTION_TYPES = [
@@ -88,6 +92,26 @@ const QUESTION_TYPES = [
     },
     value: null,
   },
+  {
+    type: 'checklist',
+    options: {
+      title: '',
+      description: '',
+      items: [
+        {
+          title: 'Selection 1',
+        },
+        {
+          title: 'Selection 2',
+        },
+        {
+          title: 'Selection 3',
+        },
+      ],
+      isRequired: false,
+    },
+    value: [],
+  },
 ];
 
 export default {
@@ -115,13 +139,15 @@ export default {
       background: $grey-100;
     }
   }
+
   &__icon {
-    background: $grey-100;
     width: 40px;
     height: 40px;
-    border-radius: 8px;
     margin-right: 16px;
+    background: $grey-100;
+    border-radius: 8px;
   }
+
   &__right {
     display: flex;
     flex-direction: column;
@@ -129,6 +155,6 @@ export default {
 }
 
 .add-question-button {
-    margin-top: 32px;
+  margin-top: 32px;
 }
 </style>
