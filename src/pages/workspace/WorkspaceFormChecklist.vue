@@ -37,8 +37,17 @@
         >
           {{ item.title }}
         </div>
-
+        <BaseButton
+          class="checklist__delete-button"
+          @click="deleteItem(item)"
+          v-text="'Delete'"
+        />
       </label>
+      <BaseButton
+        class="add-checkbox"
+        @click="$emit('update', {id, key: `options.items`, value: [...options.items, {title: 'Your title'}]})"
+        v-text="'Add checkbox'"
+      />
     </div>
   </WorksapceFormQuestionBase>
 </template>
@@ -91,6 +100,10 @@ export default {
       }
       console.log(e.target.checked);
     },
+    deleteItem(checkBoxItem) {
+      const updatedItems = this.options.items.filter((item) => item !== checkBoxItem);
+      this.$emit('update', { id: this.id, key: 'options.items', value: updatedItems });
+    },
   },
 };
 </script>
@@ -98,7 +111,7 @@ export default {
 <style lang="scss">
 .checklist {
   &__item {
-    display: block;
+    position: relative;
     display: flex;
     align-items: center;
     padding: 10px;
@@ -119,6 +132,7 @@ export default {
 
   &__title {
     pointer-events: auto;
+    width: 100%;
   }
 
   &__input-wrapper {
@@ -163,5 +177,13 @@ export default {
     width: 16px;
     height: 16px;
   }
+
+  &__delete-button {
+    pointer-events: auto;
+  }
+}
+
+.add-checkbox {
+  pointer-events: auto;
 }
 </style>

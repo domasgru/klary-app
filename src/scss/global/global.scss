@@ -13,6 +13,10 @@
   cursor: text;
   outline: 0 solid transparent;
 
+  &:hover {
+    background-color: $grey-100;
+  }
+
   &:empty::before {
     color: $grey-600;
     content: attr(data-placeholder);

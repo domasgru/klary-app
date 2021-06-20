@@ -2370,6 +2370,11 @@ array-includes@^3.1.1:
     get-intrinsic "^1.0.1"
     is-string "^1.0.5"
 
+array-move@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/array-move/-/array-move-3.0.1.tgz#179645cc0987b65953a4fc06b6df9045e4ba9618"
+  integrity sha512-H3Of6NIn2nNU1gsVDqDnYKY/LCdWvCMMOWifNGhKcVQgiZ6nOek39aESOvro6zmueP07exSl93YLvkN4fZOkSg==
+
 array-sort@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/array-sort/-/array-sort-1.0.0.tgz#e4c05356453f56f53512a7d1d6123f2c54c0a88a"
