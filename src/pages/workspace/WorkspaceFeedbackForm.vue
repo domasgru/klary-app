@@ -255,12 +255,14 @@ export default {
 
   &__question-wrapper {
     position: relative;
-  }
 
-  &__question {
     &:not(:last-child) {
       margin-bottom: 16px;
     }
+  }
+
+  &__question {
+
   }
 
   &__question-controls {
