@@ -5,7 +5,8 @@
   "scripts": {
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "vue-cli-service serve --port 4000"
+    "start": "vue-cli-service serve --port 4000",
+    "deploy-preview": "firebase hosting:channel:deploy new"
   },
   "dependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
