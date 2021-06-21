@@ -132,7 +132,6 @@ export default {
   &__item {
     position: relative;
     display: flex;
-    align-items: center;
     padding: 10px;
     cursor: pointer;
     user-select: none;
@@ -157,26 +156,23 @@ export default {
 
   &__input-wrapper {
     position: relative;
-    width: 20px;
-    height: 20px;
+    padding: 2px;
     margin-right: 10px;
   }
 
   &__input {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
     opacity: 0;
   }
 
   &__input-controller {
-    position: absolute;
-    top: 0;
-    left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
+    width: 20px;
+    height: 20px;
     background: $light;
     border: 1.5px solid $grey-300;
     border-radius: 6px;
