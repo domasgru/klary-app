@@ -1,14 +1,24 @@
 <template>
-  <WorkspaceFormLayout
-    v-if="!isLoading && request"
-  >
+  <WorkspaceFormLayout v-if="isReady">
     <template #content>
-      <div class="cover">
+      <div
+        v-if="!showSuccessMessage"
+        class="cover"
+        :class="{'cover--ready': showCoverCanvas}"
+      >
         <img
           class="cover__image"
           :src="require('@/assets/images/form-cover-placeholder.png')"
           alt="Klary dashboard"
         >
+        <div
+          class="cover cover__wrapper"
+        >
+          <canvas
+            id="canvas3d"
+            class="cover__canvas"
+          />
+        </div>
       </div>
     </template>
     <template #form>
@@ -24,20 +34,13 @@
           >
         </div>
         <div class="success-message__title success-message__title--success h4">
-          Your feedback has been sent
+          Thank you
         </div>
         <div class="success-message__message--success b1">
-          You can view your given feedback and discuss about it through the Kuri platform.
-        </div>
-        <div class="success-message__button-wrapper">
-          <BaseButton
-            fluid
-            size="lg"
-            @click="openFeedback"
-            v-text="'View feedback'"
-          />
+          Your answers will help us a lot in creating Klary. We wish you a good day.
         </div>
       </div>
+
       <!-- Feedback form -->
       <WorkspaceFeedbackForm
         v-else
@@ -84,7 +87,9 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import {
+  ref, computed, watch, nextTick,
+} from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import set from 'lodash.set';
@@ -103,9 +108,6 @@ export default {
   },
   setup() {
     const router = useRouter();
-
-    const store = useStore();
-    const userData = computed(() => store.state.user.userData);
 
     const formErrors = ref({});
     const removeFormError = ({ id }) => {
@@ -126,6 +128,7 @@ export default {
     const isLoading = ref(false);
     const { requestId } = router.currentRoute.value.params;
     const request = ref(null);
+    const isReady = computed(() => !isLoading.value && request.value);
 
     const loadRequestData = async () => {
       try {
@@ -139,6 +142,30 @@ export default {
     };
     loadRequestData();
 
+    // Canvas logic
+    const showCoverCanvas = ref(false);
+    watch(isReady, async (value) => {
+      await nextTick();
+
+      if (value) {
+        const canvasElement = document.getElementById('canvas3d');
+        const resizeObserver = new ResizeObserver(async ([entry]) => {
+          const { width, height } = Array.isArray(entry.contentRect) ? entry.contentRect[0] : entry.contentRect;
+          if ((height / width) > 0.9 || true) {
+            console.log('wtf');
+            showCoverCanvas.value = true;
+          }
+        });
+
+        if (canvasElement) {
+          resizeObserver.observe(canvasElement);
+        }
+
+        const app = new window.SpeRuntime.Application();
+        app.start('/scene.json');
+      }
+    });
+
     const submitMessage = async () => {
       // Check if required questions have answers
       const unansweredRequiredQuestions = request.value.questions.filter((question) => question.options.isRequired && !question.value);
@@ -150,21 +177,16 @@ export default {
         return;
       }
 
-      if (!userData.value) {
-        showSignupModal.value = true;
-        return;
-      }
-
       const timeNow = getTimeNow();
       const sentFeedback = await createFeedback({
-        authorId: userData.value.uid,
+        authorId: 'notLoggedInUser',
         receiverId: request.value.uid,
         participants: {
-          [userData.value.uid]: {
+          notLoggedInUser: {
             feedbackState: ACTIVE_STATE,
             flags: [],
-            name: userData.value.name,
-            picture: userData.value.picture || '',
+            name: 'Guest',
+            picture: '',
             lastAction: {
               createdAt: timeNow,
               type: CREATE_ACTION,
@@ -221,8 +243,9 @@ export default {
       request,
       formErrors,
       removeFormError,
-      userData,
       updateQuestionAnswer,
+      isReady,
+      showCoverCanvas,
     };
   },
 };
@@ -230,19 +253,39 @@ export default {
 
 <style lang="scss" scoped>
 .cover {
-  padding: 48px 34px 0 34px;
+  position: relative;
+  width: 100%;
+  min-height: 320px;
+  padding: 27px 34px 0 34px;
   margin: 32px 0;
   background: linear-gradient(90deg, #e3d9ff 0%, #f5d9ff 98.96%);
   border-radius: 16px;
 
   @media screen and (max-width: 836px) {
+    min-height: auto;
     padding: 20px 12px 0 12px;
     margin: 16px 0;
   }
 
-  &__image {
+  .cover__wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+  }
+
+  &--ready .cover__wrapper {
+    opacity: 1;
+  }
+
+  &__image,
+  &__canvas {
+    width: 100% !important;
     max-width: 720px;
+    height: auto !important;
   }
 }
 
@@ -267,18 +310,27 @@ export default {
 }
 
 .success-message {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 728px;
-  padding: 64px 64px 48px 64px;
+  max-width: 560px;
+  padding: 64px 100px;
+  margin: auto;
   margin-bottom: 24px;
   text-align: center;
   background: $light;
   border: 1px solid $grey-200;
   border-radius: $border-radius;
+  transform: translate(-50%, -50%);
+
+  @media screen and (max-width: 836px) {
+    width: 90%;
+    padding: 56px 32px;
+  }
 
   &__illustration {
     position: absolute !important;
@@ -320,7 +372,7 @@ export default {
     max-width: 592px;
 
     &--success {
-      max-width: 460px;
+      max-width: 360px;
     }
   }
 

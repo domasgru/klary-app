@@ -27,6 +27,7 @@
   }
 
   &__content {
+    height: 100%;
     // margin-top: -160px;
 
     @media screen and (max-width: 836px) {
@@ -40,6 +41,7 @@
     align-items: center;
     width: 100%;
     max-width: 788px;
+    height: 100%;
     margin: 0 auto;
   }
 }

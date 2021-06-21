@@ -266,7 +266,7 @@ export default {
     width: 44px;
     height: 44px;
     margin-right: 4px;
-    transition: transform 0.3s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.4s 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
 
     &:last-child {
       margin-right: 8px;
@@ -288,7 +288,7 @@ export default {
   }
 
   &__author-title {
-    transition: transform 0.4s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.4s 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform: translateX(-40px);
   }
 
