@@ -132,7 +132,7 @@ export default {
   &__item {
     position: relative;
     display: flex;
-    padding: 10px;
+    padding: 7px;
     cursor: pointer;
     user-select: none;
     background: $grey-50;
