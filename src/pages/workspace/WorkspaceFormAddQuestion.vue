@@ -111,6 +111,7 @@ const QUESTION_TYPES = [
       isRequired: false,
     },
     value: [],
+    customOptionValue: '',
   },
 ];
 

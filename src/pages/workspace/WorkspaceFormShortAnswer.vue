@@ -13,7 +13,7 @@
       :error="error"
       size="lg"
       has-scale-interaction-on-focus
-      @input="$emit('form-input', $event.target.value)"
+      @input="$emit('form-input', {value: $event.target.value})"
     />
   </WorksapceFormQuestionBase>
 </template>

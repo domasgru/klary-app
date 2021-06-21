@@ -21,7 +21,7 @@
             class="checklist__input"
             :checked="value.includes(item.title)"
             :disabled="isEditMode"
-            @input="t($event, item.title)"
+            @input="updateChecklistValue($event, item.title)"
           >
           <div class="checklist__input-controller">
             <BaseSvg
@@ -37,8 +37,17 @@
         >
           {{ item.title }}
         </div>
-
       </label>
+      <div
+        v-show="doesAnswerContainCustomOption"
+        class="checklist__custom"
+      >
+        <BaseInput
+          label="Add your own option:"
+          :model-value="customOptionValue"
+          @input="$emit('form-input', {customOptionValue: $event.target.value})"
+        />
+      </div>
     </div>
   </WorksapceFormQuestionBase>
 </template>
@@ -58,6 +67,10 @@ export default {
     value: {
       type: Array,
       default: null,
+    },
+    customOptionValue: {
+      type: String,
+      default: '',
     },
     options: {
       type: Object,
@@ -80,16 +93,15 @@ export default {
   computed: {
     isEditMode: ({ viewMode }) => viewMode === 'edit',
     placeholder: ({ isEditMode }) => (isEditMode ? 'Short answer' : 'Your answer'),
+    doesAnswerContainCustomOption: ({ value }) => value.some((item) => item.toLowerCase() === 'other'),
   },
   methods: {
-    t(e, item) {
-      console.log(this.value);
+    updateChecklistValue(e, item) {
       if (e.target.checked) {
-        this.$emit('form-input', [...this.value, item]);
+        this.$emit('form-input', { value: [...this.value, item] });
       } else {
-        this.$emit('form-input', this.value.filter((value) => value !== item));
+        this.$emit('form-input', { value: [this.value.filter((value) => value !== item)] });
       }
-      console.log(e.target.checked);
     },
   },
 };

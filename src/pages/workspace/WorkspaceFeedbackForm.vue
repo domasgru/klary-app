@@ -76,10 +76,11 @@
         :error="(errors && errors[question.id]) || null"
         class="form__question"
         :value="question.value"
+        :custom-option-value="question.customOptionValue"
         @update="$emit('update-form-question', $event)"
         @duplicate="$emit('duplicate', question.id)"
         @delete="$emit('delete', question.id)"
-        @form-input="$emit('form-input', {id: question.id, value: $event})"
+        @form-input="$emit('form-input', {...$event, id: question.id})"
       />
     </div>
 

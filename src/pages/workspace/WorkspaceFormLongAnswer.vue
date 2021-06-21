@@ -14,7 +14,7 @@
       :placeholder="placeholder"
       has-scale-interaction-on-focus
       :model-value="value"
-      @input="$emit('form-input', $event.target.value)"
+      @input="$emit('form-input', {value: $event.target.value})"
     />
   </WorksapceFormQuestionBase>
 </template>

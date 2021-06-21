@@ -21,7 +21,7 @@
           :name="`opinion-scale-${id}`"
           :value="index - 1"
           :checked="parseInt(value, 10) === index - 1"
-          @input="$emit('form-input', $event.target.value)"
+          @input="$emit('form-input', {value: $event.target.value})"
         >
         <label
           :for="`option${index - 1}-${id}`"
@@ -133,16 +133,16 @@ export default {
     }
 
     & input {
-      opacity: 0;
       position: absolute;
+      opacity: 0;
     }
 
     & label {
-      width: 100%;
-      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 100%;
+      height: 48px;
       border: 1px solid $grey-200;
       border-radius: 10px;
       //transition: all 0.2s ease;
@@ -155,12 +155,13 @@ export default {
     }
 
     & input:checked + label {
+      color: $light;
       background: $primary;
       border: 1px solid $primary;
-      color: $light;
     }
   }
 }
+
 .opinion-scale-labels {
   display: flex;
   justify-content: space-between;
@@ -172,11 +173,13 @@ export default {
     &:not(:first-child):not(:last-child) {
       text-align: center;
     }
+
     &:last-child {
       text-align: right;
     }
   }
 }
+
 .opinion-scale-error {
   margin-top: 24px;
   color: $error;
