@@ -209,6 +209,10 @@ export default {
     background: $light;
     border: $stroke;
     border-radius: $border-radius;
+
+    @media screen and (max-width: 836px) {
+      padding: 32px;
+    }
   }
 
   &__author-toggle {
