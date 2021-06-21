@@ -25,14 +25,26 @@
           v-if="feedbackRequestData.showAuthor"
           class="form__author-initials"
         >
-          <BaseAvatar
-            class="form__avatar"
-            :picture="feedbackRequestData.picture"
-            :name="feedbackRequestData.name"
-          />
+          <div class="form__avatars">
+            <img
+              class="form__avatar"
+              :src="require('@/assets/images/klary-avatar.png')"
+              alt="Klary avatar"
+            >
+            <img
+              class="form__avatar"
+              :src="require('@/assets/images/dominykas-avatar.png')"
+              alt="Dominykas avatar"
+            >
+            <img
+              class="form__avatar"
+              :src="require('@/assets/images/justinas-avatar.png')"
+              alt="Justinas avatar"
+            >
+          </div>
           <div
-            class="b1s"
-            v-text="feedbackRequestData.name"
+            class="form__author-title b1s"
+            v-text="'Klary team'"
           />
         </div>
       </div>
@@ -231,12 +243,53 @@ export default {
   }
 
   &__author-initials {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    cursor: pointer;
+  }
+
+  &__author-initials:hover {
+    & #{$this}__avatar {
+      transform: translateX(0) !important;
+    }
+
+    & #{$this}__author-title {
+      transform: translateX(0) !important;
+    }
+  }
+
+  &__avatars {
+    display: flex;
   }
 
   &__avatar {
-    margin-right: 8px;
+    width: 44px;
+    height: 44px;
+    margin-right: 4px;
+    transition: transform 0.3s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    &:last-child {
+      margin-right: 8px;
+    }
+
+    &:nth-of-type(1) {
+      z-index: 3;
+    }
+
+    &:nth-of-type(2) {
+      z-index: 2;
+      transform: translateX(-20px);
+    }
+
+    &:nth-of-type(3) {
+      z-index: 1;
+      transform: translateX(-40px);
+    }
+  }
+
+  &__author-title {
+    transition: transform 0.4s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateX(-40px);
   }
 
   &__questions {

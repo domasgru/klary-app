@@ -235,6 +235,11 @@ export default {
   background: linear-gradient(90deg, #e3d9ff 0%, #f5d9ff 98.96%);
   border-radius: 16px;
 
+  @media screen and (max-width: 836px) {
+    padding: 20px 12px 0 12px;
+    margin: 16px 0;
+  }
+
   &__image {
     width: 100%;
     max-width: 720px;
