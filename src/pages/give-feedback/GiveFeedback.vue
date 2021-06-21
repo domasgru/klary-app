@@ -2,20 +2,13 @@
   <WorkspaceFormLayout
     v-if="!isLoading && request"
   >
-    <template #header>
-      <div class="navigation">
-        <div
-          v-if="userData"
-          class="navigation__user b2s"
+    <template #content>
+      <div class="cover">
+        <img
+          class="cover__image"
+          :src="require('@/assets/images/form-cover-placeholder.png')"
+          alt="Klary dashboard"
         >
-          <BaseAvatar
-            class="navigation__user-avatar"
-            size="sm"
-            :name="userData.name"
-            :picture="userData.picture"
-          />
-          {{ userData.name }}
-        </div>
       </div>
     </template>
     <template #form>
@@ -236,6 +229,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.cover {
+  padding: 48px 34px 0 34px;
+  margin: 32px 0;
+  background: linear-gradient(90deg, #e3d9ff 0%, #f5d9ff 98.96%);
+  border-radius: 16px;
+
+  &__image {
+    width: 100%;
+    max-width: 720px;
+  }
+}
+
 .navigation {
   position: absolute;
   top: 0;

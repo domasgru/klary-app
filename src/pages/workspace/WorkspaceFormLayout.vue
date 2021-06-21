@@ -1,10 +1,11 @@
 <template>
   <div class="layout">
     <slot name="header" />
-    <div class="layout__cover" />
+    <!-- <div class="layout__cover" /> -->
     <slot />
     <div class="layout__content">
       <div class="layout__container">
+        <slot name="content" />
         <slot name="form" />
       </div>
     </div>
@@ -26,7 +27,7 @@
   }
 
   &__content {
-    margin-top: -160px;
+    // margin-top: -160px;
 
     @media screen and (max-width: 836px) {
       padding: 0 16px;
