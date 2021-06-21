@@ -7,10 +7,12 @@
           class="base-question__text-item h6"
         >
           <div
-            class="editable"
             :contenteditable="isEditMode"
             data-placeholder="Type a question"
-            :class="{'display-inline-block': !isEditMode}"
+            :class="{
+              'display-inline-block': !isEditMode,
+              'editable': isEditMode
+            }"
             @blur="$emit('update', {id, key: 'options.title', value: $event.target.textContent})"
           >
             {{ options.title }}
@@ -24,7 +26,10 @@
         </div>
         <div
           v-if="showFormDescription"
-          class="base-question__text-item b1 editable"
+          class="base-question__text-item b1"
+          :class="{
+            'editable': isEditMode
+          }"
           :contenteditable="isEditMode"
           data-placeholder="Type a description"
           @blur="$emit('update', {id, key: 'options.description', value: $event.target.textContent})"

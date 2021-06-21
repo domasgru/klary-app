@@ -7,37 +7,45 @@
     @delete="$emit('delete')"
   >
     <div class="checklist">
-      <label
-        v-for="(item, index) in options.items"
-        :key="`item${index}-${id}`"
-        class="checklist__item"
-        :class="{'checklist__item--checked': value.includes(item.title)}"
-      >
-        <div class="checklist__input-wrapper">
-          <input
-            :id="`item${index}-${id}`"
-            :value="item.title"
-            type="checkbox"
-            class="checklist__input"
-            :checked="value.includes(item.title)"
-            :disabled="isEditMode"
-            @input="updateChecklistValue($event, item.title)"
-          >
-          <div class="checklist__input-controller">
-            <BaseSvg
-              class="checklist__check-icon"
-              name="checkbox-check"
-            />
-          </div>
-        </div>
-        <div
-          class="checklist__title"
-          :contenteditable="isEditMode"
-          @blur="$emit('update', {id, key: `options.items[${index}].title`, value: $event.target.textContent})"
+      <div class="checklsit__items">
+        <label
+          v-for="(item, index) in options.items"
+          :key="`item${index}-${id}`"
+          class="checklist__item"
+          :class="{'checklist__item--checked': value.includes(item.title)}"
         >
-          {{ item.title }}
-        </div>
-      </label>
+          <div class="checklist__input-wrapper">
+            <input
+              :id="`item${index}-${id}`"
+              :value="item.title"
+              type="checkbox"
+              class="checklist__input"
+              :checked="value.includes(item.title)"
+              :disabled="isEditMode || isDisabled"
+              @input="updateChecklistValue($event, item.title)"
+            >
+            <div class="checklist__input-controller">
+              <BaseSvg
+                class="checklist__check-icon"
+                name="checkbox-check"
+              />
+            </div>
+          </div>
+          <div
+            class="checklist__title"
+            :contenteditable="isEditMode"
+            @blur="$emit('update', {id, key: `options.items[${index}].title`, value: $event.target.textContent})"
+          >
+            {{ item.title }}
+          </div>
+          <BaseButton
+            v-if="isEditMode"
+            class="checklist__delete-button"
+            @click="deleteItem(item)"
+            v-text="'Delete'"
+          />
+        </label>
+      </div>
       <div
         v-show="doesAnswerContainCustomOption"
         class="checklist__custom"
@@ -45,9 +53,17 @@
         <BaseInput
           label="Add your own option:"
           :model-value="customOptionValue"
-          @input="$emit('form-input', {customOptionValue: $event.target.value})"
+          size="lg"
+          :is-disabled="isDisabled"
+          @input="$emit('form-input', {key: 'customOptionValue', value: $event.target.value})"
         />
       </div>
+      <BaseButton
+        v-if="isEditMode"
+        class="add-checkbox"
+        @click="$emit('update', {id, key: `options.items`, value: [...options.items, {title: 'Your title'}]})"
+        v-text="'Add checkbox'"
+      />
     </div>
   </WorksapceFormQuestionBase>
 </template>
@@ -100,8 +116,12 @@ export default {
       if (e.target.checked) {
         this.$emit('form-input', { value: [...this.value, item] });
       } else {
-        this.$emit('form-input', { value: [this.value.filter((value) => value !== item)] });
+        this.$emit('form-input', { value: this.value.filter((value) => value !== item) });
       }
+    },
+    deleteItem(checkBoxItem) {
+      const updatedItems = this.options.items.filter((item) => item !== checkBoxItem);
+      this.$emit('update', { id: this.id, key: 'options.items', value: updatedItems });
     },
   },
 };
@@ -110,11 +130,12 @@ export default {
 <style lang="scss">
 .checklist {
   &__item {
-    display: block;
+    position: relative;
     display: flex;
     align-items: center;
     padding: 10px;
     cursor: pointer;
+    user-select: none;
     background: $grey-50;
     border: 1px solid $grey-200;
     border-radius: 8px;
@@ -130,6 +151,7 @@ export default {
   }
 
   &__title {
+    width: 100%;
     pointer-events: auto;
   }
 
@@ -175,5 +197,19 @@ export default {
     width: 16px;
     height: 16px;
   }
+
+  &__delete-button {
+    position: absolute;
+    right: 0;
+    pointer-events: auto;
+  }
+
+  &__custom {
+    margin-top: 24px;
+  }
+}
+
+.add-checkbox {
+  pointer-events: auto;
 }
 </style>

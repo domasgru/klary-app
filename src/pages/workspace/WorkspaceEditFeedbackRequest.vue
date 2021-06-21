@@ -9,6 +9,7 @@
         :feedback-request-data="form"
         @update-form="updateForm"
         @update-form-question="updateQuestion"
+        @update-questions="updateQuestionsList"
         @save="saveForm"
         @duplicate="duplicateQuestion"
         @delete="deleteQuestion"
@@ -84,6 +85,12 @@ export default {
       this.updateForm({
         path: 'questions',
         value: arrayWithDeletedQuestion,
+      });
+    },
+    updateQuestionsList({ value }) {
+      this.updateForm({
+        path: 'questions',
+        value,
       });
     },
     updateQuestion({ id, key, value }) {

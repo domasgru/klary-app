@@ -39,8 +39,9 @@
 
       <div
         v-if="showFormTitle"
-        class="form__initial form__title h4 editable"
+        class="form__initial form__title h4"
         :contenteditable="isEditMode"
+        :class="{'editable': isEditMode}"
         data-placeholder="Type a form title"
         @blur="$emit('update-form', { path: 'formTitle', value: $event.target.textContent })"
       >
@@ -49,13 +50,13 @@
 
       <div
         v-if="showFormDescription"
-        class="form__initial form__description b1 editable"
+        class="form__initial form__description b1"
         :contenteditable="isEditMode"
+        :class="{'editable': isEditMode}"
         data-placeholder="Type a form description"
-        @blur="$emit('update-form', {path: 'formDescription', value: $event.target.textContent})"
-      >
-        {{ feedbackRequestData.formDescription }}
-      </div>
+        @blur="$emit('update-form', {path: 'formDescription', value: $event.target.innerHTML})"
+        v-html="feedbackRequestData.formDescription"
+      />
       <div
         v-if="!isEditMode && hasRequiredQuestions"
         class="form__initial form__required b2"
@@ -65,23 +66,50 @@
     </div>
 
     <div class="form__questions">
-      <component
-        :is="`WorkspaceForm${$options.capitalize(question.type)}`"
-        v-for="question in feedbackRequestData.questions"
-        :id="question.id"
+      <div
+        v-for="(question, index) in feedbackRequestData.questions"
         :key="question.id"
-        :options="question.options"
-        :view-mode="viewMode"
-        :is-disabled="viewMode === 'view'"
-        :error="(errors && errors[question.id]) || null"
-        class="form__question"
-        :value="question.value"
-        :custom-option-value="question.customOptionValue"
-        @update="$emit('update-form-question', $event)"
-        @duplicate="$emit('duplicate', question.id)"
-        @delete="$emit('delete', question.id)"
-        @form-input="$emit('form-input', {...$event, id: question.id})"
-      />
+        class="form__question-wrapper"
+      >
+        <component
+          :is="`WorkspaceForm${$options.capitalize(question.type)}`"
+          :id="question.id"
+          :options="question.options"
+          :view-mode="viewMode"
+          :is-disabled="viewMode === 'view'"
+          :error="(errors && errors[question.id]) || null"
+          class="form__question"
+          :value="question.value"
+          :custom-option-value="question.customOptionValue"
+          @update="$emit('update-form-question', $event)"
+          @duplicate="$emit('duplicate', question.id)"
+          @delete="$emit('delete', question.id)"
+          @form-input="$emit('form-input', {...$event, id: question.id})"
+        />
+        <div
+          v-if="isEditMode"
+          class="form__question-controls"
+        >
+          <button
+            class="form__order-button"
+            @click="moveQuestion('top', index)"
+          >
+            <BaseSvg
+              class="form__order-top-icon"
+              name="arrow-down"
+            />
+          </button>
+          <button
+            class="form__order-button"
+            @click="moveQuestion('bottom', index)"
+          >
+            <BaseSvg
+              class="form__order-down-icon"
+              name="arrow-down"
+            />
+          </button>
+        </div>
+      </div>
     </div>
 
     <template v-if="viewMode === 'active'">
@@ -108,6 +136,7 @@
 <script>
 import { capitalize } from '@/utils/stringUtils';
 import { pasteAsPlainText } from '@/utils/pasteAsPlainText';
+import arrayMove from 'array-move';
 import WorkspaceFormShortAnswer from './WorkspaceFormShortAnswer.vue';
 import WorkspaceFormLongAnswer from './WorkspaceFormLongAnswer.vue';
 import WorkspaceFormOpinionScale from './WorkspaceFormOpinionScale.vue';
@@ -134,7 +163,7 @@ export default {
       default: null,
     },
   },
-  emits: ['update-form', 'update-form-question', 'save', 'submit', 'delete', 'duplicate', 'form-input'],
+  emits: ['update-form', 'update-form-question', 'save', 'submit', 'delete', 'duplicate', 'form-input', 'update-questions'],
   computed: {
     isEditMode() {
       return this.viewMode === 'edit';
@@ -152,6 +181,14 @@ export default {
       return this.feedbackRequestData.questions.some(({ options }) => options.isRequired);
     },
   },
+  methods: {
+    moveQuestion(direction, index) {
+      const updatedQuestions = direction === 'bottom'
+        ? arrayMove(this.feedbackRequestData.questions, index, (index + 1))
+        : arrayMove(this.feedbackRequestData.questions, index, (index - 1));
+      this.$emit('update-questions', { value: updatedQuestions });
+    },
+  },
   capitalize,
   pasteAsPlainText,
 };
@@ -159,6 +196,8 @@ export default {
 
 <style lang="scss" scoped>
 .form {
+  $this: &;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -217,10 +256,45 @@ export default {
     margin-bottom: 0;
   }
 
-  &__question {
+  &__question-wrapper {
+    position: relative;
+
     &:not(:last-child) {
       margin-bottom: 16px;
     }
+  }
+
+  &__question {
+
+  }
+
+  &__question-controls {
+    position: absolute;
+    top: 0;
+    left: -50px;
+  }
+
+  &__order-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+
+    &:hover {
+      background: $grey-200;
+    }
+  }
+
+  &__order-top-icon {
+    width: 20px;
+    height: 8px;
+    transform: rotate(180deg);
+  }
+
+  &__order-down-icon {
+    width: 20px;
+    height: 8px;
   }
 
   &__kuri {

@@ -37,8 +37,9 @@
     >
       <div
         v-if="options.scaleLabels.low"
-        class="opinion-scale-labels__label editable"
-        contenteditable="true"
+        class="opinion-scale-labels__label"
+        :contenteditable="isEditMode"
+        :class="{'editable': isEditMode}"
         data-placeholder="Type a label"
         @input="$emit('update', {id, key: 'options.scaleLabels.low', value: $event.target.textContent})"
         @blur="$emit('save')"
@@ -47,8 +48,9 @@
       </div>
       <div
         v-if="options.scaleLabels.medium"
-        class="opinion-scale-labels__label editable"
-        contenteditable="true"
+        class="opinion-scale-labels__label"
+        :contenteditable="isEditMode"
+        :class="{'editable': isEditMode}"
         data-placeholder="Type a label"
         @input="$emit('update', {id, key: 'options.scaleLabels.medium', value: $event.target.textContent})"
         @blur="$emit('save')"
@@ -57,8 +59,9 @@
       </div>
       <div
         v-if="options.scaleLabels.high"
-        class="opinion-scale-labels__label editable"
-        contenteditable="true"
+        class="opinion-scale-labels__label"
+        :contenteditable="isEditMode"
+        :class="{'editable': isEditMode}"
         data-placeholder="Type a label"
         @input="$emit('update', {id, key: 'options.scaleLabels.high', value: $event.target.textContent})"
         @blur="$emit('save')"

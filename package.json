@@ -17,6 +17,7 @@
     "@vuelidate/core": "^2.0.0-alpha.7",
     "@vuelidate/validators": "^2.0.0-alpha.5",
     "animejs": "^3.2.0",
+    "array-move": "^3.0.1",
     "array-sort": "^1.0.0",
     "autosize": "^4.0.2",
     "core-js": "^3.6.4",

@@ -213,9 +213,9 @@ export default {
       router.push(`/sent/${sentFeedbackId.value}`);
     };
 
-    const updateQuestionAnswer = ({ id, value }) => {
+    const updateQuestionAnswer = ({ id, key, value }) => {
       const questionIndex = request.value.questions.findIndex((question) => question.id === id);
-      set(request.value, `questions[${questionIndex}].value`, value);
+      set(request.value, `questions[${questionIndex}].${key || 'value'}`, value);
     };
 
     return {
