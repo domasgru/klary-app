@@ -17,8 +17,12 @@
   position: relative;
   width: 100%;
   min-height: 100%;
-  padding-bottom: 120px;
+  padding-bottom: 88px;
   background: $grey-100;
+
+  @media screen and (max-width: 836px) {
+    padding-bottom: 64px;
+  }
 
   &__cover {
     width: 100%;
