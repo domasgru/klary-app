@@ -221,6 +221,9 @@ export default {
     background: $light;
     border: $stroke;
     border-radius: $border-radius;
+    opacity: 0.2;
+    transform: translateY(48px);
+    animation: resetTransform 0.3s ease forwards;
 
     @media screen and (max-width: 836px) {
       padding: 32px;
@@ -245,7 +248,6 @@ export default {
   &__author-initials {
     display: inline-flex;
     align-items: center;
-    cursor: pointer;
   }
 
   &__author-initials:hover {
@@ -322,7 +324,9 @@ export default {
   }
 
   &__question {
-
+    opacity: 0.2;
+    transform: translateY(56px);
+    animation: resetTransform 0.3s ease forwards;
   }
 
   &__question-controls {
@@ -363,6 +367,13 @@ export default {
 
   &__logo {
     margin-top: 10px;
+  }
+}
+
+@keyframes resetTransform {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

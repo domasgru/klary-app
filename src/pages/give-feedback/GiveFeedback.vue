@@ -259,7 +259,12 @@ export default {
   padding: 27px 34px 0 34px;
   margin: 32px 0;
   background: linear-gradient(90deg, #e3d9ff 0%, #f5d9ff 98.96%);
+  border: 1px solid;
   border-radius: 16px;
+  border-image-source: linear-gradient(99.36deg, #daccff 0%, #f3ccff 100%);
+  opacity: 0.2;
+  transform: translateY(32px);
+  animation: resetTransform 0.3s ease forwards;
 
   @media screen and (max-width: 836px) {
     min-height: auto;
@@ -414,6 +419,13 @@ export default {
   &__title {
     max-width: 480px;
     margin-bottom: 16px;
+  }
+}
+
+@keyframes resetTransform {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>
