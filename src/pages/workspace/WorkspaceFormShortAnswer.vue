@@ -6,13 +6,14 @@
     @duplicate="$emit('duplicate')"
     @delete="$emit('delete')"
   >
-    <BaseInput
-      :placeholder="placeholder"
-      :model-value="value"
+    <BaseTextarea
+      rows="1"
+      padding="12px 16px"
       :is-disabled="isDisabled"
       :error="error"
-      size="lg"
+      :placeholder="placeholder"
       has-scale-interaction-on-focus
+      :model-value="value"
       @input="$emit('form-input', {value: $event.target.value})"
     />
   </WorksapceFormQuestionBase>

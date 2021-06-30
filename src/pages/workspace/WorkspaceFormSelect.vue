@@ -12,22 +12,22 @@
           v-for="(item, index) in options.items"
           :key="`item${index}-${id}`"
           class="checklist__item"
-          :class="{'checklist__item--checked': value.includes(item.title)}"
+          :class="{'checklist__item--checked': value === item.title}"
         >
           <div class="checklist__input-wrapper">
             <input
               :id="`item${index}-${id}`"
               :value="item.title"
-              type="checkbox"
+              type="radio"
               class="checklist__input"
-              :checked="value.includes(item.title)"
+              :checked="value === item.title"
               :disabled="isEditMode || isDisabled"
-              @input="updateChecklistValue($event, item.title)"
+              @input="updateSelectValue"
             >
             <div class="checklist__input-controller">
-              <BaseSvg
+              <div
+                v-show="value === item.title"
                 class="checklist__check-icon"
-                name="checkbox-check"
               />
             </div>
           </div>
@@ -81,7 +81,7 @@ export default {
       required: true,
     },
     value: {
-      type: Array,
+      type: String,
       default: null,
     },
     customOptionValue: {
@@ -109,15 +109,11 @@ export default {
   computed: {
     isEditMode: ({ viewMode }) => viewMode === 'edit',
     placeholder: ({ isEditMode }) => (isEditMode ? 'Short answer' : 'Your answer'),
-    doesAnswerContainCustomOption: ({ value }) => value.some((item) => item.toLowerCase() === 'other'),
+    doesAnswerContainCustomOption: ({ value }) => value.toLowerCase() === 'other',
   },
   methods: {
-    updateChecklistValue(e, item) {
-      if (e.target.checked) {
-        this.$emit('form-input', { value: [...this.value, item] });
-      } else {
-        this.$emit('form-input', { value: this.value.filter((value) => value !== item) });
-      }
+    updateSelectValue(e) {
+      this.$emit('form-input', { value: e.target.value });
     },
     deleteItem(checkBoxItem) {
       const updatedItems = this.options.items.filter((item) => item !== checkBoxItem);
@@ -175,12 +171,11 @@ export default {
     height: 20px;
     background: $light;
     border: 1.5px solid $grey-300;
-    border-radius: 6px;
+    border-radius: 50%;
     transition: all 0.2s ease;
   }
 
   &__input:checked + &__input-controller {
-    background: $primary;
     border: 1.5px solid $primary;
   }
 
@@ -190,8 +185,10 @@ export default {
   }
 
   &__check-icon {
-    width: 16px;
-    height: 16px;
+    width: 10px;
+    height: 10px;
+    background: $primary;
+    border-radius: 50%;
   }
 
   &__delete-button {

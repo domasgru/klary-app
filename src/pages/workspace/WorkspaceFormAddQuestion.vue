@@ -54,6 +54,10 @@ const QUESTION_INFO = {
     questionName: 'Checklist',
     illustration: '',
   },
+  select: {
+    questionName: 'Select',
+    illustration: '',
+  },
 };
 
 const QUESTION_TYPES = [
@@ -111,6 +115,27 @@ const QUESTION_TYPES = [
       isRequired: false,
     },
     value: [],
+    customOptionValue: '',
+  },
+  {
+    type: 'select',
+    options: {
+      title: '',
+      description: '',
+      items: [
+        {
+          title: 'Selection 1',
+        },
+        {
+          title: 'Selection 2',
+        },
+        {
+          title: 'Selection 3',
+        },
+      ],
+      isRequired: false,
+    },
+    value: '',
     customOptionValue: '',
   },
 ];
