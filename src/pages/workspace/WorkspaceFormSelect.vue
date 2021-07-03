@@ -22,7 +22,7 @@
               class="checklist__input"
               :checked="value === item.title"
               :disabled="isEditMode || isDisabled"
-              @input="updateSelectValue"
+              @input="$emit('form-input', { value: $event.target.value })"
             >
             <div class="checklist__input-controller">
               <div
@@ -58,6 +58,13 @@
           @input="$emit('form-input', {key: 'customOptionValue', value: $event.target.value})"
         />
       </div>
+      <BaseButton
+        v-show="value"
+        type="secondary"
+        class="checklist__unselect"
+        @click="$emit('form-input', { value: '' })"
+        v-text="'Unselect'"
+      />
       <BaseButton
         v-if="isEditMode"
         class="add-checkbox"
@@ -112,9 +119,6 @@ export default {
     doesAnswerContainCustomOption: ({ value }) => value.toLowerCase() === 'other',
   },
   methods: {
-    updateSelectValue(e) {
-      this.$emit('form-input', { value: e.target.value });
-    },
     deleteItem(checkBoxItem) {
       const updatedItems = this.options.items.filter((item) => item !== checkBoxItem);
       this.$emit('update', { id: this.id, key: 'options.items', value: updatedItems });
@@ -198,6 +202,10 @@ export default {
   }
 
   &__custom {
+    margin-top: 24px;
+  }
+
+  &__unselect {
     margin-top: 24px;
   }
 }
