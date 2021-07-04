@@ -55,6 +55,7 @@
           :model-value="customOptionValue"
           size="lg"
           :is-disabled="isDisabled"
+          has-scale-interaction-on-focus
           @input="$emit('form-input', {key: 'customOptionValue', value: $event.target.value})"
         />
       </div>
