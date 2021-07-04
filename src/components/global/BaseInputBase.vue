@@ -6,7 +6,6 @@
       'base-input--success': success,
       'base-input--disabled': isDisabled,
       'base-input--liftUpAnimation': animateLiftUp,
-      'base-input--hasScaleInteractionOnFocus': hasScaleInteractionOnFocus
     }"
     @animationend="animateLiftUp = false"
   >
@@ -17,13 +16,15 @@
     >
       {{ label }}
     </label>
-    <div
-      class="base-input__input-wrapper"
-      :style="styleVariables"
-      :class="{'base-input__input-wrapper--pulse': inputPulseAnimation}"
-      @animationend="inputPulseAnimation = false"
-    >
-      <slot />
+    <div :class="{'base-input--hasScaleInteractionOnFocus': hasScaleInteractionOnFocus}">
+      <div
+        class="base-input__input-wrapper"
+        :style="styleVariables"
+        :class="{'base-input__input-wrapper--pulse': inputPulseAnimation}"
+        @animationend="inputPulseAnimation = false"
+      >
+        <slot />
+      </div>
     </div>
     <span
       v-if="showHintArea"
@@ -130,6 +131,8 @@ export default {
   transform-origin: center center;
 
   &--hasScaleInteractionOnFocus {
+    transition: all 0.2s ease;
+
     &:focus-within {
       transform: scale(1.01);
     }
