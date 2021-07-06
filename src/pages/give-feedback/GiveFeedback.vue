@@ -88,7 +88,7 @@
 
 <script>
 import {
-  ref, computed, watch, nextTick,
+  ref, computed, watch, nextTick, onMounted,
 } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -131,11 +131,19 @@ export default {
     const isReady = computed(() => !isLoading.value && request.value);
 
     // Form tracking
-    const { trackingMark } = router.currentRoute.value.params;
-    const formTestVariant = trackingMark.replace(/[0-9]/g, '');
-    if (formTestVariant) {
-      window.umami.trackEvent(formTestVariant, 'feedback-culture-form-variant');
-    }
+    onMounted(() => {
+      setTimeout(() => {
+        try {
+          const { trackingMark } = router.currentRoute.value.params;
+          const formTestVariant = trackingMark.replace(/[0-9]/g, '');
+          if (formTestVariant) {
+            window.umami.trackEvent(formTestVariant, 'feedback-culture-form-variant');
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }, 2000);
+    });
 
     const loadRequestData = async () => {
       try {
@@ -159,7 +167,6 @@ export default {
         const resizeObserver = new ResizeObserver(async ([entry]) => {
           const { width, height } = Array.isArray(entry.contentRect) ? entry.contentRect[0] : entry.contentRect;
           if ((height / width) > 0.9 || true) {
-            console.log('wtf');
             showCoverCanvas.value = true;
           }
         });
