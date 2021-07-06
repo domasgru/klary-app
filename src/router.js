@@ -11,7 +11,7 @@ export const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/f/:requestId',
+      path: '/f/:requestId/:trackingMark?',
       component: GiveFeedback,
     },
   ],

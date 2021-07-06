@@ -130,6 +130,13 @@ export default {
     const request = ref(null);
     const isReady = computed(() => !isLoading.value && request.value);
 
+    // Form tracking
+    const { trackingMark } = router.currentRoute.value.params;
+    const formTestVariant = trackingMark.replace(/[0-9]/g, '');
+    if (formTestVariant) {
+      window.umami.trackEvent(formTestVariant, 'feedback-culture-form-variant');
+    }
+
     const loadRequestData = async () => {
       try {
         isLoading.value = true;
