@@ -9,7 +9,7 @@
     <BaseTextarea
       rows="1"
       padding="12px 16px"
-      :is-disabled="isDisabled"
+      :is-preview="viewMode === 'view'"
       :error="error"
       :placeholder="placeholder"
       has-scale-interaction-on-focus

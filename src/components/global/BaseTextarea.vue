@@ -10,7 +10,7 @@
       :value="modelValue"
       :rows="rows"
       :autofocus="autofocus"
-      :disabled="isDisabled"
+      :disabled="isDisabled || isPreview"
       @input="$emit('update:modelValue', $event.target.value)"
       @keydown="handleCmdEnter"
     />
@@ -86,6 +86,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isPreview: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['update:modelValue', 'submit'],
   data() {
@@ -145,11 +149,11 @@ export default {
   height: 100%;
   font-family: 'Inter';
   line-height: 24px;
-  resize: none;
-  outline: none;
-  border: none;
-  background: transparent;
   cursor: text;
+  resize: none;
+  background: transparent;
+  border: none;
+  outline: none;
 
   &::placeholder {
     color: $grey-500;

@@ -5,6 +5,7 @@
       'base-input--error': error,
       'base-input--success': success,
       'base-input--disabled': isDisabled,
+      'base-input--preview': isPreview,
       'base-input--liftUpAnimation': animateLiftUp,
     }"
     @animationend="animateLiftUp = false"
@@ -55,6 +56,10 @@ export default {
       default: undefined,
     },
     isDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    isPreview: {
       type: Boolean,
       default: false,
     },
@@ -195,6 +200,11 @@ export default {
 
     #{$this}--disabled & {
       color: $grey-600;
+      background: $grey-50;
+    }
+
+    #{$this}--preview & {
+      color: $dark;
       background: $grey-50;
     }
   }
