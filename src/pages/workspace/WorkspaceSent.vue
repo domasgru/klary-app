@@ -1,6 +1,6 @@
 <template>
   <h4 class="title h4">
-    Sent
+    All sent
   </h4>
   <template v-if="isLoading || pendingFeedbacks.length || clearFeedbacks.length">
     <WorkspaceFeedbackList

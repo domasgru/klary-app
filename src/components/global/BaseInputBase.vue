@@ -146,6 +146,7 @@ export default {
   &__label {
     display: block;
     padding-bottom: 8px;
+    text-align: start;
   }
 
   &__hint {
@@ -200,11 +201,13 @@ export default {
 
     #{$this}--disabled & {
       color: $grey-600;
+      pointer-events: none;
       background: $grey-50;
     }
 
     #{$this}--preview & {
       color: $dark;
+      pointer-events: none;
       background: $grey-50;
     }
   }

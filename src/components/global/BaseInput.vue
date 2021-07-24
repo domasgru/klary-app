@@ -69,7 +69,6 @@ export default {
   position: relative;
   width: 100%;
   font-family: 'Inter', sans-serif;
-  color: $dark;
   cursor: text;
   resize: none;
   background: transparent;

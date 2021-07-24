@@ -9,8 +9,6 @@ import App from './App.vue';
 import { router } from './router';
 import { store } from './store';
 import './firebase';
-// eslint-disable-next-line import/no-unresolved
-import 'windi.css';
 import './scss/global/global.scss';
 
 const app = createApp(App);

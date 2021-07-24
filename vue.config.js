@@ -1,6 +1,5 @@
 module.exports = {
   pluginOptions: {
-    windicss: {},
   },
   css: {
     loaderOptions: {

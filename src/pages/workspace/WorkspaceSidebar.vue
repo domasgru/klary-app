@@ -112,13 +112,13 @@ import WorkspaceSidebarButton from './WorkspaceSidebarButton.vue';
 const INBOX = {
   RECEIVED: {
     icon: 'received',
-    text: 'All Received',
+    text: 'All received',
     storeState: 'receivedFeedbacks',
     path: '/received',
   },
   SENT: {
     icon: 'sent',
-    text: 'All Sent',
+    text: 'All sent',
     storeState: 'sentFeedbacks',
     path: '/sent',
   },
@@ -252,8 +252,8 @@ export default {
   }
 
   &__user-wrapper {
-    margin-bottom: 16px;
     width: 100%;
+    margin-bottom: 16px;
   }
 
   &__user {
@@ -302,14 +302,14 @@ export default {
 
   &__forms-scroll {
     flex-grow: 1;
-    overflow-y: auto;
     padding: 0 8px 20px 8px;
+    overflow-y: auto;
   }
 
   &__my-forms {
+    padding: 0 16px;
     margin-bottom: 8px;
     color: $grey-600;
-    padding: 0 16px;
   }
 
   &__form-button {
@@ -318,16 +318,16 @@ export default {
 
   &__create-form {
     display: flex;
-    padding: 6px 8px;
     align-items: center;
+    padding: 6px 8px;
     color: $grey-600;
     cursor: pointer;
     border-radius: 6px;
     transition: all 0.2s;
 
     &:hover {
-    background: $grey-100;
-  }
+      background: $grey-100;
+    }
   }
 
   &__plus-icon {
@@ -358,8 +358,8 @@ export default {
   &__plus {
     width: 20px;
     height: 20px;
-    margin-right: 8px;
     padding: 2px;
+    margin-right: 8px;
   }
 }
 </style>
