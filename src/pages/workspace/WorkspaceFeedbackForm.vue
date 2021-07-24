@@ -95,8 +95,8 @@
             @click="moveQuestion('top', index)"
           >
             <BaseSvg
-              class="form__order-top-icon"
-              name="arrow-down"
+              class="form__order-icon"
+              name="arrow-up"
             />
           </button>
           <button
@@ -104,7 +104,7 @@
             @click="moveQuestion('bottom', index)"
           >
             <BaseSvg
-              class="form__order-down-icon"
+              class="form__order-icon"
               name="arrow-down"
             />
           </button>
@@ -185,9 +185,18 @@ export default {
   },
   methods: {
     moveQuestion(direction, index) {
-      const updatedQuestions = direction === 'bottom'
-        ? arrayMove(this.feedbackRequestData.questions, index, (index + 1))
-        : arrayMove(this.feedbackRequestData.questions, index, (index - 1));
+      const { questions } = this.feedbackRequestData;
+      let updatedQuestions = null;
+      if (direction === 'bottom') {
+        // Moving last question to bottom resets it to first one.
+        if (index === questions.length - 1) {
+          updatedQuestions = arrayMove(questions, index, 0);
+        } else {
+          updatedQuestions = arrayMove(questions, index, (index + 1));
+        }
+      } else if (direction === 'top') {
+        updatedQuestions = arrayMove(questions, index, (index - 1));
+      }
       this.$emit('update-questions', { value: updatedQuestions });
     },
   },
@@ -277,30 +286,26 @@ export default {
   &__question-controls {
     position: absolute;
     top: 0;
-    left: -50px;
+    left: -48px;
   }
 
   &__order-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
 
     &:hover {
-      background: $grey-200;
+      cursor: pointer;
+      background: $grey-150;
     }
   }
 
-  &__order-top-icon {
+  &__order-icon {
     width: 20px;
-    height: 8px;
-    transform: rotate(180deg);
-  }
-
-  &__order-down-icon {
-    width: 20px;
-    height: 8px;
+    height: 20px;
   }
 
   &__kuri {

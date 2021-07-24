@@ -279,9 +279,8 @@ export default {
   }
 
   &__user-icon {
-    width: 24px;
-    height: 24px;
-    padding: 6px;
+    width: 16px;
+    height: 16px;
     margin-left: auto;
   }
 
