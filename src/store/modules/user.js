@@ -5,6 +5,7 @@ export default {
   state: {
     userAuth: null,
     userData: null,
+    customUI: null,
   },
   mutations: {
     setUserAuth(state, value) {
@@ -23,6 +24,9 @@ export default {
     },
     bindUser: firestoreAction(
       ({ bindFirestoreRef }, uid) => bindFirestoreRef('userData', db.collection('users').doc(uid)),
+    ),
+    bindCustomUI: firestoreAction(
+      ({ bindFirestoreRef }, uid) => bindFirestoreRef('customUI', db.collection('customUI').doc(uid)),
     ),
     unbindUser: firestoreAction(({ unbindFirestoreRef }) => {
       unbindFirestoreRef('userData');

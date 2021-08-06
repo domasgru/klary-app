@@ -49,22 +49,27 @@
       My forms:
     </div>
     <div class="workspace-sidebar__forms-scroll">
-      <WorkspaceSidebarButton
-        v-for="request in feedbackRequests"
-        :key="request.id"
-        :icon="request.icon || 'blank'"
-        :text="request.title"
-        :emoji="request.emoji"
-        :to="`/form/${request.id}`"
-        :is-active="isActive(request.id, $route.path)"
-        :options="$options.feedbackRequestOptions"
-        class="workspace-sidebar__form-button"
-        @copy-link="copyFeedbackRequestLink(request)"
-        @duplicate="duplicateFeedbackRequest(request)"
-        @delete="deleteForm(request.id)"
-        @update-emoji="updateFormEmoji(request.id, $event)"
-        @update-title="updateFeedbackRequestTitle(request.id, $event)"
-      />
+      <div
+        ref="sidebarButtonsSortable"
+        class="workspace-sidebar__form-buttons"
+      >
+        <WorkspaceSidebarButton
+          v-for="request in orderedFeedbackRequests"
+          :key="request.id"
+          :icon="request.icon || 'blank'"
+          :text="request.title"
+          :emoji="request.emoji"
+          :to="`/form/${request.id}`"
+          :is-active="isActive(request.id, $route.path)"
+          :options="$options.feedbackRequestOptions"
+          class="workspace-sidebar__form-button"
+          @copy-link="copyFeedbackRequestLink(request)"
+          @duplicate="duplicateFeedbackRequest(request)"
+          @delete="deleteForm(request.id)"
+          @update-emoji="updateFormEmoji(request.id, $event)"
+          @update-title="updateFeedbackRequestTitle(request.id, $event)"
+        />
+      </div>
 
       <div
         class="workspace-sidebar__create-form btn2"
@@ -101,11 +106,13 @@
 
 <script>
 import { nanoid } from 'nanoid';
-import { mapActions, mapGetters, mapState } from 'vuex';
+import Sortable from 'sortablejs';
+import { mapGetters, mapState } from 'vuex';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import {
-  logout, updateFeedbackRequest, createFeedbackRequest, deleteFeedbackRequest,
+  logout, updateFeedbackRequest, createFeedbackRequest, deleteFeedbackRequest, setCustomUI,
 } from '@/firebase';
+import arrayMove from 'array-move';
 import WorkspaceAccountSettings from './WorkspaceAccountSettings.vue';
 import WorkspaceSidebarButton from './WorkspaceSidebarButton.vue';
 
@@ -170,12 +177,23 @@ export default {
     };
   },
   computed: {
-    ...mapState('user', ['userData']),
+    ...mapState('user', ['userData', 'customUI']),
     ...mapState('feedback', ['feedbackRequests']),
-    ...mapGetters('feedback', ['receivedFeedbacks', 'sentFeedbacks']),
+    ...mapGetters('feedback', ['receivedFeedbacks', 'sentFeedbacks', 'orderedFeedbackRequests']),
+  },
+  mounted() {
+    const sortable = Sortable.create(this.$refs.sidebarButtonsSortable, {
+      onUpdate: async ({ oldIndex, newIndex }) => {
+        const updatedIdsOrder = arrayMove(this.orderedFeedbackRequests.map((request) => request.id), oldIndex, newIndex);
+        setCustomUI({
+          userId: this.userData.uid,
+          key: 'sidebarFormsOrder',
+          value: updatedIdsOrder,
+        });
+      },
+    });
   },
   methods: {
-    ...mapActions('feedback', ['bindFeedbackRequests']),
     isActive(path, currentRoute) {
       return currentRoute.includes(path);
     },
@@ -205,7 +223,7 @@ export default {
     deleteForm(id) {
       deleteFeedbackRequest(id);
       if (this.$router.currentRoute.value.params.id === id) {
-        const requestsAfterDelete = this.feedbackRequests.filter((request) => request.id !== id);
+        const requestsAfterDelete = this.orderedFeedbackRequests.filter((request) => request.id !== id);
         if (!requestsAfterDelete.length) {
           this.$router.push('/received');
         }

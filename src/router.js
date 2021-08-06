@@ -61,7 +61,9 @@ export const router = createRouter({
         await Promise.all([
           store.dispatch('feedback/bindAllFeedbacks', { userId: uid }),
           store.dispatch('feedback/bindFeedbackRequests', { userId: uid }),
+          store.dispatch('user/bindCustomUI', uid),
         ]);
+
         return next();
       },
       children: [

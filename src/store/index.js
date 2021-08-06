@@ -21,8 +21,5 @@ export const store = createStore({
     ...vuexfireMutations,
   },
   modules,
-  plugins: [
-    ...(!isProduction ? [createLogger()] : []),
-  ],
   strict: !isProduction,
 });

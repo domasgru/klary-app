@@ -37,6 +37,13 @@ export default {
     removedFeedbacks(state, getters) {
       return state.removedFeedbacks;
     },
+    orderedFeedbackRequests(state, getters, rootState) {
+      if (rootState.user.customUI.sidebarFormsOrder) {
+        return rootState.user.customUI.sidebarFormsOrder.map((item) => state.feedbackRequests.find((request) => request.id === item));
+      }
+
+      return state.feedbackRequests;
+    },
   },
   mutations: {
     ...bindFirestoreArrayRefMutations,

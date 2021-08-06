@@ -163,8 +163,18 @@ export const createFeedbackRequest = (id, requestData) => {
     createdAt: getTimeNow(),
     ...requestData,
   };
-  return db.collection('feedbackRequests').doc(id).set(feedbackRequest);
+
+  return Promise.all([
+    db.collection('feedbackRequests').doc(id).set(feedbackRequest),
+    db.collection('customUI').doc(auth.currentUser.uid).update({ sidebarFormsOrder: FieldValue.arrayUnion(id) }),
+  ]);
 };
-export const deleteFeedbackRequest = (requestId) => db.collection('feedbackRequests').doc(requestId).delete();
+export const deleteFeedbackRequest = (requestId) => Promise.all([
+  db.collection('feedbackRequests').doc(requestId).delete(),
+  db.collection('customUI').doc(auth.currentUser.uid).update({ sidebarFormsOrder: FieldValue.arrayRemove(requestId) }),
+]);
 
 export const updateFeedbackRequest = (feedbackId, data) => db.doc(`feedbackRequests/${feedbackId}`).update(data);
+
+// Custom UI
+export const setCustomUI = ({ userId, key, value }) => db.collection('customUI').doc(userId).update({ [key]: value });
