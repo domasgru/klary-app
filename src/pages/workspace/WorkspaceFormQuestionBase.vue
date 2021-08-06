@@ -9,6 +9,7 @@
           <div
             :contenteditable="isEditMode"
             data-placeholder="Type a question"
+            class="base-question__title"
             :class="{
               'display-inline-block': !isEditMode,
               'editable': isEditMode
@@ -26,7 +27,7 @@
         </div>
         <div
           v-if="showFormDescription"
-          class="base-question__text-item b1"
+          class="base-question__description base-question__text-item b1"
           :class="{
             'editable': isEditMode
           }"
@@ -38,7 +39,10 @@
         </div>
       </div>
 
-      <div :class="{'pointer-events-none': isEditMode}">
+      <div
+        class="base-question__slot"
+        :class="{'pointer-events-none': isEditMode}"
+      >
         <slot />
       </div>
     </div>
@@ -118,16 +122,23 @@ export default {
   border-radius: $border-radius;
 
   &__content {
-    padding: 48px 64px;
+    padding: 48px 56px;
 
     @media screen and (max-width: 836px) {
       padding: 32px;
     }
   }
 
-  &__text-item {
-    margin-bottom: 16px;
+  &__title,
+  &__description {
+    padding: 8px;
+  }
 
+  &__slot {
+    padding: 0 8px;
+  }
+
+  &__text-item {
     &:last-of-type {
       margin-bottom: 24px;
     }

@@ -11,6 +11,7 @@
 
 .editable {
   cursor: text;
+  border-radius: 10px;
   outline: 0 solid transparent;
 
   &:hover {
@@ -20,6 +21,10 @@
   &:empty::before {
     color: $grey-600;
     content: attr(data-placeholder);
+  }
+
+  &--plain:hover {
+    background: transparent;
   }
 }
 

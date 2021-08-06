@@ -72,7 +72,7 @@
         class="form__question-wrapper"
       >
         <component
-          :is="`WorkspaceForm${$options.capitalize(question.type)}`"
+          :is="question.component"
           :id="question.id"
           :options="question.options"
           :view-mode="viewMode"
@@ -216,7 +216,7 @@ export default {
 
   &__initials {
     width: 100%;
-    padding: 48px 64px;
+    padding: 48px 56px;
     background: $light;
     border: $stroke;
     border-radius: $border-radius;
@@ -238,7 +238,8 @@ export default {
   }
 
   &__author {
-    margin-bottom: 24px;
+    padding: 0 8px;
+    margin-bottom: 16px;
   }
 
   &__author-initials {
@@ -256,10 +257,11 @@ export default {
   }
 
   &__title {
-    margin-bottom: 16px;
+    padding: 8px;
   }
 
   &__description {
+    padding: 8px;
     margin-bottom: 16px;
   }
 
@@ -328,5 +330,9 @@ export default {
   @media screen and (max-width: 838px) {
     margin-bottom: 64px;
   }
+}
+
+.mb-16px {
+  margin-bottom: 16px;
 }
 </style>

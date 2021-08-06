@@ -8,43 +8,66 @@
   >
     <div class="checklist">
       <div class="checklsit__items">
-        <label
+        <div
           v-for="(item, index) in options.items"
           :key="`item${index}-${id}`"
-          class="checklist__item"
-          :class="{'checklist__item--checked': value === item.title}"
+          class="checklist__item-wrapper"
         >
           <div class="checklist__input-wrapper">
-            <input
-              :id="`item${index}-${id}`"
-              :value="item.title"
-              type="radio"
-              class="checklist__input"
-              :checked="value === item.title"
-              :disabled="isEditMode || isDisabled"
-              @input="$emit('form-input', { value: $event.target.value })"
+            <label
+              class="checklist__item"
+              :class="{'checklist__item--checked': isItemSelected(item)}"
             >
-            <div class="checklist__input-controller">
+
+              <input
+                :id="`item${index}-${id}`"
+                :value="item.title"
+                :type="isSingleSelect ? 'radio' : 'checkbox'"
+                class="checklist__input"
+                :checked="isItemSelected(item)"
+                :disabled="isEditMode || isDisabled"
+                @input="updateSelectValue($event, item.title)"
+              >
               <div
-                v-show="value === item.title"
-                class="checklist__check-icon"
-              />
-            </div>
+                class="checklist__input-controller"
+                :class="{
+                  'checklist__input-controller--radio': isSingleSelect,
+                  'checklist__input-controller--checkbox': !isSingleSelect
+                }"
+              >
+                <div
+                  v-if="isSingleSelect && isItemSelected(item)"
+                  class="checklist__radio-icon"
+                />
+                <BaseSvg
+                  v-if="!isSingleSelect"
+                  class="checklist__checklist-icon"
+                  name="checkbox-check"
+                />
+              </div>
+              <div
+                class="checklist__title"
+                :class="{'editable': isEditMode, 'editable--plain': isEditMode}"
+                :contenteditable="isEditMode"
+                data-placeholder="Type a choice"
+                @blur="$emit('update', {id, key: `options.items[${index}].title`, value: $event.target.textContent})"
+              >
+                {{ item.title }}
+              </div>
+            </label>
           </div>
-          <div
-            class="checklist__title"
-            :contenteditable="isEditMode"
-            @blur="$emit('update', {id, key: `options.items[${index}].title`, value: $event.target.textContent})"
-          >
-            {{ item.title }}
-          </div>
-          <BaseButton
+
+          <button
             v-if="isEditMode"
-            class="checklist__delete-button"
+            class="checklist__delete-item"
             @click="deleteItem(item)"
-            v-text="'Delete'"
-          />
-        </label>
+          >
+            <BaseSvg
+              class="checklist__delete-icon"
+              name="x"
+            />
+          </button>
+        </div>
       </div>
       <div
         v-show="doesAnswerContainCustomOption"
@@ -60,18 +83,23 @@
         />
       </div>
       <BaseButton
-        v-show="value"
+        v-show="isSingleSelect && value"
         type="secondary"
         class="checklist__unselect"
         @click="$emit('form-input', { value: '' })"
         v-text="'Unselect'"
       />
-      <BaseButton
+      <div
         v-if="isEditMode"
-        class="add-checkbox"
-        @click="$emit('update', {id, key: `options.items`, value: [...options.items, {title: 'Your title'}]})"
-        v-text="'Add checkbox'"
-      />
+        class="add-select"
+        @click="$emit('update', {id, key: `options.items`, value: [...options.items, {title: ''}]})"
+      >
+        <BaseSvg
+          name="plus"
+          class="add-select__icon"
+        />
+        Add choice
+      </div>
     </div>
   </WorksapceFormQuestionBase>
 </template>
@@ -89,7 +117,7 @@ export default {
       required: true,
     },
     value: {
-      type: String,
+      type: [Array, String],
       default: null,
     },
     customOptionValue: {
@@ -117,12 +145,27 @@ export default {
   computed: {
     isEditMode: ({ viewMode }) => viewMode === 'edit',
     placeholder: ({ isEditMode }) => (isEditMode ? 'Short answer' : 'Your answer'),
-    doesAnswerContainCustomOption: ({ value }) => value.toLowerCase() === 'other',
+    isSingleSelect: ({ options }) => !!options.isSingleSelect,
+    doesAnswerContainCustomOption: ({ value, isSingleSelect }) => (
+      isSingleSelect ? value && value.toLowerCase() === 'other' : value.some((item) => item.toLowerCase() === 'other')
+    ),
   },
   methods: {
     deleteItem(checkBoxItem) {
       const updatedItems = this.options.items.filter((item) => item !== checkBoxItem);
       this.$emit('update', { id: this.id, key: 'options.items', value: updatedItems });
+    },
+    updateSelectValue(event, item) {
+      if (this.isSingleSelect) {
+        this.$emit('form-input', { value: event.target.value });
+      } else if (event.target.checked) {
+        this.$emit('form-input', { value: [...this.value, item] });
+      } else {
+        this.$emit('form-input', { value: this.value.filter((value) => value !== item) });
+      }
+    },
+    isItemSelected(item) {
+      return this.isSingleSelect ? this.value === item.title : this.value.includes(item.title);
     },
   },
 };
@@ -130,10 +173,19 @@ export default {
 
 <style scoped lang="scss">
 .checklist {
+  &__item-wrapper {
+    display: flex;
+
+    &:not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+
   &__item {
     position: relative;
     display: flex;
-    padding: 7px;
+    align-items: center;
+    padding: 7px 10px;
     cursor: pointer;
     user-select: none;
     background: $grey-50;
@@ -145,6 +197,10 @@ export default {
       border: 1px solid $primary;
     }
 
+    &:focus-within {
+      border: 1px solid $dark;
+    }
+
     &:not(:last-child) {
       margin-bottom: 8px;
     }
@@ -152,13 +208,15 @@ export default {
 
   &__title {
     flex-grow: 1;
+    min-height: 24px;
+    line-height: 24px;
     pointer-events: auto;
   }
 
   &__input-wrapper {
     position: relative;
-    padding: 2px;
-    margin-right: 10px;
+    flex-grow: 1;
+    margin-right: 8px;
   }
 
   &__input {
@@ -174,13 +232,25 @@ export default {
     justify-content: center;
     width: 20px;
     height: 20px;
+    margin-right: 10px;
     background: $light;
     border: 1.5px solid $grey-300;
-    border-radius: 50%;
-    transition: all 0.2s ease;
+
+    &--radio {
+      border-radius: 50%;
+    }
+
+    &--checkbox {
+      border-radius: 6px;
+    }
   }
 
-  &__input:checked + &__input-controller {
+  &__input:checked + &__input-controller--checkbox {
+    background: $primary;
+    border: 1.5px solid $primary;
+  }
+
+  &__input:checked + &__input-controller--radio {
     border: 1.5px solid $primary;
   }
 
@@ -189,17 +259,32 @@ export default {
     line-height: 24px;
   }
 
-  &__check-icon {
+  &__radio-icon {
     width: 10px;
     height: 10px;
     background: $primary;
     border-radius: 50%;
   }
 
-  &__delete-button {
-    position: absolute;
-    right: 0;
+  &__checklist-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  &__delete-item {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
     pointer-events: auto;
+    cursor: pointer;
+  }
+
+  &__delete-icon {
+    width: 20px;
+    height: 20px;
   }
 
   &__custom {
@@ -211,7 +296,20 @@ export default {
   }
 }
 
-.add-checkbox {
+.add-select {
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+  font-size: 16px;
+  color: $grey-600;
   pointer-events: auto;
+  cursor: pointer;
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    margin-right: 10px;
+  }
 }
 </style>

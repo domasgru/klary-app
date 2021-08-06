@@ -22,12 +22,12 @@
           @click="$emit('add-form-question', item), showAddQuestion = false"
         >
           <BaseSvg
-            :name="$options.QUESTION_INFO[item.type].illustration"
+            :name="$options.QUESTION_INFO[item.id].illustration"
             class="add-question__icon"
           />
           <div class="add-question__right">
             <div class="add-question__title b2s">
-              {{ $options.QUESTION_INFO[item.type].questionName }}
+              {{ $options.QUESTION_INFO[item.id].questionName }}
             </div>
           </div>
         </div>
@@ -50,19 +50,20 @@ const QUESTION_INFO = {
     questionName: 'Opinion scale',
     illustration: 'opinion-scale',
   },
-  checklist: {
+  multiSelect: {
     questionName: 'Checklist',
-    illustration: '',
+    illustration: 'multiple-select',
   },
-  select: {
+  singleSelect: {
     questionName: 'Select',
-    illustration: '',
+    illustration: 'single-select',
   },
 };
 
 const QUESTION_TYPES = [
   {
-    type: 'shortAnswer',
+    id: 'shortAnswer',
+    component: 'WorkspaceFormShortAnswer',
     options: {
       title: '',
       decription: '',
@@ -72,7 +73,8 @@ const QUESTION_TYPES = [
     value: null,
   },
   {
-    type: 'longAnswer',
+    id: 'longAnswer',
+    component: 'WorkspaceFormLongAnswer',
     options: {
       title: '',
       decription: '',
@@ -82,7 +84,8 @@ const QUESTION_TYPES = [
     value: null,
   },
   {
-    type: 'opinionScale',
+    id: 'opinionScale',
+    component: 'WorkspaceFormOpinionScale',
     options: {
       title: '',
       description: '',
@@ -97,45 +100,37 @@ const QUESTION_TYPES = [
     value: null,
   },
   {
-    type: 'checklist',
+    id: 'multiSelect',
+    component: 'WorkspaceFormSelect',
     options: {
       title: '',
       description: '',
       items: [
         {
-          title: 'Selection 1',
-        },
-        {
-          title: 'Selection 2',
-        },
-        {
-          title: 'Selection 3',
+          title: '',
         },
       ],
       isRequired: false,
+      isSingleSelect: false,
     },
     value: [],
     customOptionValue: '',
   },
   {
-    type: 'select',
+    id: 'singleSelect',
+    component: 'WorkspaceFormSelect',
     options: {
       title: '',
       description: '',
       items: [
         {
-          title: 'Selection 1',
-        },
-        {
-          title: 'Selection 2',
-        },
-        {
-          title: 'Selection 3',
+          title: '',
         },
       ],
       isRequired: false,
+      isSingleSelect: true,
     },
-    value: '',
+    value: null,
     customOptionValue: '',
   },
 ];

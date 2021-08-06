@@ -47,7 +47,7 @@ export default {
   emits: ['update', 'save', 'duplicate', 'delete', 'form-input'],
   computed: {
     isEditMode: ({ viewMode }) => viewMode === 'edit',
-    placeholder: ({ isEditMode }) => (isEditMode ? 'Short answer' : 'Your answer'),
+    placeholder: ({ isEditMode }) => (isEditMode ? 'Long answer' : 'Your answer'),
   },
 };
 </script>
