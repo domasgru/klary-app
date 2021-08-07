@@ -120,7 +120,7 @@
         v-text="'Submit'"
       />
 
-      <div class="form__kuri b1">
+      <div class="form__klary b1">
         Made with
         <BaseLogo
           type="full"
@@ -310,7 +310,7 @@ export default {
     height: 20px;
   }
 
-  &__kuri {
+  &__klary {
     display: flex;
     flex-direction: column;
     align-items: center;

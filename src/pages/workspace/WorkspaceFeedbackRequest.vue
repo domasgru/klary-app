@@ -24,7 +24,7 @@
     <WorkspaceShareFormPopup
       class="header__button"
     />
-    <BaseButton
+    <!-- <BaseButton
       class="header__button"
       type="secondary"
       size="icon"
@@ -33,7 +33,7 @@
         class="header__more-icon"
         name="more-horizontal"
       />
-    </BaseButton>
+    </BaseButton> -->
   </div>
 
   <template v-if="isLoading || pendingFeedbacks.length || clearFeedbacks.length">
@@ -125,18 +125,18 @@ export default {
 
 <style lang="scss" scoped>
 .header {
-  margin-bottom: 32px;
+  z-index: 1;
   display: flex;
   align-items: center;
-  z-index: 1;
+  margin-bottom: 32px;
 
   &__emoji {
     flex-shrink: 0;
   }
 
   &__title {
-    margin-right: auto;
     padding-right: 12px;
+    margin-right: auto;
   }
 
   &__button {

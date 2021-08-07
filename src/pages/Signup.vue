@@ -4,7 +4,7 @@
     class="welcome-content"
   >
     <div class="h4 title">
-      Welcome to Kuri
+      Welcome to Klary
     </div>
     <div class="b1 subtitle">
       Use your Google account to sign up or log in.

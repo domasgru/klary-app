@@ -19,7 +19,7 @@
           NEW
         </div>
       </div>
-      <div class="comment-reply__content">
+      <div class="comment-reply__content base-typography--b-16-24">
         {{ reply.content }}
       </div>
     </div>

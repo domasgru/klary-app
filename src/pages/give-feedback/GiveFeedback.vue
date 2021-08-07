@@ -34,7 +34,7 @@
           Your feedback has been sent
         </div>
         <div class="success-message__message--success b1">
-          You can view your given feedback and discuss about it through the Kuri platform.
+          You can view your given feedback and discuss about it through the Klary platform.
         </div>
         <div class="success-message__button-wrapper">
           <BaseButton

@@ -45,7 +45,7 @@ export default {
     return {
       userInput: '',
       selectedUsers: [],
-      message: 'I’m gathering professional feedback from a handful of my peers to help me learn my strengths and opportunities to improve. I’m using a new app called Kuri and it should only take a few minutes.',
+      message: 'I’m gathering professional feedback from a handful of my peers to help me learn my strengths and opportunities to improve. I’m using a new app called Klary and it should only take a few minutes.',
     };
   },
   computed: {
