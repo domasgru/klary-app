@@ -1,5 +1,5 @@
 <template>
-  <WorkspaceFormLayout v-if="form && !isLoading">
+  <WorkspaceFormLayout v-if="form">
     <WorkspaceFormHeader
       :title="form.title"
       view-mode="edit"
@@ -10,7 +10,6 @@
         @update-form="updateForm"
         @update-form-question="updateQuestion"
         @update-questions="updateQuestionsList"
-        @save="saveForm"
         @duplicate="duplicateQuestion"
         @delete="deleteQuestion"
       />
@@ -20,8 +19,12 @@
 </template>
 
 <script>
+import { computed } from 'vue';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import set from 'lodash.set';
+import { updateFeedbackRequest } from '@/firebase';
 import { useForm } from '@/composables/useForm';
 import WorkspaceFeedbackForm from './WorkspaceFeedbackForm.vue';
 import WorkspaceFormAddQuestion from './WorkspaceFormAddQuestion.vue';
@@ -37,18 +40,23 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const {
-      form, isLoading, getForm, updateForm, saveForm,
-    } = useForm(router.currentRoute.value.params.id);
+    const store = useStore();
 
-    getForm();
+    const form = computed(
+      () => store.state.feedback.feedbackRequests.find((request) => request.id === router.currentRoute.value.params.id),
+    );
+
+    const updateForm = ({ path, value }) => {
+      const formCopy = JSON.parse(JSON.stringify(form.value));
+      set(formCopy, path, value);
+      updateFeedbackRequest(router.currentRoute.value.params.id, {
+        ...formCopy,
+      });
+    };
 
     return {
       form,
-      isLoading,
-      getForm,
       updateForm,
-      saveForm,
     };
   },
   data() {

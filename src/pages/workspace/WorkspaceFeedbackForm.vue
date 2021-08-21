@@ -165,7 +165,7 @@ export default {
       default: null,
     },
   },
-  emits: ['update-form', 'update-form-question', 'save', 'submit', 'delete', 'duplicate', 'form-input', 'update-questions'],
+  emits: ['update-form', 'update-form-question', 'submit', 'delete', 'duplicate', 'form-input', 'update-questions'],
   computed: {
     isEditMode() {
       return this.viewMode === 'edit';

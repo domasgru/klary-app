@@ -96,7 +96,7 @@
       <div
         v-if="isEditMode"
         class="add-select"
-        @click="$emit('update', {id, key: `options.items`, value: [...options.items, {title: ''}]}), focusAddedOption()"
+        @click="$emit('update', {id, key: `options.items`, value: [...options.items, {title: ''}]})"
       >
         <BaseSvg
           name="plus"

@@ -122,7 +122,7 @@ export default {
   border-radius: $border-radius;
 
   &__content {
-    padding: 48px 56px;
+    padding: 40px 56px 48px 56px;
 
     @media screen and (max-width: 836px) {
       padding: 32px;

@@ -196,7 +196,6 @@ export default {
     } catch (e) {
       console.error(e);
     }
-    // debugger;
   },
   methods: {
     isActive(path, currentRoute) {

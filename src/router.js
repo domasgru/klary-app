@@ -33,6 +33,7 @@ export const router = createRouter({
     {
       path: '/edit-form/:id',
       component: WorkspaceEditFeedbackRequest,
+      beforeEnter: workspaceBeforeEnter,
       meta: {
         requiresAuth: true,
       },
@@ -40,6 +41,7 @@ export const router = createRouter({
     {
       path: '/preview-form/:id',
       component: WorkspacePreviewFeedbackRequest,
+      beforeEnter: workspaceBeforeEnter,
       meta: {
         requiresAuth: true,
       },
@@ -51,21 +53,7 @@ export const router = createRouter({
       meta: {
         requiresAuth: true,
       },
-      beforeEnter: async (to, from, next) => {
-        const { uid } = store.state.user.userData;
-        const { feedbackRequests, sentFeedbacks, receivedFeedbacks } = store.state.feedback;
-        if (feedbackRequests && sentFeedbacks && receivedFeedbacks) {
-          return next();
-        }
-
-        await Promise.all([
-          store.dispatch('feedback/bindAllFeedbacks', { userId: uid }),
-          store.dispatch('feedback/bindFeedbackRequests', { userId: uid }),
-          store.dispatch('user/bindCustomUI', uid),
-        ]);
-
-        return next();
-      },
+      beforeEnter: workspaceBeforeEnter,
       children: [
         {
           path: 'received',
@@ -213,4 +201,20 @@ async function isLoggedIn() {
   store.dispatch('user/setUserAuth', userAuth);
   const userData = store.state.user.userData || await store.dispatch('user/bindUser', userAuth.uid);
   return userData;
+}
+
+async function workspaceBeforeEnter(to, from, next) {
+  const { uid } = store.state.user.userData;
+  const { feedbackRequests, sentFeedbacks, receivedFeedbacks } = store.state.feedback;
+  if (feedbackRequests && sentFeedbacks && receivedFeedbacks) {
+    return next();
+  }
+
+  await Promise.all([
+    store.dispatch('feedback/bindAllFeedbacks', { userId: uid }),
+    store.dispatch('feedback/bindFeedbackRequests', { userId: uid }),
+    store.dispatch('user/bindCustomUI', uid),
+  ]);
+
+  return next();
 }
