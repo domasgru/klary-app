@@ -266,6 +266,7 @@ export default {
   }
 
   &__required {
+    padding-left: 8px;
     color: $error;
   }
 

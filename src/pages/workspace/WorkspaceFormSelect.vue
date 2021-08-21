@@ -49,6 +49,7 @@
                 />
               </div>
               <div
+                ref="itemTitle"
                 class="checklist__title"
                 :class="{'editable': isEditMode, 'editable--plain': isEditMode}"
                 :contenteditable="isEditMode"
@@ -86,7 +87,7 @@
         />
       </div>
       <BaseButton
-        v-show="isSingleSelect && value"
+        v-show="isSingleSelect && value && viewMode === 'active'"
         type="secondary"
         class="checklist__unselect"
         @click="$emit('form-input', { value: '' })"
@@ -95,7 +96,7 @@
       <div
         v-if="isEditMode"
         class="add-select"
-        @click="$emit('update', {id, key: `options.items`, value: [...options.items, {title: ''}]})"
+        @click="$emit('update', {id, key: `options.items`, value: [...options.items, {title: ''}]}), focusAddedOption()"
       >
         <BaseSvg
           name="plus"
@@ -170,6 +171,10 @@ export default {
     isItemSelected(item) {
       return this.isSingleSelect ? this.value === item.title : this.value.includes(item.title);
     },
+    async focusAddedOption() {
+      await this.$nextTick();
+      this.$refs.itemTitle.focus();
+    },
   },
 };
 </script>
@@ -203,7 +208,7 @@ export default {
     &--edit-mode {
       &:focus-within {
         background: $grey-100;
-        border: 1px solid $dark;
+        border: 1px solid $grey-600;
       }
     }
 

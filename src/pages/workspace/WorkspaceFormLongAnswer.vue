@@ -12,7 +12,6 @@
       :is-preview="viewMode === 'view'"
       :error="error"
       :placeholder="placeholder"
-      has-scale-interaction-on-focus
       :model-value="value"
       @input="$emit('form-input', {value: $event.target.value})"
     />
