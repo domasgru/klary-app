@@ -1,6 +1,6 @@
 <template>
   <WorkspaceFormLayout
-    v-if="!isLoading && request"
+    v-if="!isLoading && form"
   >
     <template #header>
       <div class="navigation">
@@ -48,16 +48,16 @@
       <!-- Feedback form -->
       <WorkspaceFeedbackForm
         v-else
-        :feedback-request-data="request"
+        :feedback-request-data="form"
         :errors="formErrors"
         view-mode="active"
-        @form-input="updateQuestionAnswer($event), removeFormError($event)"
+        @form-input="updateFormQuestionAnswer($event), removeFormError($event)"
         @submit="submitMessage"
       />
     </template>
   </WorkspaceFormLayout>
   <div
-    v-if="!isLoading && !request"
+    v-if="!isLoading && !form"
     class="error"
   >
     <BaseLogo
@@ -101,6 +101,7 @@ import { ACTIVE_STATE, ACTIVE_STATUS } from '@/constants/feedback';
 import Signup from '@/pages/Signup.vue';
 import WorkspaceFormLayout from '@/pages/workspace/WorkspaceFormLayout.vue';
 import WorkspaceFeedbackForm from '@/pages/workspace/WorkspaceFeedbackForm.vue';
+import { useFormPure } from '@/composables/useForm';
 
 export default {
   components: {
@@ -130,25 +131,12 @@ export default {
     const showSuccessMessage = ref(false);
 
     // INIT feedback request data
-    const isLoading = ref(false);
     const { requestId } = router.currentRoute.value.params;
-    const request = ref(null);
-
-    const loadRequestData = async () => {
-      try {
-        isLoading.value = true;
-        request.value = await getFeedbackRequestById(requestId);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        isLoading.value = false;
-      }
-    };
-    loadRequestData();
+    const { form, isLoading, updateFormQuestionAnswer } = useFormPure(requestId);
 
     const submitMessage = async () => {
       // Check if required questions have answers
-      const unansweredRequiredQuestions = request.value.questions.filter((question) => question.options.isRequired && !question.value);
+      const unansweredRequiredQuestions = form.value.questions.filter((question) => question.options.isRequired && !question.value);
       if (unansweredRequiredQuestions?.length) {
         formErrors.value = unansweredRequiredQuestions.reduce((errorsObject, value) => {
           errorsObject[value.id] = 'This question is required';
@@ -165,7 +153,7 @@ export default {
       const timeNow = getTimeNow();
       const sentFeedback = await createFeedback({
         authorId: userData.value.uid,
-        receiverId: request.value.uid,
+        receiverId: form.value.uid,
         participants: {
           [userData.value.uid]: {
             feedbackState: ACTIVE_STATE,
@@ -178,11 +166,11 @@ export default {
             },
             seenAt: timeNow,
           },
-          [request.value.uid]: {
+          [form.value.uid]: {
             feedbackState: ACTIVE_STATE,
             flags: [],
-            name: request.value.name,
-            picture: request.value.picture || '',
+            name: form.value.name,
+            picture: form.value.picture || '',
             lastAction: {
               createdAt: null,
               type: '',
@@ -190,8 +178,8 @@ export default {
             seenAt: null,
           },
         },
-        title: request.value.title,
-        form: JSON.parse(JSON.stringify(request.value)),
+        title: form.value.title,
+        form: JSON.parse(JSON.stringify(form.value)),
         status: ACTIVE_STATUS,
         feedbackRequestId: requestId,
       });
@@ -213,11 +201,6 @@ export default {
       router.push(`/sent/${sentFeedbackId.value}`);
     };
 
-    const updateQuestionAnswer = ({ id, key, value }) => {
-      const questionIndex = request.value.questions.findIndex((question) => question.id === id);
-      set(request.value, `questions[${questionIndex}].${key || 'value'}`, value);
-    };
-
     return {
       submitAfterLogin,
       showSignupModal,
@@ -225,11 +208,11 @@ export default {
       submitMessage,
       openFeedback,
       isLoading,
-      request,
+      form,
       formErrors,
       removeFormError,
       userData,
-      updateQuestionAnswer,
+      updateFormQuestionAnswer,
     };
   },
 };

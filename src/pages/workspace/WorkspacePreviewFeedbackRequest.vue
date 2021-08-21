@@ -8,6 +8,7 @@
       <WorkspaceFeedbackForm
         :feedback-request-data="form"
         view-mode="active"
+        @form-input="updateFormQuestionAnswer($event)"
       />
     </template>
   </WorkspaceFormLayout>
@@ -15,7 +16,7 @@
 
 <script>
 import { useRouter } from 'vue-router';
-import { useForm } from '@/composables/useForm';
+import { useFormPure } from '@/composables/useForm';
 import WorkspaceFormHeader from './WorkspaceFormHeader.vue';
 import WorkspaceFormLayout from './WorkspaceFormLayout.vue';
 import WorkspaceFeedbackForm from './WorkspaceFeedbackForm.vue';
@@ -28,17 +29,12 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const { form, getForm } = useForm(router.currentRoute.value.params.id);
-
-    getForm();
+    const { form, updateFormQuestionAnswer } = useFormPure(router.currentRoute.value.params.id);
 
     return {
       form,
+      updateFormQuestionAnswer,
     };
   },
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -16,7 +16,10 @@
           <div class="checklist__input-wrapper">
             <label
               class="checklist__item"
-              :class="{'checklist__item--checked': isItemSelected(item)}"
+              :class="{
+                'checklist__item--checked': isItemSelected(item),
+                'checklist__item--edit-mode': isEditMode
+              }"
             >
 
               <input
@@ -197,8 +200,11 @@ export default {
       border: 1px solid $primary;
     }
 
-    &:focus-within {
-      border: 1px solid $dark;
+    &--edit-mode {
+      &:focus-within {
+        background: $grey-100;
+        border: 1px solid $dark;
+      }
     }
 
     &:not(:last-child) {
@@ -280,6 +286,11 @@ export default {
     height: 40px;
     pointer-events: auto;
     cursor: pointer;
+    border-radius: 8px;
+
+    &:hover {
+      background: $grey-100;
+    }
   }
 
   &__delete-icon {

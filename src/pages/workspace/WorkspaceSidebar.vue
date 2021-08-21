@@ -182,16 +182,21 @@ export default {
     ...mapGetters('feedback', ['receivedFeedbacks', 'sentFeedbacks', 'orderedFeedbackRequests']),
   },
   mounted() {
-    const sortable = Sortable.create(this.$refs.sidebarButtonsSortable, {
-      onUpdate: async ({ oldIndex, newIndex }) => {
-        const updatedIdsOrder = arrayMove(this.orderedFeedbackRequests.map((request) => request.id), oldIndex, newIndex);
-        setCustomUI({
-          userId: this.userData.uid,
-          key: 'sidebarFormsOrder',
-          value: updatedIdsOrder,
-        });
-      },
-    });
+    try {
+      const sortable = Sortable.create(this.$refs.sidebarButtonsSortable, {
+        onUpdate: async ({ oldIndex, newIndex }) => {
+          const updatedIdsOrder = arrayMove(this.orderedFeedbackRequests.map((request) => request.id), oldIndex, newIndex);
+          setCustomUI({
+            userId: this.userData.uid,
+            key: 'sidebarFormsOrder',
+            value: updatedIdsOrder,
+          });
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    }
+    // debugger;
   },
   methods: {
     isActive(path, currentRoute) {

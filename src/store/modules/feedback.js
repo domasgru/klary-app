@@ -39,7 +39,9 @@ export default {
     },
     orderedFeedbackRequests(state, getters, rootState) {
       if (rootState.user.customUI.sidebarFormsOrder) {
-        return rootState.user.customUI.sidebarFormsOrder.map((item) => state.feedbackRequests.find((request) => request.id === item));
+        return rootState.user.customUI.sidebarFormsOrder.map(
+          (item) => state.feedbackRequests.find((request) => request.id === item),
+        ).filter(((item) => !!item));
       }
 
       return state.feedbackRequests;
