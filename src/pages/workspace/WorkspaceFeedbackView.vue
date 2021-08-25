@@ -18,9 +18,10 @@
         type="secondary"
         @click="isMarkAsClearModalOpen = true"
       >
-        <BaseSvg
+        <BaseIcon
+          size="sm"
           class="feedback-clear__icon"
-          name="checkmark-black"
+          name="check"
         />
         Mark as clear
       </BaseButton>
@@ -224,11 +225,7 @@ export default {
   border-radius: 10px;
 
   &__icon {
-    width: 20px;
-    height: 20px;
-    padding: 2px;
     margin-right: 4px;
-    stroke: $dark;
   }
 }
 

@@ -24,10 +24,10 @@
       <div
         v-else-if="icon"
       >
-        <BaseSvg
+        <BaseIcon
+          size="sm"
           :name="icon"
-          :stroke-color="isActive ? '#511FDC' : '#17171A'"
-          class="icon__svg"
+          :color="isActive ? 'primary' : 'dark'"
         />
       </div>
     </div>
@@ -103,29 +103,23 @@ export default {
   margin-right: 8px;
 
   &__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 20px;
     height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  &__svg {
-    width: 16px;
-    height: 16px;
-    fill: none;
   }
 
   &__emoji-select-theme {
-    width: 40px;
-    height: 40px;
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
+    width: 40px;
+    height: 40px;
     background: $light;
     border: $stroke;
-    flex-shrink: 0;
+    border-radius: 10px;
     transition: all 0.2s ease;
 
     &:hover {

@@ -7,7 +7,7 @@
       'action-button--active-star': (isStarTheme && active),
     }"
   >
-    <BaseSvg
+    <BaseIcon
       v-if="icon"
       class="action-button__icon"
       :name="icon"

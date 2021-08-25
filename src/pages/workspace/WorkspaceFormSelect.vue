@@ -45,7 +45,7 @@
                 <BaseSvg
                   v-if="!isSingleSelect"
                   class="checklist__checklist-icon"
-                  name="checkbox-check"
+                  name="check"
                 />
               </div>
               <div
@@ -66,9 +66,10 @@
             class="checklist__delete-item"
             @click="deleteItem(item)"
           >
-            <BaseSvg
+            <BaseIcon
               class="checklist__delete-icon"
-              name="x"
+              color="grey-600"
+              name="close"
             />
           </button>
         </div>
@@ -98,8 +99,9 @@
         class="add-select"
         @click="$emit('update', {id, key: `options.items`, value: [...options.items, {title: ''}]})"
       >
-        <BaseSvg
+        <BaseIcon
           name="plus"
+          color="grey-600"
           class="add-select__icon"
         />
         Add choice
@@ -280,6 +282,7 @@ export default {
   &__checklist-icon {
     width: 16px;
     height: 16px;
+    stroke: $light;
   }
 
   &__delete-item {
@@ -322,10 +325,7 @@ export default {
   cursor: pointer;
 
   &__icon {
-    width: 20px;
-    height: 20px;
-    padding: 2px;
-    margin-right: 10px;
+    margin-right: 8px;
   }
 }
 </style>

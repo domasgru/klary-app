@@ -9,7 +9,7 @@
     </div>
     <div class="feedback-actions__right">
       <WorkspaceActionButton
-        icon="star"
+        icon="favorite"
         theme="star"
         class="feedback-actions__action"
         :active="isFeedbackFavorite"
@@ -24,7 +24,7 @@
       >
         <WorkspaceActionButton
           class="feedback-actions__right-action feedback-actions__action"
-          icon="more-horizontal"
+          icon="more"
         />
       </WorkspaceFeedbackSettings>
     </div>
@@ -84,10 +84,10 @@ export default {
 <style lang="scss" scoped>
 .feedback-actions {
   position: sticky;
+  top: 104px;
   left: 0;
   z-index: 1;
   display: flex;
-  top: 104px;
 
   &__left {
     position: absolute;

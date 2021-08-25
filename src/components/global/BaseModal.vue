@@ -10,12 +10,13 @@
         :style="contentStyle"
         class="modal-content"
       >
-        <BaseSvg
-          v-if="showClose"
-          class="modal-content__icon"
-          name="close"
-          @click="$emit('close')"
-        />
+        <div class="modal-content__icon">
+          <BaseIcon
+            v-if="showClose"
+            name="close"
+            @click="$emit('close')"
+          />
+        </div>
         <slot name="content" />
       </div>
     </div>
@@ -73,9 +74,11 @@ export default {
     position: absolute;
     top: 24px;
     right: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 32px;
     height: 32px;
-    padding: 6px;
     cursor: pointer;
     border-radius: 8px;
     transition: background 0.2s ease;

@@ -5,9 +5,10 @@
         class="header__back-button"
         @click="$router.push(`/form/${$route.params.id}`)"
       >
-        <BaseSvg
+        <BaseIcon
+          color="grey-600"
           class="header__back-icon"
-          name="back"
+          name="left"
         />
       </button>
 
@@ -60,22 +61,22 @@ export default {
 <style lang="scss" scoped>
 .header {
   position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
   display: flex;
+  align-items: center;
+  width: 100%;
   padding: 8px;
   background: $light;
   border-bottom: $stroke;
-  align-items: center;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 100;
 
   &__back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 40px;
     height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     margin-right: 8px;
     cursor: pointer;
     border-radius: 10px;
@@ -84,12 +85,6 @@ export default {
       background: $grey-100;
       transition: 0.2s ease;
     }
-  }
-
-  &__back-icon {
-    width: 24px;
-    height: 24px;
-    padding: 2px;
   }
 
   &__title {
@@ -102,15 +97,16 @@ export default {
 
   &__preview-mode-text {
     position: absolute;
-    left: 0;
     right: 0;
+    left: 0;
     margin: auto;
     text-align: center;
   }
+
   &__back-to-editor {
+    z-index: 1;
     margin-left: auto;
     cursor: pointer;
-    z-index: 1;
   }
 }
 </style>

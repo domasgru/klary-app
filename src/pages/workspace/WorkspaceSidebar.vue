@@ -25,8 +25,10 @@
             class="workspace-sidebar__user-avatar"
           />
           {{ userData.name }}
-          <BaseSvg
-            name="arrow-down"
+          <BaseIcon
+            size="sm"
+            name="down"
+            color="grey-600"
             class="workspace-sidebar__user-icon"
           />
         </button>
@@ -56,7 +58,7 @@
         <WorkspaceSidebarButton
           v-for="request in orderedFeedbackRequests"
           :key="request.id"
-          :icon="request.icon || 'blank'"
+          :icon="request.icon || 'doc'"
           :text="request.title"
           :emoji="request.emoji"
           :to="`/form/${request.id}`"
@@ -75,7 +77,8 @@
         class="workspace-sidebar__create-form btn2"
         @click="createForm"
       >
-        <BaseSvg
+        <BaseIcon
+          size="sm"
           class="workspace-sidebar__plus-icon"
           name="plus"
         />
@@ -86,7 +89,8 @@
       class="workspace-sidebar__create btn2"
       @click="createForm"
     >
-      <BaseSvg
+      <BaseIcon
+        size="sm"
         class="workspace-sidebar__plus"
         name="plus"
       />
@@ -135,13 +139,13 @@ const userDropdownItems = [
   {
     name: 'Account settings',
     action: 'open-settings',
-    icon: 'profile',
+    icon: 'user',
     separator: true,
   },
   {
     name: 'Sign out',
     action: 'logout',
-    icon: 'logout',
+    icon: 'sign-out',
   },
 ];
 
@@ -150,7 +154,7 @@ const feedbackRequestOptions = [
     name: 'Rename', icon: 'edit', action: 'rename',
   },
   {
-    name: 'Duplicate', icon: 'duplicate', action: 'duplicate',
+    name: 'Duplicate', icon: 'copy', action: 'duplicate',
   },
   {
     name: 'Copy form link', icon: 'link', action: 'copy-link',
@@ -301,8 +305,6 @@ export default {
   }
 
   &__user-icon {
-    width: 16px;
-    height: 16px;
     margin-left: auto;
   }
 
@@ -352,9 +354,6 @@ export default {
   }
 
   &__plus-icon {
-    width: 20px;
-    height: 20px;
-    padding: 2px;
     margin-right: 8px;
   }
 
@@ -377,9 +376,6 @@ export default {
   }
 
   &__plus {
-    width: 20px;
-    height: 20px;
-    padding: 2px;
     margin-right: 8px;
   }
 }

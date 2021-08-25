@@ -14,7 +14,7 @@
     <template #content>
       <div class="share-popup">
         <div class="share-popup__title b1s">
-          <BaseSvg
+          <BaseIcon
             class="share-popup__link-icon"
             name="link"
           />
@@ -70,15 +70,12 @@ export default {
   }
 
   &__link-icon {
-    width: 24px;
-    height: 24px;
-    padding: 2px;
     margin-right: 4px;
   }
 
   &__description {
-    color: $grey-600;
     margin-bottom: 16px;
+    color: $grey-600;
   }
 
   &__bottom {
@@ -87,14 +84,15 @@ export default {
   }
 
   &__link {
-    padding: 10px 12px;
     flex-grow: 1;
-    background: $grey-50;
-    border-radius: 10px;
-    border: 1px solid $grey-200;
+    padding: 10px 12px;
     margin-right: 8px;
     font-size: 14px;
     line-height: 20px;
+    background: $grey-50;
+    border: 1px solid $grey-200;
+    border-radius: 10px;
+
     @include text-overflow-ellipsis;
   }
 

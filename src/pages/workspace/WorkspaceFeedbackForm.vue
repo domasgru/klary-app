@@ -94,18 +94,20 @@
             class="form__order-button"
             @click="moveQuestion('top', index)"
           >
-            <BaseSvg
+            <BaseIcon
+              color="grey-600"
               class="form__order-icon"
-              name="arrow-up"
+              name="up"
             />
           </button>
           <button
             class="form__order-button"
             @click="moveQuestion('bottom', index)"
           >
-            <BaseSvg
+            <BaseIcon
+              color="grey-600"
               class="form__order-icon"
-              name="arrow-down"
+              name="down"
             />
           </button>
         </div>
@@ -304,11 +306,6 @@ export default {
       cursor: pointer;
       background: $grey-150;
     }
-  }
-
-  &__order-icon {
-    width: 20px;
-    height: 20px;
   }
 
   &__klary {

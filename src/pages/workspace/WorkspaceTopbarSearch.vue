@@ -7,8 +7,10 @@
     class="search-indicator base-typography--b-14-20"
     @click="show"
   >
-    <BaseSvg
+    <BaseIcon
       class="search-indicator__icon"
+      size="sm"
+      color="grey-600"
       name="search"
     />
     Search

@@ -42,9 +42,10 @@
         @delete="$emit('delete')"
         @click.stop.prevent
       >
-        <BaseSvg
-          name="more-horizontal"
-          :stroke-color="isActive ? '#511FDC' : '#17171A'"
+        <BaseIcon
+          size="sm"
+          name="more"
+          :stroke-color="isActive ? 'primary' : 'dark'"
           class="sidebar-button__dots-icon"
           @click="handleOptionsClick"
         />
@@ -195,12 +196,6 @@ export default {
     #{$this}.is-selected.is-active & {
       background: $primary-light-20;
     }
-  }
-
-  &__dots-icon {
-    width: 20px;
-    height: 20px;
-    padding: 2px;
   }
 }
 

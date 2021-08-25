@@ -1,11 +1,5 @@
 <template>
-  <svg
-    class="base-svg"
-    :style="{
-      ...(strokeColor ? {stroke: strokeColor} : {}),
-      ...(fillColor ? {fill: fillColor} : {})
-    }"
-  >
+  <svg class="base-svg">
     <use :xlink:href="`#${name}`" />
   </svg>
 </template>
@@ -17,13 +11,9 @@ export default {
       type: String,
       required: true,
     },
-    strokeColor: {
+    size: {
       type: String,
-      default: '',
-    },
-    fillColor: {
-      type: String,
-      default: '',
+      default: 'md',
     },
   },
 };

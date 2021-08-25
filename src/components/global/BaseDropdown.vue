@@ -17,13 +17,11 @@
           }"
           @click="$emit(action), $emit('close')"
         >
-          <BaseSvg
+          <BaseIcon
             v-if="icon"
             :name="icon"
             class="dropdown__item-icon"
-            :class="{
-              'dropdown__item-icon--alarm': theme === 'alarm'
-            }"
+            :color="theme === 'alarm' ? 'error' : 'dark'"
           />
           {{ name }}
         </button>
@@ -83,16 +81,8 @@ export default {
   }
 
   &__item-icon {
-    width: 20px;
-    height: 20px;
-    padding: 2px;
     margin-right: 8px;
     fill: none;
-    stroke: $dark;
-
-    &--alarm {
-      stroke: $error;
-    }
   }
 }
 </style>

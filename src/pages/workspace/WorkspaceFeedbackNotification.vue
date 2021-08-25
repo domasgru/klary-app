@@ -13,10 +13,13 @@
           :name="author.name"
           :picture="author.picture"
         />
-        <BaseSvg
-          class="content__check"
-          name="check-green"
-        />
+        <div class="content__check">
+          <BaseIcon
+            size="sm"
+            color="light"
+            name="check"
+          />
+        </div>
       </div>
       <div class="content__text b1">
         <div class="content__name b1s">
@@ -114,8 +117,14 @@ export default {
     right: -8px;
     bottom: 0;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 24px;
     height: 24px;
+    background: $success;
+    border: 2px solid $light;
+    border-radius: 50%;
   }
 
   &__time {

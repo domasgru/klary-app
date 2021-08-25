@@ -56,22 +56,32 @@
         :value="options.isRequired"
         @change="$emit('update', {id, key: 'options.isRequired', value: $event.target.checked})"
       />
-      <BaseSvg
-        class="base-question__settings-icon"
-        name="duplicate"
-        @click="$emit('duplicate')"
-      />
-      <BaseSvg
-        class="base-question__settings-icon"
-        name="trash"
-        @click="$emit('delete')"
-      />
-      <BaseSvg
+      <div class="base-question__settings-icon">
+        <BaseIcon
+          color="grey-600"
+          name="copy"
+          @click="$emit('duplicate')"
+        />
+      </div>
+
+      <div class="base-question__settings-icon">
+        <BaseIcon
+          color="grey-600"
+          name="trash"
+          @click="$emit('delete')"
+        />
+      </div>
+
+      <div
         v-show="false"
         class="base-question__settings-icon"
-        name="more-horizontal"
-        @click="showMoreOptions = true"
-      />
+      >
+        <BaseIcon
+          color="grey-600"
+          name="more"
+          @click="showMoreOptions = true"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -160,11 +170,12 @@ export default {
   }
 
   &__settings-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 32px;
     height: 32px;
-    padding: 6px;
     border-radius: 8px;
-    stroke: $grey-600;
     transition: all 0.2s ease;
 
     &:hover {

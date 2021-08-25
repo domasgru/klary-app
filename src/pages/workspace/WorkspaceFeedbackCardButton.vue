@@ -7,7 +7,7 @@
       'action-button--active-star': (isStarTheme && active),
     }"
   >
-    <BaseSvg
+    <BaseIcon
       v-if="icon"
       class="action-button__icon"
       :name="icon"
@@ -64,11 +64,6 @@ export default {
   }
 
   &__icon {
-    width: 24px;
-    height: 24px;
-    padding: 2px;
-    fill: none;
-    stroke: $grey-600;
     transition: stroke 0.2s ease;
 
     #{$this}--active-star & {
