@@ -40,23 +40,23 @@
 const QUESTION_INFO = {
   shortAnswer: {
     questionName: 'Short answer',
-    illustration: 'short-answer',
+    illustration: 'short-answer-illustration',
   },
   longAnswer: {
     questionName: 'Long answer',
-    illustration: 'long-answer',
+    illustration: 'long-answer-illustration',
   },
   opinionScale: {
     questionName: 'Opinion scale',
-    illustration: 'opinion-scale',
+    illustration: 'opinion-scale-illustration',
   },
   multiSelect: {
     questionName: 'Checklist',
-    illustration: 'multiple-select',
+    illustration: 'multiple-select-illustration',
   },
   singleSelect: {
     questionName: 'Select',
-    illustration: 'single-select',
+    illustration: 'single-select-illustration',
   },
 };
 
