@@ -45,7 +45,7 @@
       />
     </div>
     <WorkspaceFeedbackCardButton
-      icon="star"
+      icon="favorite"
       theme="star"
       class="card__favorite"
       :active="isFeedbackFavorite"
@@ -58,7 +58,7 @@
       @delete="showDeleteModal = true"
     >
       <WorkspaceFeedbackCardButton
-        icon="more-horizontal"
+        icon="more"
       />
     </WorkspaceFeedbackSettings>
   </div>

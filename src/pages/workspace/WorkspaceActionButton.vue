@@ -10,6 +10,8 @@
     <BaseIcon
       v-if="icon"
       class="action-button__icon"
+      :color="(isStarTheme && active) ? 'yellow' : 'dark'"
+      :fill-color="(isStarTheme && active) ? 'yellow': 'none'"
       :name="icon"
     />
     {{ text }}
@@ -45,8 +47,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$star-color: #fac04b;
-
 .action-button {
   $this: &;
 
@@ -73,9 +73,9 @@ $star-color: #fac04b;
   }
 
   &--active-star {
-    color: $star-color;
+    color: $yellow;
     background: #fff6e5;
-    border: 1px solid $star-color;
+    border: 1px solid $yellow;
 
     &:hover {
       background: #fff6e5;
@@ -83,21 +83,7 @@ $star-color: #fac04b;
   }
 
   &__icon {
-    width: 24px;
-    height: 24px;
-    padding: 2px;
-    fill: none;
-    stroke: $grey-800;
     transition: stroke 0.2s ease;
-
-    #{$this}--active & {
-      stroke: $success;
-    }
-
-    #{$this}--active-star & {
-      fill: $star-color;
-      stroke: $star-color;
-    }
   }
 }
 </style>

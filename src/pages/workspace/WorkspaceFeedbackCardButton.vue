@@ -9,6 +9,8 @@
   >
     <BaseIcon
       v-if="icon"
+      :color="(isStarTheme && active) ? 'yellow' : 'grey-600'"
+      :fill-color="(isStarTheme && active) ? 'yellow' : 'none'"
       class="action-button__icon"
       :name="icon"
     />
@@ -59,17 +61,8 @@ export default {
     background: $grey-200;
   }
 
-  &--active-star {
-    color: $yellow;
-  }
-
   &__icon {
     transition: stroke 0.2s ease;
-
-    #{$this}--active-star & {
-      fill: $yellow;
-      stroke: $yellow;
-    }
   }
 }
 </style>

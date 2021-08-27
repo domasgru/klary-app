@@ -20,6 +20,7 @@
           <BaseIcon
             v-if="icon"
             :name="icon"
+            size="sm"
             class="dropdown__item-icon"
             :color="theme === 'alarm' ? 'error' : 'dark'"
           />

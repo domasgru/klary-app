@@ -7,6 +7,7 @@
       'base-icon--sm': size === 'sm',
       'base-icon--md': size === 'md',
       [`base-icon--${color}`]: color,
+      [`base-icon--fillColor-${fillColor}`]: fillColor
     }"
   />
 </template>
@@ -26,6 +27,10 @@ export default {
       type: String,
       default: 'dark',
     },
+    fillColor: {
+      type: String,
+      default: 'none',
+    },
   },
 };
 </script>
@@ -33,7 +38,6 @@ export default {
 <style lang="scss" scoped>
 .base-icon {
   padding: 2px;
-  fill: none;
 
   &--sm {
     width: 20px;
@@ -63,6 +67,18 @@ export default {
 
   &--error {
     stroke: $error;
+  }
+
+  &--yellow {
+    stroke: $yellow;
+  }
+
+  &--fillColor-none {
+    fill: none;
+  }
+
+  &--fillColor-yellow {
+    fill: $yellow;
   }
 }
 </style>
