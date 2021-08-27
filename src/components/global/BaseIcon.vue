@@ -62,7 +62,7 @@ export default {
   }
 
   &--grey-600 {
-    stroke: $grey-500;
+    stroke: $grey-600;
   }
 
   &--error {
