@@ -79,6 +79,7 @@
       >
         <BaseIcon
           size="sm"
+          color="grey-600"
           class="workspace-sidebar__plus-icon"
           name="plus"
         />
@@ -91,6 +92,7 @@
     >
       <BaseIcon
         size="sm"
+        color="grey-600"
         class="workspace-sidebar__plus"
         name="plus"
       />
@@ -181,7 +183,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('user', ['userData', 'customUI']),
+    ...mapState('user', ['userData']),
     ...mapState('feedback', ['feedbackRequests']),
     ...mapGetters('feedback', ['receivedFeedbacks', 'sentFeedbacks', 'orderedFeedbackRequests']),
   },

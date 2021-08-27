@@ -45,8 +45,7 @@
         <BaseIcon
           size="sm"
           name="more"
-          :stroke-color="isActive ? 'primary' : 'dark'"
-          class="sidebar-button__dots-icon"
+          :color="isActive ? 'primary' : 'dark'"
           @click="handleOptionsClick"
         />
       </BaseDropdown>

@@ -177,4 +177,4 @@ export const deleteFeedbackRequest = (requestId) => Promise.all([
 export const updateFeedbackRequest = (feedbackId, data) => db.doc(`feedbackRequests/${feedbackId}`).update(data);
 
 // Custom UI
-export const setCustomUI = ({ userId, key, value }) => db.collection('customUI').doc(userId).update({ [key]: value });
+export const setCustomUI = ({ userId, key, value }) => db.collection('customUI').doc(userId).set({ [key]: value }, { merge: true });

@@ -15,7 +15,7 @@
     >
       <BaseSvg
         class="google-icon"
-        name="google"
+        name="google-logo"
       />
       Continue with Google
     </button>

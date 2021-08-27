@@ -1,5 +1,6 @@
 <template>
   <BaseSvg
+    class="base-logo"
     :name="svgFileName"
     :class="computedClasses"
   />
@@ -34,15 +35,17 @@ export default {
       return 'text';
     },
     computedClasses: ({ type, size, color }) => ({
-      [`logo--${type}-${size}`]: size,
-      [`logo--${color}`]: color,
+      [`base-logo--${type}-${size}`]: size,
+      [`base-logo--${color}`]: color,
     }),
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.logo {
+.base-logo {
+  //stroke: $dark;
+
   &--sm {
     width: 43px;
     height: 24px;
