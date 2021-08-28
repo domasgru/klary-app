@@ -204,17 +204,21 @@ async function isLoggedIn() {
 }
 
 async function workspaceBeforeEnter(to, from, next) {
-  const { uid } = store.state.user.userData;
-  const { feedbackRequests, sentFeedbacks, receivedFeedbacks } = store.state.feedback;
-  if (feedbackRequests && sentFeedbacks && receivedFeedbacks) {
-    return next();
-  }
+  try {
+    const { uid } = store.state.user.userData;
+    const { feedbackRequests, sentFeedbacks, receivedFeedbacks } = store.state.feedback;
+    if (feedbackRequests && sentFeedbacks && receivedFeedbacks) {
+      return next();
+    }
 
-  await Promise.all([
-    store.dispatch('feedback/bindAllFeedbacks', { userId: uid }),
-    store.dispatch('feedback/bindFeedbackRequests', { userId: uid }),
-    store.dispatch('user/bindCustomUI', uid),
-  ]);
+    await Promise.all([
+      store.dispatch('feedback/bindAllFeedbacks', { userId: uid }),
+      store.dispatch('feedback/bindFeedbackRequests', { userId: uid }),
+      store.dispatch('user/bindCustomUI', uid),
+    ]);
+  } catch (e) {
+    console.error(e);
+  }
 
   return next();
 }

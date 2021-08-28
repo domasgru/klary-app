@@ -39,7 +39,7 @@
     "shortid": "^2.2.15",
     "sortablejs": "^1.14.0",
     "svg-sprite-loader": "^5.0.0",
-    "vue": "^3.0.4",
+    "vue": "^3.2.6",
     "vue-contenteditable": "^3.0.4",
     "vue-fuse": "^2.2.1",
     "vue-router": "^4.0.0-rc.1",
