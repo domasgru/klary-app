@@ -14,6 +14,7 @@
           <BaseIcon
             v-if="showClose"
             name="close"
+            color="grey-600"
             @click="$emit('close')"
           />
         </div>

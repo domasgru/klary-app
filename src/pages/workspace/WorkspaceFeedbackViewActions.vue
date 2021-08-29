@@ -4,7 +4,7 @@
       <WorkspaceActionButton
         icon="arrow-left"
         class="feedback-actions__action"
-        @click="router.back()"
+        @click="goBack"
       />
     </div>
     <div class="feedback-actions__right">
@@ -66,12 +66,17 @@ export default {
       router.push(`/${router.currentRoute.value.params.type}`);
     };
 
+    const goBack = () => {
+      router.push(router.currentRoute.value.path.split('/').slice(0, -1).join('/'));
+    };
+
     return {
       router,
       isFeedbackFavorite,
       isFeedbackRemoved,
       toggleFeedbackFlag,
       updateFeedbackStateAndClose,
+      goBack,
       FAVORITE_FLAG,
       REMOVED_STATE,
       ACTIVE_STATE,

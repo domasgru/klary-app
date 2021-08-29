@@ -194,7 +194,6 @@ export default {
   &__item {
     position: relative;
     display: flex;
-    align-items: center;
     padding: 7px 10px;
     cursor: pointer;
     user-select: none;
@@ -241,10 +240,12 @@ export default {
 
   &__input-controller {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
     width: 20px;
     height: 20px;
+    margin-top: 2px;
     margin-right: 10px;
     background: $light;
     border: 1.5px solid $grey-300;

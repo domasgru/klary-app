@@ -142,7 +142,6 @@ import arrayMove from 'array-move';
 import WorkspaceFormShortAnswer from './WorkspaceFormShortAnswer.vue';
 import WorkspaceFormLongAnswer from './WorkspaceFormLongAnswer.vue';
 import WorkspaceFormOpinionScale from './WorkspaceFormOpinionScale.vue';
-import WorkspaceFormChecklist from './WorkspaceFormChecklist.vue';
 import WorkspaceFormSelect from './WorkspaceFormSelect.vue';
 
 export default {
@@ -150,7 +149,6 @@ export default {
     WorkspaceFormShortAnswer,
     WorkspaceFormLongAnswer,
     WorkspaceFormOpinionScale,
-    WorkspaceFormChecklist,
     WorkspaceFormSelect,
   },
   props: {

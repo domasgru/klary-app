@@ -1,61 +1,17 @@
 import { computed, ref, toRefs } from 'vue';
 import set from 'lodash.set';
 import { getFeedbackRequestById, updateFeedbackRequest } from '@/firebase';
-
-const forms = ref({});
-
-export const useForm = (formId) => {
-  const id = formId;
-  const isLoading = ref(false);
-
-  const saveForm = () => updateFeedbackRequest(id, {
-    ...forms.value[id],
-  });
-
-  const getForm = async () => {
-    if (forms.value[id]) {
-      return;
-    }
-
-    isLoading.value = true;
-    const form = await getFeedbackRequestById(id);
-    isLoading.value = false;
-
-    if (!form) {
-      console.error('Failed to load a form');
-      return;
-    }
-    console.log(form);
-    forms.value[id] = form;
-  };
-
-  const updateForm = ({ path, value }) => {
-    const form = forms.value[id];
-    if (!form) {
-      console.error('First get form, before updating it');
-      return;
-    }
-
-    set(forms.value, `${id}.${path}`, value);
-    saveForm();
-  };
-
-  return {
-    form: computed(() => forms.value[id]),
-    isLoading,
-    getForm,
-    updateForm,
-    saveForm,
-  };
-};
+import { useStore } from 'vuex';
 
 export const useFormPure = (formId) => {
   const isLoading = ref(true);
   const form = ref(null);
+  const store = useStore();
 
   const getForm = async () => {
-    if (forms.value[formId]) {
-      form.value = JSON.parse(JSON.stringify(forms.value[formId]));
+    const formFromVuex = store.state.feedback.feedbackRequests.find((request) => request.id === formId);
+    if (formFromVuex) {
+      form.value = JSON.parse(JSON.stringify(formFromVuex));
       isLoading.value = false;
     }
 

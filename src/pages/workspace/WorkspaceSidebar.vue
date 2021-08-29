@@ -219,9 +219,9 @@ export default {
       logout();
       window.location.replace(window.location.origin);
     },
-    async createForm() {
+    createForm() {
       const id = nanoid(10);
-      await createFeedbackRequest(id, {
+      createFeedbackRequest(id, {
         uid: this.userData.uid,
         name: this.userData.name,
         title: 'Untitled',

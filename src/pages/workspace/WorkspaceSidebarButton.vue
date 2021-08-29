@@ -45,7 +45,7 @@
         <BaseIcon
           size="sm"
           name="more"
-          :color="isActive ? 'primary' : 'dark'"
+          :color="isActive ? 'primary' : 'grey-600'"
           @click="handleOptionsClick"
         />
       </BaseDropdown>

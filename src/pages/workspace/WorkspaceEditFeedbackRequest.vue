@@ -25,7 +25,6 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import set from 'lodash.set';
 import { updateFeedbackRequest } from '@/firebase';
-import { useForm } from '@/composables/useForm';
 import WorkspaceFeedbackForm from './WorkspaceFeedbackForm.vue';
 import WorkspaceFormAddQuestion from './WorkspaceFormAddQuestion.vue';
 import WorkspaceFormLayout from './WorkspaceFormLayout.vue';
@@ -57,12 +56,6 @@ export default {
     return {
       form,
       updateForm,
-    };
-  },
-  data() {
-    return {
-      feedbackRequestDataFirebaseRef: null,
-      feedbackRequestData: null,
     };
   },
   methods: {
