@@ -150,7 +150,7 @@ export default {
 
   &__text-item {
     &:last-of-type {
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
   }
 

@@ -180,7 +180,7 @@ export default {
       return this.feedbackRequestData.showAuthor || this.showFormTitle || this.showFormDescription;
     },
     hasRequiredQuestions() {
-      return this.feedbackRequestData.questions.some(({ options }) => options.isRequired);
+      return this.feedbackRequestData.questions && this.feedbackRequestData.questions.some(({ options }) => options.isRequired);
     },
   },
   methods: {
@@ -216,7 +216,7 @@ export default {
 
   &__initials {
     width: 100%;
-    padding: 48px 56px;
+    padding: 48px 56px 40px 56px;
     background: $light;
     border: $stroke;
     border-radius: $border-radius;
@@ -262,11 +262,12 @@ export default {
 
   &__description {
     padding: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
 
   &__required {
     padding-left: 8px;
+    margin-bottom: 8px;
     color: $error;
   }
 
