@@ -50,7 +50,7 @@ export default {
   width: 100%;
   max-width: 248px;
   padding: 10px 12px 10px 8px;
-  color: $grey-500;
+  color: $grey-600;
   background: transparent;
   border-radius: 8px;
   transition: background 0.2s ease;

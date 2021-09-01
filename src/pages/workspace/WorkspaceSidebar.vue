@@ -86,18 +86,23 @@
         Create new form
       </div>
     </div>
-    <div
-      class="workspace-sidebar__create btn2"
-      @click="createForm"
+    <HelpAndSupportModal
+      :show-modal="showHelpAndSupportModal"
+      @close="showHelpAndSupportModal = false"
     >
-      <BaseIcon
-        size="sm"
-        color="grey-600"
-        class="workspace-sidebar__plus"
-        name="plus"
-      />
-      Create new form
-    </div>
+      <div
+        class="workspace-sidebar__create btn2"
+        @click="showHelpAndSupportModal = true"
+      >
+        <BaseIcon
+          size="sm"
+          color="grey-600"
+          class="workspace-sidebar__plus"
+          name="help-circle"
+        />
+        Help & Support
+      </div>
+    </HelpAndSupportModal>
     <BaseModal
       :show-modal="showAccountSettingsModal"
       max-width="600px"
@@ -119,6 +124,7 @@ import {
   logout, updateFeedbackRequest, createFeedbackRequest, deleteFeedbackRequest, setCustomUI,
 } from '@/firebase';
 import arrayMove from 'array-move';
+import HelpAndSupportModal from '@/pages/HelpAndSupportModal.vue';
 import WorkspaceAccountSettings from './WorkspaceAccountSettings.vue';
 import WorkspaceSidebarButton from './WorkspaceSidebarButton.vue';
 
@@ -170,11 +176,13 @@ export default {
   components: {
     WorkspaceAccountSettings,
     WorkspaceSidebarButton,
+    HelpAndSupportModal,
   },
   data() {
     return {
       showUserDropdown: false,
       showRequestModal: false,
+      showHelpAndSupportModal: false,
       showAccountSettingsModal: false,
       feedbackRequestId: null,
       feedbackRequestDataLoading: false,
