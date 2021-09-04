@@ -61,6 +61,7 @@
           />
           <BaseButton
             class="modal-support__submit"
+            :disabled="!message"
             @click="sendContactUsMessage"
             v-text="'Send'"
           />
