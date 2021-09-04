@@ -178,3 +178,6 @@ export const updateFeedbackRequest = (feedbackId, data) => db.doc(`feedbackReque
 
 // Custom UI
 export const setCustomUI = ({ userId, key, value }) => db.collection('customUI').doc(userId).set({ [key]: value }, { merge: true });
+
+// Klary support message
+export const addSupportMessage = (message) => db.collection('contactUs').add({ uid: auth.currentUser.uid, message });

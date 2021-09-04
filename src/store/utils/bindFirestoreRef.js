@@ -22,7 +22,7 @@ export const unbindFirestoreRef = (stateKey) => {
   if (!bindings[stateKey]) {
     return Promise.resolve('done');
   }
-  console.log(typeof bindings[stateKey]);
+
   return bindings[stateKey]();
 };
 
