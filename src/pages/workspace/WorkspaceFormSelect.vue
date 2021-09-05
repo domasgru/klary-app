@@ -78,20 +78,21 @@
         v-show="doesAnswerContainCustomOption"
         class="checklist__custom"
       >
-        <BaseInput
+        <BaseTextarea
           label="Add your own option:"
-          :model-value="customOptionValue"
-          size="lg"
+          rows="1"
+          padding="12px 16px"
+          :is-preview="viewMode === 'view'"
           :is-disabled="isDisabled"
-          has-scale-interaction-on-focus
+          :model-value="customOptionValue"
           @input="$emit('form-input', {key: 'customOptionValue', value: $event.target.value})"
         />
       </div>
       <BaseButton
-        v-show="isSingleSelect && value && viewMode === 'active'"
+        v-show="isSingleSelect && value !== null && viewMode === 'active'"
         type="secondary"
         class="checklist__unselect"
-        @click="$emit('form-input', { value: '' })"
+        @click="$emit('form-input', { value: null })"
         v-text="'Unselect'"
       />
       <div
@@ -196,7 +197,6 @@ export default {
     display: flex;
     padding: 7px 10px;
     cursor: pointer;
-    user-select: none;
     background: $grey-50;
     border: 1px solid $grey-200;
     border-radius: 8px;

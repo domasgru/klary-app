@@ -149,6 +149,7 @@ export default {
   height: 100%;
   font-family: 'Inter';
   line-height: 24px;
+  color: inherit;
   cursor: text;
   resize: none;
   background: transparent;
