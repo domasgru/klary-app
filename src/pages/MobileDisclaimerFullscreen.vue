@@ -13,7 +13,7 @@
         The mobile experience is on the way
       </h4>
       <p class="b1 mb-16">
-        We are working as fast as we can to adapt Kuri to smaller devices.
+        We are working as fast as we can to adapt Klary to smaller devices.
         It takes time because we want to create an exceptionally good experience for you.
       </p>
       <p class="b1">

@@ -1,7 +1,7 @@
 <template>
   <BaseTextarea
     v-model="comment"
-    placeholder="Leave a comment..."
+    placeholder="Comment..."
     class="comment"
     padding="16px 24px"
     rows="3"
