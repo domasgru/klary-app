@@ -223,6 +223,7 @@ export default {
     min-height: 24px;
     line-height: 24px;
     pointer-events: auto;
+    user-select: auto;
   }
 
   &__input-wrapper {
