@@ -1,6 +1,10 @@
 <template>
   <router-view />
   <LoaderFullscreen v-if="loading" />
+  <NotSupportedBrowser
+    v-if="isBrowserNotSupported"
+    class="not-supported"
+  />
   <div id="modals" />
   <div id="popup-portal" />
 </template>
@@ -8,11 +12,18 @@
 <script>
 import { mapMutations, mapActions, mapState } from 'vuex';
 import LoaderFullscreen from '@/components/ui/LoaderFullscreen.vue';
+import NotSupportedBrowser from '@/pages/NotSupportedBrowser.vue';
 import { auth } from '@/firebase';
 
 export default {
   components: {
     LoaderFullscreen,
+    NotSupportedBrowser,
+  },
+  data() {
+    return {
+      isBrowserNotSupported: false,
+    };
   },
   computed: {
     ...mapState(['loading']),
@@ -21,6 +32,7 @@ export default {
   created() {
     this.prepareSvg();
     this.observeAuth();
+    this.handleBrowserSupport();
   },
   methods: {
     ...mapMutations('user', ['setUserAuth']),
@@ -39,6 +51,11 @@ export default {
         }
       });
     },
+    handleBrowserSupport() {
+      const ua = navigator.userAgent || navigator.vendor;
+
+      this.isBrowserNotSupported = ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
+    },
   },
 };
 </script>
@@ -46,5 +63,9 @@ export default {
 <style lang="scss" scoped>
 #app {
   height: 100%;
+}
+
+.not-supported {
+  z-index: 10000;
 }
 </style>
