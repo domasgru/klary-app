@@ -96,8 +96,6 @@ export default {
           return;
         }
 
-        this.addGettingStartedData();
-
         this.$emit('success');
       } catch (e) {
         this.$emit('error');
