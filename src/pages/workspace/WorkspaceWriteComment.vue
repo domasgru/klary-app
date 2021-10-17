@@ -37,7 +37,12 @@ export default {
         return;
       }
 
-      addAction(this.$route.params.id, COMMENT_ACTION, this.comment, this.userData.uid);
+      addAction({
+        feedbackId: this.$route.params.id,
+        type: COMMENT_ACTION,
+        content: this.comment,
+        authorUid: this.userData.uid,
+      });
       this.comment = '';
     },
   },

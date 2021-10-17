@@ -9,7 +9,7 @@ export const useFormPure = (formId) => {
   const store = useStore();
 
   const getForm = async () => {
-    const formFromVuex = store.state.feedback.feedbackRequests.find((request) => request.id === formId);
+    const formFromVuex = store.state.feedback.feedbackRequests?.find((request) => request.id === formId);
     if (formFromVuex) {
       form.value = JSON.parse(JSON.stringify(formFromVuex));
       isLoading.value = false;

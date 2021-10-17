@@ -95,7 +95,7 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import set from 'lodash.set';
-import { getFeedbackRequestById, createFeedback, getTimeNow } from '@/firebase';
+import { getFeedbackRequestById, createFeedback, getTime } from '@/firebase';
 import { CREATE_ACTION } from '@/constants';
 import { ACTIVE_STATE, ACTIVE_STATUS } from '@/constants/feedback';
 import Signup from '@/pages/Signup.vue';
@@ -150,7 +150,7 @@ export default {
         return;
       }
 
-      const timeNow = getTimeNow();
+      const timeNow = getTime();
       const sentFeedback = await createFeedback({
         authorId: userData.value.uid,
         receiverId: form.value.uid,

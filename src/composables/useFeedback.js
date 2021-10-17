@@ -130,9 +130,16 @@ export const useFeedbackData = (feedbackData, inboxType) => {
 
     return isAuthor;
   });
-  const feedbackCardUserId = computed(() => (isFeedbackSent.value
-    ? feedbackData.value.receiverId
-    : feedbackData.value.authorId));
+  const feedbackCardUserId = computed(() => {
+    // Ability to rewrite data in feedback card UI, with example
+    if (feedbackData.value.exampleAuthorId) {
+      return feedbackData.value.exampleAuthorId;
+    }
+
+    return isFeedbackSent.value
+      ? feedbackData.value.receiverId
+      : feedbackData.value.authorId;
+  });
 
   const toggleFeedbackFlag = (flag) => {
     const updatedFlags = feedbackFlags.value.includes(flag)
@@ -155,7 +162,12 @@ export const useFeedbackData = (feedbackData, inboxType) => {
     path: `participants.${userData.value.uid}.feedbackState`,
     value: state,
   });
-  const addFeedbackAction = (type, message) => addAction(feedbackId.value, type, message, userData.value.uid);
+  const addFeedbackAction = (type, content) => addAction({
+    feedbackId: feedbackId.value,
+    type,
+    content,
+    authorUid: userData.value.uid,
+  });
 
   const getParticipant = (uid) => feedbackData.value.participants[uid];
 

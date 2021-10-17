@@ -48,7 +48,7 @@
     <BaseButton
       size="lg"
       is-fluid
-      @click="createFullName"
+      @click="finishSignup"
       v-text="completionText"
     />
   </div>
@@ -56,9 +56,13 @@
 
 <script>
 /* eslint-disable camelcase */
-import { loginWithGoogle, createUserProfileDocument } from '@/firebase';
+import { nanoid } from 'nanoid';
+import {
+  loginWithGoogle, createUserProfileDocument, createFeedbackRequest, createFeedback, getTime, addAction,
+} from '@/firebase';
 import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
 import { mapActions, mapState } from 'vuex';
+import { getExampleFormData, exampleFeedbackDiscussion } from '@/utils/getExampleFormData';
 
 export default {
   props: {
@@ -92,13 +96,15 @@ export default {
           return;
         }
 
+        this.addGettingStartedData();
+
         this.$emit('success');
       } catch (e) {
         this.$emit('error');
         console.error(e);
       }
     },
-    async createFullName() {
+    async finishSignup() {
       const picture = this.userAuth.additionalUserInfo.profile?.picture
         ? { picture: this.userAuth.additionalUserInfo.profile?.picture } : {};
       await createUserProfileDocument(this.userAuth, {
@@ -106,7 +112,88 @@ export default {
         name: this.fullName,
         status: 'NEW',
       });
+      await this.addGettingStartedData();
       this.$emit('success');
+    },
+    async addGettingStartedData() {
+      const formId = nanoid(10);
+
+      try {
+        const [feedbackRequest, exampleFeedback] = await Promise.all([
+          createFeedbackRequest(
+            formId,
+            getExampleFormData(this.userData.uid, this.userData.name, this.userData.picture),
+          ),
+          createFeedback({
+            authorId: 'author',
+            receiverId: this.userData.uid,
+            participants: {
+              author: {
+                feedbackState: 'ACTIVE',
+                flags: [],
+                lastAction: {
+                  createdAt: getTime(2021, 6, 21, 16, 20),
+                  type: 'CREATE',
+                },
+                picture: 'https://firebasestorage.googleapis.com/v0/b/feedback-2263b.appspot.com/o/9Ofe3K6QuMS48m8kUlKMLZkypcw1%2Fimages%2FprofileImage.png?alt=media&token=b076fbb3-9b19-445e-b67e-23b1991f7f5d',
+                name: 'Dominykas Grubys',
+                seenAt: getTime(2021, 6, 21, 16, 20),
+              },
+              receiver: {
+                feedbackState: 'ACTIVE',
+                flags: [],
+                lastAction: {
+                  createdAt: getTime(2021, 6, 21, 16, 21),
+                  type: '',
+                },
+                picture: 'https://lh3.googleusercontent.com/a-/AOh14GjElxDOkr2xBF19YlRDZcz67WUeFE9VW1Nc7A_-hQ=s96-c',
+                name: 'Justinas Guliokas',
+                seenAt: getTime(2021, 6, 21, 16, 21),
+              },
+              [this.userData.uid]: {
+                feedbackState: 'ACTIVE',
+                flags: [],
+                lastAction: {
+                  createdAt: null,
+                  type: '',
+                },
+                picture: this.userData.picture,
+                name: this.userData.name,
+                seenAt: null,
+              },
+              klaryTeam: {
+                picture: 'https://lh3.googleusercontent.com/a-/AOh14GiDUPrjN4nc_05UHRztl40JwwVENn3JFgJi7YEw=s96-c',
+                name: 'Klary Team',
+                lastAction: {
+                  createdAt: null,
+                  type: '',
+                },
+                seenAt: null,
+              },
+            },
+            feedbackRequestId: formId,
+            status: 'CLOSED',
+            title: 'Feedback example',
+            form: getExampleFormData('receiver', 'Justinas Guliokas', 'https://lh3.googleusercontent.com/a-/AOh14GjElxDOkr2xBF19YlRDZcz67WUeFE9VW1Nc7A_-hQ=s96-c', true),
+            exampleAuthorId: 'klaryTeam',
+          }),
+        ]);
+
+        await Promise.all([
+          exampleFeedbackDiscussion.map(({
+            type, content, replies, authorUid, createdAt,
+          }) => addAction({
+            feedbackId: exampleFeedback.id,
+            type,
+            content,
+            replies,
+            authorUid,
+            createdAt,
+          })),
+        ]);
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 };

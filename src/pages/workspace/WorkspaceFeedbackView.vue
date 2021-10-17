@@ -125,7 +125,7 @@ export default {
         .filter(([id, participant]) => id !== currentUser.value.uid)
         .map(([id, value]) => value)
         .reduce((max, participant) => (
-          max.lastAction.createdAt.seconds > participant.lastAction.createdAt.seconds
+          max.lastAction.createdAt?.seconds > participant.lastAction.createdAt?.seconds
             ? max
             : participant
         ));
