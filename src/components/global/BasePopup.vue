@@ -114,11 +114,12 @@ export default {
   display: flex;
 
   &__trigger {
-    cursor: pointer;
     width: 100%;
+    cursor: pointer;
   }
 
   &__content {
+    position: relative;
     z-index: 1000;
   }
 }

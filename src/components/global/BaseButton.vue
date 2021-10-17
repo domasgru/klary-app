@@ -2,6 +2,8 @@
   <component
     :is="tag"
     :to="to"
+    :href="href"
+    :target="target"
     class="button"
     :class="{
       ...computedClasses,
@@ -52,9 +54,24 @@ export default {
       type: String,
       default: null,
     },
+    href: {
+      type: String,
+      default: null,
+    },
+    target: {
+      type: String,
+      default: null,
+    },
   },
   computed: {
-    tag: ({ to }) => (to ? 'router-link' : 'button'),
+    tag: ({ to, href }) => {
+      if (href) {
+        return 'a';
+      } if (to) {
+        return 'router-link';
+      }
+      return 'button';
+    },
     computedClasses: ({
       type, disabled, fluid, inverse, size, isPlain, isInline,
     }) => (
