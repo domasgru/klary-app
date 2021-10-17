@@ -181,6 +181,7 @@ export const useFeedbackData = (feedbackData, inboxType) => {
     isFeedbackSent,
     isFeedbackLastActionSeen: computed(() => isFeedbackSeen(feedbackData.value, userData.value.uid)),
     isSelfFeedback,
+    isExampleFeedback: computed(() => !!feedbackData.value.exampleAuthorId),
     toggleFeedbackFlag,
     updateFeedbackStatus,
     updateFeedbackState,

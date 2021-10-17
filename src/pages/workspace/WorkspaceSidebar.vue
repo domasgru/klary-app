@@ -93,6 +93,7 @@
         :offset="[0, 17]"
         padding="16px"
         width="350px"
+        popup-z-index="1001"
         @close="showGuidePopup = false"
       >
         <button
@@ -453,6 +454,10 @@ export default {
     border: 1px solid #e1e1e6;
     border-radius: 8px;
     box-shadow: 0 4px 6px -1px rgba(23, 23, 26, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+    &:hover {
+      background: $grey-100;
+    }
 
     &--active {
       background: $grey-100;

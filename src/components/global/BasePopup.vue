@@ -52,6 +52,10 @@ export default {
       type: String,
       default: '4px 4px',
     },
+    popupZIndex: {
+      type: String,
+      default: '1000',
+    },
   },
   emits: ['close'],
   computed: {
@@ -59,39 +63,43 @@ export default {
       return {
         width: this.width,
         padding: this.padding,
+        zIndex: this.popupZIndex,
       };
     },
   },
   watch: {
-    async isOpen(newValue) {
-      if (!newValue) {
-        return;
-      }
+    isOpen: {
+      async handler(newValue) {
+        if (!newValue) {
+          return;
+        }
 
-      await nextTick();
-      createPopper(this.$refs.popupTrigger, this.$refs.popupElement.$el, {
-        placement: this.position,
-        modifiers: [
-          {
-            name: 'flip',
-            options: {
-              fallbackPlacements: ['right'],
+        await nextTick();
+        createPopper(this.$refs.popupTrigger, this.$refs.popupElement.$el, {
+          placement: this.position,
+          modifiers: [
+            {
+              name: 'flip',
+              options: {
+                fallbackPlacements: ['right'],
+              },
             },
-          },
-          //       {
-          //   name: 'preventOverflow',
-          //   options: {
-          //     altAxis: true, // false by default
-          //   },
-          // },
-          ...(this.offset ? [{
-            name: 'offset',
-            options: {
-              offset: this.offset,
-            },
-          }] : []),
-        ],
-      });
+            //       {
+            //   name: 'preventOverflow',
+            //   options: {
+            //     altAxis: true, // false by default
+            //   },
+            // },
+            ...(this.offset ? [{
+              name: 'offset',
+              options: {
+                offset: this.offset,
+              },
+            }] : []),
+          ],
+        });
+      },
+      immediate: true,
     },
   },
   methods: {
@@ -120,7 +128,6 @@ export default {
 
   &__content {
     position: relative;
-    z-index: 1000;
   }
 }
 </style>

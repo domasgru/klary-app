@@ -6,6 +6,17 @@
       :show-on-sides="showActionsOnSides"
     />
     <div
+      v-if="isExampleFeedback"
+      class="feedback-view__example-feedback-message b2"
+    >
+      <BaseIcon
+        name="info"
+        color="primary"
+        class="feedback-view__example-feedback-message-icon"
+      />
+      This is an example of the feedback our co-founder Justinas recently received from his teammate.
+    </div>
+    <div
       v-if="showMarkAsClear"
       class="feedback-clear"
     >
@@ -99,6 +110,7 @@ export default {
       addFeedbackAction,
       isFeedbackSent,
       isSelfFeedback,
+      isExampleFeedback,
     } = useFeedbackData(toRefs(props).feedbackData);
 
     const currentFeedbackActions = computed(() => store.state.feedback.currentFeedbackActions);
@@ -191,6 +203,7 @@ export default {
       showActionsOnSides,
       markAsClear,
       isFeedbackClosed,
+      isExampleFeedback,
     };
   },
 };
@@ -211,6 +224,21 @@ export default {
   &__discussion-title {
     margin-bottom: 16px;
     color: $grey-600;
+  }
+
+  &__example-feedback-message {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 15px 16px;
+    margin-bottom: 16px;
+    background: $primary-light-10;
+    border: 1px solid $primary-100;
+    border-radius: 8px;
+  }
+
+  &__example-feedback-message-icon {
+    margin-right: 16px;
   }
 }
 
