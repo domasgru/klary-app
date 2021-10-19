@@ -48,8 +48,9 @@ export default {
     const updateForm = ({ path, value }) => {
       const formCopy = JSON.parse(JSON.stringify(form.value));
       set(formCopy, path, value);
+      const { createdAt, ...preparedForm } = formCopy;
       updateFeedbackRequest(router.currentRoute.value.params.id, {
-        ...formCopy,
+        ...preparedForm,
       });
     };
 

@@ -10,6 +10,7 @@
     <div class="content__top">
       <div class="content__avatar-wrapper">
         <BaseAvatar
+          class="content__avatar"
           :name="author.name"
           :picture="author.picture"
         />
@@ -116,7 +117,7 @@ export default {
     position: absolute;
     right: -8px;
     bottom: 0;
-    z-index: 1;
+    z-index: 3;
     display: flex;
     align-items: center;
     justify-content: center;

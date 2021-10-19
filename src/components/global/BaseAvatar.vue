@@ -59,6 +59,7 @@ export default {
 <style lang="scss" scoped>
 .base-avatar {
   position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -110,6 +111,7 @@ export default {
 
   &__default-initials {
     position: absolute;
+    z-index: 0;
     display: flex;
     align-items: center;
     justify-content: center;

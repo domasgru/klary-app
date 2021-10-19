@@ -13,11 +13,13 @@
       </div>
     </div>
   </div>
+  <MobileDisclaimerFullscreen />
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex';
 import { logout } from '@/firebase';
+import MobileDisclaimerFullscreen from '@/pages/MobileDisclaimerFullscreen.vue';
 import Sidebar from './WorkspaceSidebar.vue';
 import WorkspaceTopbar from './WorkspaceTopbar.vue';
 
@@ -25,6 +27,7 @@ export default {
   components: {
     Sidebar,
     WorkspaceTopbar,
+    MobileDisclaimerFullscreen,
   },
   mounted() {
     try {

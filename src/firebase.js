@@ -7,7 +7,7 @@ import { COMMENT_ACTION } from '@/constants';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAFS8RVfGHghmSagIJ3FDRVcYTWaPCGMMw',
-  authDomain: 'feedback-2263b.firebaseapp.com',
+  authDomain: 'login.klary.co',
   databaseURL: 'https://feedback-2263b.firebaseio.com',
   projectId: 'feedback-2263b',
   storageBucket: 'feedback-2263b.appspot.com',
@@ -190,3 +190,6 @@ export const updateFeedbackRequest = (feedbackId, data) => db.doc(`feedbackReque
 
 // Custom UI
 export const setCustomUI = ({ userId, key, value }) => db.collection('customUI').doc(userId).set({ [key]: value }, { merge: true });
+
+// Klary support message
+export const addSupportMessage = (message) => db.collection('contactUs').add({ uid: auth.currentUser.uid, message });

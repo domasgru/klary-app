@@ -7,7 +7,7 @@
     "lint": "vue-cli-service lint",
     "start": "vue-cli-service serve --port 4000",
     "deploy-preview-app": "firebase hosting:channel:deploy app",
-    "deploy-preview-form": "firebase deploy --except functions"
+    "deploy": "firebase deploy --except functions"
   },
   "dependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
