@@ -200,6 +200,7 @@ async function isLoggedIn() {
   }
   store.dispatch('user/setUserAuth', userAuth);
   const userData = store.state.user.userData || await store.dispatch('user/bindUser', userAuth.uid);
+
   return userData;
 }
 

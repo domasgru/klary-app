@@ -86,6 +86,67 @@
         Create new form
       </div>
     </div>
+    <div class="workspace-sidebar__guide-button-container">
+      <BasePopup
+        :is-open="showGuidePopup"
+        position="right-end"
+        :offset="[0, 17]"
+        padding="16px"
+        width="350px"
+        popup-z-index="1001"
+        @close="showGuidePopup = false"
+      >
+        <button
+          class="workspace-sidebar__guide-button btn2"
+          :class="{'workspace-sidebar__guide-button--active': showGuidePopup}"
+          @click="showGuidePopup = true"
+        >
+          How to start?
+          <BaseIcon
+            name="right"
+            size="sm"
+            color="grey-600"
+          />
+        </button>
+        <template #content>
+          <div class="workspace-sidebar__guide">
+            <p class="b2s workspace-sidebar__guide-title">
+              How to start?
+            </p>
+            <p class="b2 workspace-sidebar__guide-description">
+              Quick steps to get started.
+            </p>
+            <p class="b2 workspace-sidebar__guide-item">
+              1. Create feedabck form.
+            </p>
+            <p class="b2 workspace-sidebar__guide-item">
+              2. Send a form link to the people you want to get feedback from.
+            </p>
+            <p class="b2 workspace-sidebar__guide-item">
+              3. Get to know the feedback you received.
+            </p>
+            <p class="b2 workspace-sidebar__guide-item">
+              4. Dicuss right in the feedback if something is unclear or you want to dive deep.
+            </p>
+            <p class="b2 workspace-sidebar__guide-item">
+              5. Create action items in your notes based on feedback. Klary's own solution coming soon.
+            </p>
+            <BaseButton
+              type="secondary"
+              href="https://klaryapp.notion.site/Klary-Guide-dfccd1ae915343df87f5a3ac55f81e71"
+              target="_blank"
+              v-text="'Learn more'"
+            />
+            <BaseIcon
+              class="workspace-sidebar__guide-close"
+              name="close"
+              color="grey-600"
+              @click="showGuidePopup = false"
+            />
+          </div>
+        </template>
+      </BasePopup>
+    </div>
     <HelpAndSupportModal
       :show-modal="showHelpAndSupportModal"
       @close="showHelpAndSupportModal = false"
@@ -184,6 +245,7 @@ export default {
       showRequestModal: false,
       showHelpAndSupportModal: false,
       showAccountSettingsModal: false,
+      showGuidePopup: false,
       feedbackRequestId: null,
       feedbackRequestDataLoading: false,
       feedbackRequestMessage: '',
@@ -347,6 +409,67 @@ export default {
 
   &__form-button {
     margin-bottom: 4px;
+  }
+
+  &__guide {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+
+  &__guide-title {
+    margin-bottom: 4px;
+  }
+
+  &__guide-description {
+    margin-bottom: 16px;
+    color: $grey-600;
+  }
+
+  &__guide-item {
+    margin-bottom: 12px;
+
+    &:last-child {
+      margin-bottom: 16px;
+    }
+  }
+
+  &__guide-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    border-radius: 8px;
+
+    &:hover {
+      cursor: pointer;
+      background: $grey-100;
+    }
+  }
+
+  &__guide-button-container {
+    width: 100%;
+    padding: 16px 8px;
+  }
+
+  &__guide-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 12px;
+    cursor: pointer;
+    background: $light;
+    border: 1px solid #e1e1e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(23, 23, 26, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+    &:hover {
+      background: $grey-100;
+    }
+
+    &--active {
+      background: $grey-100;
+    }
   }
 
   &__create-form {

@@ -24,7 +24,10 @@ export const auth = firebase.auth();
 export const db = firebase.firestore();
 export const storage = firebase.storage();
 export const { FieldValue } = firebase.firestore;
-export const getTimeNow = () => firebase.firestore.Timestamp.fromDate(new Date());
+export const getTime = (...date) => (date
+  ? firebase.firestore.Timestamp.fromDate(new Date(...date))
+  : firebase.firestore.Timestamp.fromDate(new Date())
+);
 export const loginWithGoogle = () => auth.signInWithPopup(googleAuthProvider);
 export const login = (email, redirectToPage = '') => {
   const actionCodeSettings = {
@@ -87,39 +90,48 @@ export const updateUserProfileDocument = (uid, userData) => db.collection('users
 
 // Feedback
 export const updateFeedback = ({ feedbackId, path, value }) => db.collection('feedbacks').doc(feedbackId).update({ [path]: value });
-export const updateFeedbackLastAction = ({ userId, feedbackId, actionType }) => updateFeedback({
+
+export const updateFeedbackLastAction = ({
+  userId, feedbackId, actionType, createdAt,
+}) => updateFeedback({
   feedbackId,
   path: `participants.${userId}.lastAction`,
   value: {
-    createdAt: getTimeNow(),
+    createdAt: createdAt || getTime(),
     type: actionType,
   },
 });
+
 export const getFeedback = async (id) => {
   const feedback = await db.doc(`feedbacks/${id}`).get();
   return { id: feedback.id, ...feedback.data() };
 };
 
-export const addAction = async (feedbackId, type, content, authorUid) => {
-  const comment = {
-    type,
-    content: content.replace(/^\s+|\s+$/g, ''),
-    authorUid,
-    createdAt: getTimeNow(),
-  };
+export const addAction = async ({
+  feedbackId, type, content, replies = [], authorUid, createdAt = getTime(),
+}) => {
   const discussionRef = db.collection(`feedbacks/${feedbackId}/discussion`);
   updateFeedbackLastAction(
-    { userId: authorUid, feedbackId, actionType: type },
+    {
+      userId: authorUid, feedbackId, actionType: type, createdAt,
+    },
   );
-  return discussionRef.add(comment);
+  return discussionRef.add({
+    type,
+    content: content.replace(/^\s+|\s+$/g, ''),
+    replies,
+    authorUid,
+    createdAt,
+  });
 };
 
+// TODO: rewrite argument as object
 export const addCommentReply = async (feedbackId, commentId, content, authorUid) => {
   const reply = {
     id: shortId.generate(),
     authorUid,
     content: content.replace(/^\s+|\s+$/g, ''),
-    createdAt: getTimeNow(),
+    createdAt: getTime(),
   };
   const commentRef = db.doc(`feedbacks/${feedbackId}/discussion/${commentId}`);
   updateFeedbackLastAction(
@@ -129,12 +141,12 @@ export const addCommentReply = async (feedbackId, commentId, content, authorUid)
 };
 
 export const updateSeenAt = async (userId, feedbackId) => updateFeedback(
-  { feedbackId, path: `participants.${userId}.seenAt`, value: getTimeNow() },
+  { feedbackId, path: `participants.${userId}.seenAt`, value: getTime() },
 );
 
 export const createFeedback = async (feedbackData) => {
   const feedback = {
-    createdAt: getTimeNow(),
+    createdAt: getTime(),
     ...feedbackData,
   };
   const feedbackRef = db.collection('feedbacks');
@@ -160,18 +172,18 @@ export const getFeedbackRequestById = async (id) => {
 
 export const createFeedbackRequest = (id, requestData) => {
   const feedbackRequest = {
-    createdAt: getTimeNow(),
+    createdAt: getTime(),
     ...requestData,
   };
 
   return Promise.all([
     db.collection('feedbackRequests').doc(id).set(feedbackRequest),
-    db.collection('customUI').doc(auth.currentUser.uid).update({ sidebarFormsOrder: FieldValue.arrayUnion(id) }),
+    db.collection('customUI').doc(auth.currentUser.uid).set({ sidebarFormsOrder: FieldValue.arrayUnion(id) }, { merge: true }),
   ]);
 };
 export const deleteFeedbackRequest = (requestId) => Promise.all([
   db.collection('feedbackRequests').doc(requestId).delete(),
-  db.collection('customUI').doc(auth.currentUser.uid).update({ sidebarFormsOrder: FieldValue.arrayRemove(requestId) }),
+  db.collection('customUI').doc(auth.currentUser.uid).set({ sidebarFormsOrder: FieldValue.arrayRemove(requestId) }, { merge: true }),
 ]);
 
 export const updateFeedbackRequest = (feedbackId, data) => db.doc(`feedbackRequests/${feedbackId}`).update(data);

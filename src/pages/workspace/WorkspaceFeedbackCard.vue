@@ -61,6 +61,10 @@
         icon="more"
       />
     </WorkspaceFeedbackSettings>
+    <ExampleFeedbackGuide
+      v-if="isExampleFeedback"
+      class="guide"
+    />
   </div>
 </template>
 
@@ -70,6 +74,7 @@ import {
   FAVORITE_FLAG, ACTIVE_STATE, REMOVED_STATE, DELETED_STATE,
 } from '@/constants/feedback';
 import { useFeedbackData } from '@/composables/useFeedback';
+import ExampleFeedbackGuide from './ExampleFeedbackGuide.vue';
 import WorkspaceFeedbackSettings from './WorkspaceFeedbackSettings.vue';
 import WorkspaceFeedbackCardButton from './WorkspaceFeedbackCardButton.vue';
 
@@ -77,6 +82,7 @@ export default {
   components: {
     WorkspaceFeedbackSettings,
     WorkspaceFeedbackCardButton,
+    ExampleFeedbackGuide,
   },
   props: {
     feedbackData: {
@@ -98,6 +104,7 @@ export default {
       isFeedbackLastActionSeen,
       toggleFeedbackFlag,
       updateFeedbackState,
+      isExampleFeedback,
     } = useFeedbackData(feedbackData, props.inboxType);
 
     return {
@@ -106,6 +113,7 @@ export default {
       isFeedbackClosed,
       isFeedbackFavorite,
       isFeedbackLastActionSeen,
+      isExampleFeedback,
       toggleFeedbackFlag,
       updateFeedbackState,
       FAVORITE_FLAG,
@@ -220,5 +228,14 @@ export default {
   &__favorite {
     margin-right: 8px;
   }
+}
+
+.guide {
+  position: absolute;
+  right: 0;
+  bottom: -16px;
+  left: 0;
+  z-index: 10;
+  margin: auto;
 }
 </style>
