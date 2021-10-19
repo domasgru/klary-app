@@ -6,7 +6,7 @@
     <BasePopup
       is-open
       position="bottom"
-      width="343px"
+      width="350px"
       padding="16px"
       :offset="[0, 8]"
     >
@@ -15,7 +15,10 @@
         <div class="guide__popup">
           <p class="guide__text b2">
             Hey there 👋, to help you better understand how Klary works,
-            here’s an example of the feedback our co-founder Justinas recently received from his teammate.
+            here’s an example of an actual feedback between co-founders of Klary.
+            <br>
+            <br>
+            Take a look at the future of feedback 🚀
           </p>
           <BaseButton
             @click="hideGuide"
