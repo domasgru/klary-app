@@ -117,7 +117,7 @@
               Quick steps to get started.
             </p>
             <p class="b2 workspace-sidebar__guide-item">
-              1. Create feedabck form
+              1. Create feedabck form.
             </p>
             <p class="b2 workspace-sidebar__guide-item">
               2. Send a form link to the people you want to get feedback from.
