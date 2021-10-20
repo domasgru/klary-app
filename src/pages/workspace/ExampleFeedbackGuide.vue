@@ -6,7 +6,7 @@
     <BasePopup
       is-open
       position="bottom"
-      width="350px"
+      width="362px"
       padding="16px"
       :offset="[0, 8]"
     >
