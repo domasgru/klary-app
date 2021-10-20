@@ -15,10 +15,10 @@
         <div class="guide__popup">
           <p class="guide__text b2">
             Hey there 👋, to help you better understand how Klary works,
-            here’s an example of an actual feedback between co-founders of Klary.
-            <br>
-            <br>
-            Take a look at the future of feedback 🚀
+            here’s an example of actual feedback between co-founders of Klary.
+          </p>
+          <p class="guide__text b2">
+            Take a look at the new way to share feedback 🚀
           </p>
           <BaseButton
             @click="hideGuide"

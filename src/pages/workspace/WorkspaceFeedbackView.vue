@@ -14,7 +14,7 @@
         color="primary"
         class="feedback-view__example-feedback-message-icon"
       />
-      This is an example of the feedback our co-founder Justinas recently received from his teammate.
+      This is an example of actual feedback between co-founders of Klary.
     </div>
     <div
       v-if="showMarkAsClear"

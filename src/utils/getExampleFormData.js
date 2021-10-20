@@ -20,7 +20,7 @@ export const getExampleFormData = (uid, name, picture, withAnswers = false) => (
         placeholder: 'Type your answer',
         title: 'What should I start doing?',
       },
-      value: withAnswers ? 'Maybe sometimes it feels that your communication lacks some more hyping/inspiring or "crazy" stuff 🤪 For example when we brainstormed emails or onboarding flow copy.' : null,
+      value: withAnswers ? 'Maybe sometimes it feels that your copy lacks some more hyping/inspiring or "crazy" stuff 🤪 For example when we brainstormed emails or onboarding flow copy.' : null,
     },
     {
       component: 'WorkspaceFormLongAnswer',
