@@ -19,7 +19,10 @@
           NEW
         </div>
       </div>
-      <div class="comment-reply__content base-typography--b-16-24">
+      <div
+        data-hj-suppress
+        class="comment-reply__content base-typography--b-16-24"
+      >
         {{ reply.content }}
       </div>
     </div>

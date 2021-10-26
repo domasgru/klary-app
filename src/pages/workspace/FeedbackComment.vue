@@ -25,7 +25,10 @@
         <BaseLabelNew v-if="isCommentUnseen" />
       </div>
     </div>
-    <div class="feedback-comment__content base-typography--b-16-24">
+    <div
+      data-hj-suppress
+      class="feedback-comment__content base-typography--b-16-24"
+    >
       {{ comment.content }}
     </div>
   </div>
