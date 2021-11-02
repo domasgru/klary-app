@@ -127,7 +127,7 @@ export default {
 .header {
   z-index: 1;
   display: flex;
-  align-items: center;
+  align-items: start;
   margin-bottom: 32px;
 
   &__emoji {
@@ -135,8 +135,8 @@ export default {
   }
 
   &__title {
-    padding-right: 12px;
-    margin-right: auto;
+    flex-grow: 1;
+    margin-right: 32px;
   }
 
   &__button {
