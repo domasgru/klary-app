@@ -35,7 +35,10 @@
                 v-text="item.description"
               />
             </div>
-            <BaseIcon name="right" />
+            <BaseIcon
+              color="grey-600"
+              name="right"
+            />
           </div>
         </div>
 
