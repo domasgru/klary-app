@@ -65,6 +65,11 @@
       @markAsClear="markAsClear"
       @close="isMarkAsClearModalOpen = false"
     />
+
+    <FeedbackSentModal
+      :show-modal="showFeedbackSentModal"
+      @close="showFeedbackSentModal = false"
+    />
   </div>
 </template>
 
@@ -83,6 +88,7 @@ import WorkspaceFeedbackAction from './WorkspaceFeedbackAction.vue';
 import WorkspaceFeedbackViewActions from './WorkspaceFeedbackViewActions.vue';
 import WorkspaceMarkAsClearModal from './WorkspaceMarkAsClearModal.vue';
 import WorkspaceFeedbackForm from './WorkspaceFeedbackForm.vue';
+import FeedbackSentModal from './FeedbackSentModal.vue';
 
 export default {
   components: {
@@ -91,6 +97,7 @@ export default {
     WorkspaceMarkAsClearModal,
     WorkspaceFeedbackAction,
     WorkspaceFeedbackForm,
+    FeedbackSentModal,
   },
   props: {
     feedbackData: {
@@ -102,6 +109,7 @@ export default {
     const store = useStore();
     const router = useRouter();
     const actionsRef = ref(null);
+    const showFeedbackSentModal = ref(false);
 
     const {
       feedbackAuthor,
@@ -177,6 +185,10 @@ export default {
           showActionsOnSides.value = false;
         }
       });
+
+      if (router.currentRoute.value.query.showFeedbackSentMessage) {
+        showFeedbackSentModal.value = true;
+      }
     });
 
     const showMarkAsClear = computed(
@@ -191,6 +203,7 @@ export default {
       ]);
       isMarkAsClearModalOpen.value = false;
     };
+
     return {
       showMarkAsClear,
       isFeedbackSent,
@@ -204,6 +217,7 @@ export default {
       markAsClear,
       isFeedbackClosed,
       isExampleFeedback,
+      showFeedbackSentModal,
     };
   },
 };
