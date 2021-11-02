@@ -5,5 +5,9 @@
       "files": ["**/*.vue"],
       "customSyntax": "postcss-html"
     }
-  ]
+  ],
+  "rules": {
+    "color-function-notation": null,
+    "alpha-value-notation": null
+  }
 }

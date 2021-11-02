@@ -86,7 +86,7 @@ export default {
   &__popup {
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
     width: 100%;
     background: $light;
   }

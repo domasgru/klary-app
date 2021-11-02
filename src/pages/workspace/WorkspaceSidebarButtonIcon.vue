@@ -1,19 +1,20 @@
 <template>
   <BasePopup
     class="icon"
-    :is-open="showEmojiPopup"
+    :is-open="isEditable && showEmojiPopup"
     :position="'bottom-start'"
     :offset="[0, 6]"
-    @close="showEmojiPopup = false"
-    @click.stop.prevent
+    @close="$emit('close')"
+    v-on="isEditable ? {click: (e) => {e.preventDefault(); e.stopPropagation()}} : {}"
   >
     <div
       class="icon__wrapper"
       :class="{
+        [`icon__wrapper--hover-${hoverBackgroundColor}`]: emoji && hoverBackgroundColor,
         'icon__emoji-select-theme': emojiSelectTheme,
         'is-open': showEmojiPopup
       }"
-      @click="toggleEditing"
+      @click="isEditable && $emit('toggle')"
     >
       <div
         v-if="emoji"
@@ -27,7 +28,7 @@
         <BaseIcon
           size="sm"
           :name="icon"
-          :color="isActive ? 'primary' : 'dark'"
+          :color="color"
         />
       </div>
     </div>
@@ -46,6 +47,10 @@ import 'emoji-picker-element';
 
 export default {
   props: {
+    showEmojiPopup: {
+      type: Boolean,
+      default: false,
+    },
     icon: {
       type: String,
       default: null,
@@ -58,9 +63,13 @@ export default {
       type: Boolean,
       default: false,
     },
-    isActive: {
-      type: Boolean,
-      default: false,
+    hoverBackgroundColor: {
+      type: String,
+      default: 'grey-200',
+    },
+    color: {
+      type: String,
+      default: 'dark',
     },
     isEditable: {
       type: Boolean,
@@ -68,11 +77,6 @@ export default {
     },
   },
   emits: ['close', 'toggle', 'update-emoji'],
-  data() {
-    return {
-      showEmojiPopup: false,
-    };
-  },
   watch: {
     async showEmojiPopup(newValue) {
       if (!newValue) {
@@ -82,17 +86,8 @@ export default {
       await nextTick();
       this.$refs.emojiPicker.addEventListener('emoji-click', (e) => {
         this.$emit('update-emoji', e.detail.unicode);
-        this.showEmojiPopup = false;
+        this.$emit('close');
       });
-    },
-  },
-  methods: {
-    toggleEditing() {
-      if (!this.isEditable) {
-        return;
-      }
-
-      this.showEmojiPopup = !this.showEmojiPopup;
     },
   },
 };
@@ -106,8 +101,30 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
+    padding: 2px;
+    border-radius: 4px;
+
+    &--hover-light:hover,
+    &--hover-light.is-open {
+      background: $light;
+    }
+
+    &--hover-grey-150:hover,
+    &--hover-grey-150.is-open {
+      background: $grey-150;
+    }
+
+    &--hover-grey-200:hover,
+    &--hover-grey-200.is-open {
+      background: $grey-200;
+    }
+
+    &--hover-primary-light-20:hover,
+    &--hover-primary-light-20.is-open {
+      background: $primary-light-20;
+    }
   }
 
   &__emoji-select-theme {

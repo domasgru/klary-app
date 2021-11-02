@@ -134,7 +134,7 @@ export default {
 .header {
   z-index: 1;
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   margin-bottom: 24px;
 
   &__emoji-container {

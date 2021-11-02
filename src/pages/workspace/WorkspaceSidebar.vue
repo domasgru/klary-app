@@ -414,7 +414,7 @@ export default {
   &__guide {
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
   }
 
   &__guide-title {

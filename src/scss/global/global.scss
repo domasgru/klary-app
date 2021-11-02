@@ -1,6 +1,6 @@
-@import 'reset';
-@import 'typography';
-@import 'mixins';
+@import "reset";
+@import "typography";
+@import "mixins";
 
 .container--md {
   width: 100%;
@@ -33,6 +33,10 @@
   user-select: none;
 }
 
+.mr-8 {
+  margin-right: 8px;
+}
+
 .mb-8 {
   margin-bottom: 8px;
 }
@@ -43,4 +47,9 @@
 
 .mb-24 {
   margin-bottom: 24px;
+}
+
+::selection {
+  color: $light;
+  background: $primary-disabled; /* WebKit/Blink Browsers */
 }

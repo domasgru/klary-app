@@ -11,16 +11,22 @@
       :class="{
         'is-fluid': isFluid,
         'is-active': isActive,
-        'is-selected': showOptions || showFeedbackRequestRenamePopup
+        'is-selected': showOptions || showFeedbackRequestRenamePopup || showEmojiPopup,
+        'is-more-options-selected': showOptions || showFeedbackRequestRenamePopup
       }"
-      @dblclick="showFeedbackRequestRenamePopup = true"
+      @dblclick="handleSidebarButtonDoubleClick"
     >
       <WorkspaceSidebarButtonIcon
-        :is-active="isActive"
+        class="mr-8"
+        :show-emoji-popup="showEmojiPopup"
+        :color="isActive ? 'primary' : 'dark'"
+        :hover-background-color="isActive ? 'primary-light-20' : 'grey-200'"
         :emoji="emoji"
         :icon="icon"
-        :is-editable="!!options"
+        :is-editable="isEditable"
         @update-emoji="$emit('update-emoji', $event)"
+        @close="showEmojiPopup = false"
+        @toggle="showEmojiPopup = !showEmojiPopup"
       />
       <div
         v-if="text"
@@ -54,12 +60,16 @@
     <template #content>
       <div class="settings">
         <WorkspaceSidebarButtonIcon
-          :is-active="isActive"
+          :show-emoji-popup="showEmojiPopup"
+          hover-background-color="light"
+          class="mr-8"
           :emoji="emoji"
           :icon="icon"
-          :is-editable="!!options"
+          :is-editable="isEditable"
           emoji-select-theme
           @update-emoji="$emit('update-emoji', $event)"
+          @close="showEmojiPopup = false"
+          @toggle="showEmojiPopup = !showEmojiPopup"
         />
         <BaseInput
           class="settings__title"
@@ -117,8 +127,12 @@ export default {
   data() {
     return {
       showOptions: false,
+      showEmojiPopup: false,
       showFeedbackRequestRenamePopup: false,
     };
+  },
+  computed: {
+    isEditable: ({ options }) => !!options,
   },
   methods: {
     handleOptionsClick() {
@@ -129,6 +143,13 @@ export default {
 
       this.showOptions = !this.showOptions;
     },
+    handleSidebarButtonDoubleClick() {
+      if (!this.isEditable) {
+        return;
+      }
+      this.showFeedbackRequestRenamePopup = true;
+    },
+
   },
 };
 </script>
@@ -140,7 +161,7 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-  padding: 6px 8px;
+  padding: 4px 8px;
   color: $dark;
   cursor: pointer;
   border-radius: 6px;
@@ -173,26 +194,26 @@ export default {
     top: 6px;
     right: 8px;
     border-radius: 4px;
-    opacity: 0;
+    opacity: 0%;
 
-    #{$this}:hover &, #{$this}.is-selected & {
-      opacity: 1;
+    #{$this}:hover &, #{$this}.is-more-options-selected & {
+      opacity: 100%;
     }
 
     &:hover {
       background: $grey-200;
-      opacity: 1;
+      opacity: 100%;
     }
 
     #{$this}.is-active &:hover {
       background: $primary-light-20;
     }
 
-    #{$this}.is-selected & {
+    #{$this}.is-more-options-selected & {
       background: $grey-200;
     }
 
-    #{$this}.is-selected.is-active & {
+    #{$this}.is-more-options-selected.is-active & {
       background: $primary-light-20;
     }
   }
