@@ -5,7 +5,7 @@ export const getExampleFormData = (uid, name, picture, withAnswers = false) => (
   name,
   title: 'Getting started',
   formTitle: 'Hey, help me to improve 🚀',
-  formDescription: "I'm really interested to get your perspective, don't overthink and just write what you feel, we will discuss if needed.",
+  formDescription: "I’m really curious to get your perspective. Don’t overthink and just write down what you've noticed. We will be able to discuss if needed.",
   showAuthor: true,
   emoji: '🚀',
   message: '',
