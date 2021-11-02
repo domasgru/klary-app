@@ -67,7 +67,6 @@ export default {
 .modal-content {
   position: relative;
   width: 100%;
-  overflow: hidden;
   background: $light;
   border-radius: $border-radius;
 

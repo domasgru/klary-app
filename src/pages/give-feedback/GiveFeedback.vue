@@ -19,35 +19,8 @@
       </div>
     </template>
     <template #form>
-      <!-- Success message -->
-      <div
-        v-if="showSuccessMessage"
-        class="success-message"
-      >
-        <div class="success-message__illustration success-message__illustration--sent">
-          <img
-            class="success-message__icon"
-            :src="require('@/assets/illustrations/sent.png')"
-          >
-        </div>
-        <div class="success-message__title success-message__title--success h4">
-          Your feedback has been sent
-        </div>
-        <div class="success-message__message--success b1">
-          You can view your given feedback and discuss about it through the Klary platform.
-        </div>
-        <div class="success-message__button-wrapper">
-          <BaseButton
-            fluid
-            size="lg"
-            @click="openFeedback"
-            v-text="'View feedback'"
-          />
-        </div>
-      </div>
       <!-- Feedback form -->
       <WorkspaceFeedbackForm
-        v-else
         :feedback-request-data="form"
         :errors="formErrors"
         view-mode="active"
@@ -128,7 +101,6 @@ export default {
     const sentFeedbackId = ref(null);
 
     const showSignupModal = ref(false);
-    const showSuccessMessage = ref(false);
 
     // INIT feedback request data
     const { requestId } = router.currentRoute.value.params;
@@ -184,27 +156,26 @@ export default {
         feedbackRequestId: requestId,
       });
       sentFeedbackId.value = sentFeedback.id;
-      showSuccessMessage.value = true;
+      openFeedback();
     };
 
     const submitAfterLogin = async () => {
       try {
         await submitMessage();
         showSignupModal.value = false;
-        showSuccessMessage.value = true;
+        openFeedback();
       } catch (e) {
         console.error(e);
       }
     };
 
     const openFeedback = () => {
-      router.push(`/sent/${sentFeedbackId.value}`);
+      router.push({ path: `/sent/${sentFeedbackId.value}`, query: { showFeedbackSentMessage: true } });
     };
 
     return {
       submitAfterLogin,
       showSignupModal,
-      showSuccessMessage,
       submitMessage,
       openFeedback,
       isLoading,
@@ -236,71 +207,6 @@ export default {
 
   &__user-avatar {
     margin-right: 8px;
-  }
-}
-
-.success-message {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 788px;
-  padding: 64px 64px 48px 64px;
-  margin-bottom: 24px;
-  text-align: center;
-  background: $light;
-  border: 1px solid $grey-200;
-  border-radius: $border-radius;
-
-  &__illustration {
-    position: absolute !important;
-    top: -36px;
-    right: 0;
-    left: 0;
-    margin: auto;
-    border: 3px solid $light;
-
-    &--sent {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 72px;
-      height: 72px;
-      background: $grey-100;
-      border-radius: 50%;
-    }
-  }
-
-  &__icon {
-    width: 40px;
-  }
-
-  &__title {
-    max-width: 290px;
-
-    &:not(:last-child) {
-      margin-bottom: 16px;
-    }
-
-    &--success {
-      max-width: 600px;
-    }
-  }
-
-  &__message {
-    width: 100%;
-    max-width: 592px;
-
-    &--success {
-      max-width: 460px;
-    }
-  }
-
-  &__button-wrapper {
-    width: 100%;
-    max-width: 208px;
-    margin-top: 32px;
   }
 }
 

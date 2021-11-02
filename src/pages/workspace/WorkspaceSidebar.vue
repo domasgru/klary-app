@@ -126,7 +126,7 @@
               3. Get to know the feedback you received.
             </p>
             <p class="b2 workspace-sidebar__guide-item">
-              4. Dicuss right in the feedback if something is unclear or you want to dive deep.
+              4. Dicuss right in the feedback if something is unclear or you want to dive deeper.
             </p>
             <p class="b2 workspace-sidebar__guide-item">
               5. Create action items in your notes based on feedback. Klary's own solution coming soon.
