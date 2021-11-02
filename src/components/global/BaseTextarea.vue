@@ -150,6 +150,7 @@ export default {
   font-family: 'Inter';
   line-height: 24px;
   color: inherit;
+  -webkit-text-fill-color: inherit; // safari
   cursor: text;
   resize: none;
   background: transparent;

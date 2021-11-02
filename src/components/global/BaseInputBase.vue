@@ -201,12 +201,14 @@ export default {
 
     #{$this}--disabled & {
       color: $grey-600;
+      -webkit-text-fill-color: $grey-600; // safari
       pointer-events: none;
       background: $grey-50;
     }
 
     #{$this}--preview & {
       color: $dark;
+      -webkit-text-fill-color: $dark; // safari
       pointer-events: none;
       background: $grey-50;
     }

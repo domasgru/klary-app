@@ -73,6 +73,9 @@ export default {
   resize: none;
   background: transparent;
   outline: none;
+  color: inherit;
+  opacity: 1; // ios safari
+  -webkit-text-fill-color: inherit; // safari
 
   &--lg {
     padding: 12px 16px;
