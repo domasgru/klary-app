@@ -291,12 +291,15 @@ export default {
     },
     createForm() {
       const id = nanoid(10);
-      createFeedbackRequest(id, {
-        uid: this.userData.uid,
-        name: this.userData.name,
-        title: 'Untitled',
-        message: '',
-        picture: this.userData.picture || '',
+      createFeedbackRequest({
+        id,
+        data: {
+          uid: this.userData.uid,
+          name: this.userData.name,
+          title: 'Untitled',
+          message: '',
+          picture: this.userData.picture || '',
+        },
       });
       this.$router.push(`/edit-form/${id}`);
     },
@@ -323,9 +326,11 @@ export default {
     },
     duplicateFeedbackRequest(request) {
       const { id, ...requestCopy } = request;
-      createFeedbackRequest(nanoid(10), {
-        ...requestCopy,
-        title: `Copy of ${request.title}`,
+      createFeedbackRequest({
+        data: {
+          ...requestCopy,
+          title: `Copy of ${request.title}`,
+        },
       });
     },
     copyFeedbackRequestLink(request) {
