@@ -128,7 +128,7 @@ export default {
   z-index: 1;
   display: flex;
   align-items: start;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 
   &__emoji {
     flex-shrink: 0;
@@ -136,8 +136,18 @@ export default {
 
   &__title {
     flex-grow: 1;
+    padding: 8px;
     margin-right: 32px;
+    border-radius: 10px;
     outline: none;
+
+    &:focus-within {
+      background: $grey-150;
+    }
+
+    &:hover {
+      background: $grey-150;
+    }
   }
 
   &__button {
