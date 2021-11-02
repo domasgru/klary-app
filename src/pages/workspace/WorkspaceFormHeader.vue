@@ -15,6 +15,7 @@
       <p
         contenteditable="true"
         class="header__title btn2"
+        spellcheck="false"
         @keydown.enter.prevent
         @blur="updateFeedbackTitle($event.target.textContent)"
         v-text="title || 'Untitled'"

@@ -1,29 +1,36 @@
 <template>
   <div class="header">
-    <h4
-      class="header__emoji h4"
-      @paste="pasteAsPlainText"
-    >
-      {{ feedbackRequestData.emoji }}&nbsp;
-    </h4>
+    <div class="header__emoji-container">
+      <div
+        class="header__emoji h4"
+        @paste="pasteAsPlainText"
+      >
+        {{ feedbackRequestData.emoji }}&nbsp;
+      </div>
+    </div>
+
     <h4
       ref="feedbackRequestName"
       class="header__title h4"
       contenteditable="true"
+      spellcheck="false"
       @keydown.enter.prevent
       @blur="editName"
       v-text="feedbackRequestData.title || 'Untitled'"
     />
 
-    <BaseButton
-      class="header__button"
-      type="secondary"
-      @click="$router.push(`/edit-form/${feedbackRequestData.id}`)"
-      v-text="'Edit form'"
-    />
-    <WorkspaceShareFormPopup
-      class="header__button"
-    />
+    <div class="header__actions">
+      <BaseButton
+        class="header__button"
+        type="secondary"
+        @click="$router.push(`/edit-form/${feedbackRequestData.id}`)"
+        v-text="'Edit form'"
+      />
+      <WorkspaceShareFormPopup
+        class="header__button"
+      />
+    </div>
+
     <!-- <BaseButton
       class="header__button"
       type="secondary"
@@ -130,6 +137,10 @@ export default {
   align-items: start;
   margin-bottom: 24px;
 
+  &__emoji-container {
+    padding: 8px;
+  }
+
   &__emoji {
     flex-shrink: 0;
   }
@@ -148,6 +159,11 @@ export default {
     &:hover {
       background: $grey-150;
     }
+  }
+
+  &__actions {
+    display: flex;
+    padding-top: 8px;
   }
 
   &__button {
