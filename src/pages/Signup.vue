@@ -62,7 +62,7 @@ import {
 } from '@/firebase';
 import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
 import { mapActions, mapState } from 'vuex';
-import { getExampleFormData, exampleFeedbackDiscussion } from '@/utils/getExampleFormData';
+import { getExampleFormData, getStartStopContinueFormData, exampleFeedbackDiscussion } from '@/utils/getExampleFormData';
 
 export default {
   props: {
@@ -118,10 +118,10 @@ export default {
 
       try {
         const [feedbackRequest, exampleFeedback] = await Promise.all([
-          createFeedbackRequest(
-            formId,
-            getExampleFormData(this.userData.uid, this.userData.name, this.userData.picture),
-          ),
+          createFeedbackRequest({
+            id: formId,
+            data: getExampleFormData(this.userData.uid, this.userData.name, this.userData.picture),
+          }),
           createFeedback({
             authorId: 'author',
             receiverId: this.userData.uid,
@@ -188,6 +188,9 @@ export default {
             authorUid,
             createdAt,
           })),
+          createFeedbackRequest({
+            data: getStartStopContinueFormData(this.userData.uid, this.userData.name, this.userData.picture),
+          }),
         ]);
       } catch (e) {
         console.error(e);

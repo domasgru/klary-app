@@ -4,6 +4,7 @@ import 'firebase/firestore';
 import 'firebase/storage';
 import shortId from 'shortid';
 import { COMMENT_ACTION } from '@/constants';
+import { nanoid } from 'nanoid';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAFS8RVfGHghmSagIJ3FDRVcYTWaPCGMMw',
@@ -170,16 +171,16 @@ export const getFeedbackRequestById = async (id) => {
   return { ...feedbackRequest.data(), id: feedbackRequest.id };
 };
 
-export const createFeedbackRequest = (id, requestData) => {
-  const feedbackRequest = {
-    createdAt: getTime(),
-    ...requestData,
-  };
-
-  return Promise.all([
-    db.collection('feedbackRequests').doc(id).set(feedbackRequest),
+export const createFeedbackRequest = async ({ id = nanoid(10), data }) => {
+  await Promise.all([
+    db.collection('feedbackRequests').doc(id).set({
+      createdAt: getTime(),
+      ...data,
+    }),
     db.collection('customUI').doc(auth.currentUser.uid).set({ sidebarFormsOrder: FieldValue.arrayUnion(id) }, { merge: true }),
   ]);
+
+  return id;
 };
 export const deleteFeedbackRequest = (requestId) => Promise.all([
   db.collection('feedbackRequests').doc(requestId).delete(),

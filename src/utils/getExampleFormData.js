@@ -47,6 +47,53 @@ export const getExampleFormData = (uid, name, picture, withAnswers = false) => (
   ],
 });
 
+export const getStartStopContinueFormData = (uid, name, picture) => ({
+  uid,
+  name,
+  title: 'Start / Stop / Continue',
+  formTitle: 'Hey, help me to improve 🙏',
+  formDescription: "I’m very curious to get your perspective!\nDon't overthink too much and let's discuss afterward if anything will be unclear or to dive deeper.",
+  showAuthor: true,
+  emoji: '🙏',
+  message: '',
+  picture: picture || '',
+  questions: [
+    {
+      component: 'WorkspaceFormLongAnswer',
+      id: 'ssc1',
+      options: {
+        description: '',
+        isRequired: false,
+        placeholder: 'Type your answer',
+        title: 'What should I start doing?',
+      },
+      value: null,
+    },
+    {
+      component: 'WorkspaceFormLongAnswer',
+      id: 'ssc2',
+      options: {
+        description: '',
+        isRequired: false,
+        placeholder: 'Type your answer',
+        title: 'What should I stop doing?',
+      },
+      value: null,
+    },
+    {
+      component: 'WorkspaceFormLongAnswer',
+      id: 'ssc3',
+      options: {
+        description: '',
+        isRequired: false,
+        placeholder: 'Type your answer',
+        title: 'What should I continue doing?',
+      },
+      value: null,
+    },
+  ],
+});
+
 export const exampleFeedbackDiscussion = [
   {
     type: 'COMMENT',
