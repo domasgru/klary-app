@@ -137,6 +137,7 @@ export default {
   &__title {
     flex-grow: 1;
     margin-right: 32px;
+    outline: none;
   }
 
   &__button {

@@ -13,7 +13,10 @@
       </button>
 
       <p
+        contenteditable="true"
         class="header__title btn2"
+        @keydown.enter.prevent
+        @blur="updateFeedbackTitle($event.target.textContent)"
         v-text="title || 'Untitled'"
       />
       <BaseButton
@@ -39,6 +42,7 @@
 </template>
 
 <script>
+import { updateFeedbackRequest } from '@/firebase';
 import WorkspaceShareFormPopup from './WorkspaceShareFormPopup.vue';
 
 export default {
@@ -53,6 +57,13 @@ export default {
     title: {
       type: String,
       required: true,
+    },
+  },
+  methods: {
+    updateFeedbackTitle(title) {
+      updateFeedbackRequest(this.$route.params.id, {
+        title,
+      });
     },
   },
 };
@@ -88,7 +99,18 @@ export default {
   }
 
   &__title {
+    padding: 10px 12px;
     margin-right: auto;
+    border-radius: 8px;
+    outline: none;
+
+    &:focus-within {
+      background: $grey-100;
+    }
+
+    &:hover {
+      background: $grey-100;
+    }
   }
 
   &__preview {
