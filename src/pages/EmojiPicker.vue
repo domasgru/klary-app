@@ -7,6 +7,7 @@
     :is-open="isOpen"
     :position="'bottom-start'"
     :offset="[0, 6]"
+    popup-z-index="1001"
     @close="$emit('close')"
     @click.stop.prevent
   >
