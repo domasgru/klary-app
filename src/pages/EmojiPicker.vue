@@ -47,7 +47,6 @@
 
 <script>
 import { nextTick } from 'vue';
-import 'emoji-picker-element';
 
 export default {
   props: {

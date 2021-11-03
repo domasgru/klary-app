@@ -27,13 +27,12 @@ module.exports = {
     config.module
       .rule('vue')
       .use('vue-loader')
-      .loader('vue-loader')
-      .tap((options) => {
-        options.compilerOptions = {
-          ...(options.compilerOptions || {}),
-          isCustomElement: (tag) => /^emoji-/.test(tag),
-        };
-        return options;
-      });
+      .tap((options) => ({
+        ...options,
+        compilerOptions: {
+          // treat any tag that starts with ion- as custom elements
+          isCustomElement: (tag) => tag.startsWith('emoji'),
+        },
+      }));
   },
 };

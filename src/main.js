@@ -8,6 +8,7 @@ import { Vue as VueIntegration } from '@sentry/integrations';
 import App from './App.vue';
 import { router } from './router';
 import { store } from './store';
+import 'emoji-picker-element';
 import './firebase';
 import './scss/global/global.scss';
 
@@ -16,7 +17,6 @@ app.use(router);
 app.use(store);
 app.use(VuelidatePlugin);
 
-app.config.isCustomElement = (tag) => tag.startsWith('emoji');
 app.directive('click-outside', clickOutsideDirective);
 
 const globalComponents = require.context('./components/global', false, /Base[A-Z]\w+\.(vue|js)$/);
