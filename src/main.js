@@ -1,10 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import { createApp } from 'vue';
 import { VuelidatePlugin } from '@vuelidate/core'; // https://github.com/vuelidate/vuelidate/tree/next
-import clickOutsideDirective from '@/plugins/click-outside';
 import * as Sentry from '@sentry/vue';
 import { Integrations } from '@sentry/tracing';
 import { Vue as VueIntegration } from '@sentry/integrations';
+import clickOutsideDirective from '@/plugins/click-outside';
 import App from './App.vue';
 import { router } from './router';
 import { store } from './store';

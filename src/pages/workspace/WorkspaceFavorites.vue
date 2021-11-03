@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import { useFeedbackList } from '@/composables/useFeedback';
 import { useStore } from 'vuex';
+import { useFeedbackList } from '@/composables/useFeedback';
 import { FAVORITES_TYPE, FAVORITE_FLAG } from '@/constants/feedback';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
 import WorkspaceInboxEmptyState from './WorkspaceInboxEmptyState.vue';

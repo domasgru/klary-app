@@ -57,11 +57,11 @@
 <script>
 /* eslint-disable camelcase */
 import { nanoid } from 'nanoid';
+import { mapActions, mapState } from 'vuex';
 import {
   loginWithGoogle, createUserProfileDocument, createFeedbackRequest, createFeedback, getTime, addAction,
 } from '@/firebase';
 import { handleLoginAndReturnRedirect } from '@/utils/handleLogin';
-import { mapActions, mapState } from 'vuex';
 import { getExampleFormData, getStartStopContinueFormData, exampleFeedbackDiscussion } from '@/utils/getExampleFormData';
 
 export default {

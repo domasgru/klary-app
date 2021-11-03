@@ -180,11 +180,11 @@
 import { nanoid } from 'nanoid';
 import Sortable from 'sortablejs';
 import { mapGetters, mapState } from 'vuex';
+import arrayMove from 'array-move';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
 import {
   logout, updateFeedbackRequest, createFeedbackRequest, deleteFeedbackRequest, setCustomUI,
 } from '@/firebase';
-import arrayMove from 'array-move';
 import HelpAndSupportModal from '@/pages/HelpAndSupportModal.vue';
 import WorkspaceAccountSettings from './WorkspaceAccountSettings.vue';
 import WorkspaceSidebarButton from './WorkspaceSidebarButton.vue';

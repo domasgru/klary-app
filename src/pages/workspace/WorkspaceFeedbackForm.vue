@@ -136,9 +136,9 @@
 </template>
 
 <script>
+import arrayMove from 'array-move';
 import { capitalize } from '@/utils/stringUtils';
 import { pasteAsPlainText } from '@/utils/pasteAsPlainText';
-import arrayMove from 'array-move';
 import WorkspaceFormShortAnswer from './WorkspaceFormShortAnswer.vue';
 import WorkspaceFormLongAnswer from './WorkspaceFormLongAnswer.vue';
 import WorkspaceFormOpinionScale from './WorkspaceFormOpinionScale.vue';
@@ -216,7 +216,7 @@ export default {
 
   &__initials {
     width: 100%;
-    padding: 48px 56px 40px 56px;
+    padding: 48px 56px 40px;
     background: $light;
     border: $stroke;
     border-radius: $border-radius;
@@ -281,10 +281,6 @@ export default {
     &:not(:last-child) {
       margin-bottom: 16px;
     }
-  }
-
-  &__question {
-
   }
 
   &__question-controls {

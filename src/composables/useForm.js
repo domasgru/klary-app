@@ -1,7 +1,7 @@
-import { computed, ref, toRefs } from 'vue';
+import { ref } from 'vue';
 import set from 'lodash.set';
-import { getFeedbackRequestById, updateFeedbackRequest } from '@/firebase';
 import { useStore } from 'vuex';
+import { getFeedbackRequestById } from '@/firebase';
 
 export const useFormPure = (formId) => {
   const isLoading = ref(true);

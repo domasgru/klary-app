@@ -3,8 +3,8 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
 import shortId from 'shortid';
-import { COMMENT_ACTION } from '@/constants';
 import { nanoid } from 'nanoid';
+import { COMMENT_ACTION } from '@/constants';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAFS8RVfGHghmSagIJ3FDRVcYTWaPCGMMw',

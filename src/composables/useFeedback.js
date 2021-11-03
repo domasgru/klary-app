@@ -1,16 +1,16 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-shadow */
 import {
-  computed, ref, toRefs, watch,
+  computed, ref,
 } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import arraySort from 'array-sort';
+import getObjectValue from 'get-value';
 import {
   RECEIVED_TYPE, SENT_TYPE, FAVORITE_FLAG, FAVORITES_TYPE, REMOVED_STATE, REMOVED_TYPE, ACTIVE_STATUS, CLOSED_STATUS,
 } from '@/constants/feedback';
 import { isFeedbackSeen } from '@/utils/isFeedbackSeen';
-import arraySort from 'array-sort';
-import getObjectValue from 'get-value';
 import { updateFeedback, addAction } from '@/firebase';
 
 const validTypes = [RECEIVED_TYPE, SENT_TYPE, FAVORITES_TYPE, REMOVED_TYPE];

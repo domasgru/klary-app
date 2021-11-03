@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import { addAction } from '@/firebase';
 import { mapState } from 'vuex';
+import { addAction } from '@/firebase';
 import { COMMENT_ACTION } from '@/constants/feedback';
 
 export default {
