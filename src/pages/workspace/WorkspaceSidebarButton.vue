@@ -194,15 +194,15 @@ export default {
     top: 6px;
     right: 8px;
     border-radius: 4px;
-    opacity: 0%;
+    opacity: 0;
 
     #{$this}:hover &, #{$this}.is-more-options-selected & {
-      opacity: 100%;
+      opacity: 1;
     }
 
     &:hover {
       background: $grey-200;
-      opacity: 100%;
+      opacity: 1;
     }
 
     #{$this}.is-active &:hover {
