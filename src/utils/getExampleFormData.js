@@ -3,11 +3,11 @@ import { getTime } from '@/firebase';
 export const getExampleFormData = (uid, name, picture, withAnswers = false) => ({
   uid,
   name,
-  title: 'Getting started',
+  title: 'Feedback example',
   formTitle: 'Hey, help me to improve 🚀',
   formDescription: "I’m really curious to get your perspective. Don’t overthink and just write down what you've noticed. We will be able to discuss if needed.",
   showAuthor: true,
-  emoji: '🚀',
+  emoji: '📘',
   message: '',
   picture: picture || '',
   questions: [
@@ -54,7 +54,7 @@ export const getStartStopContinueFormData = (uid, name, picture) => ({
   formTitle: 'Hey, help me to improve 🙏',
   formDescription: "I’m very curious to get your perspective!\nDon't overthink too much and let's discuss afterward if anything will be unclear or to dive deeper.",
   showAuthor: true,
-  emoji: '🙏',
+  emoji: '🚀',
   message: '',
   picture: picture || '',
   questions: [

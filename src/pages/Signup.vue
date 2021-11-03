@@ -171,7 +171,7 @@ export default {
             },
             feedbackRequestId: formId,
             status: 'CLOSED',
-            title: 'Getting started',
+            title: 'Feedback example',
             form: getExampleFormData('receiver', 'Justinas Guliokas', 'https://lh3.googleusercontent.com/a-/AOh14GjElxDOkr2xBF19YlRDZcz67WUeFE9VW1Nc7A_-hQ=s96-c', true),
             exampleAuthorId: 'klaryTeam',
           }),

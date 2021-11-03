@@ -51,5 +51,6 @@
 
 ::selection {
   color: $light;
+  -webkit-text-fill-color: $light;
   background: #7F55F2; /* WebKit/Blink Browsers */
 }
