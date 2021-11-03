@@ -38,6 +38,7 @@
     </div>
     <template #content>
       <emoji-picker
+        v-pre
         ref="emojiPicker"
         class="light"
       />
