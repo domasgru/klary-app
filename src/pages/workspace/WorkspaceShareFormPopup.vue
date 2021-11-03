@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
@@ -49,6 +51,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['userData']),
     shareLink() {
       return `${window.origin}/f/${this.$route.params.id}`;
     },
@@ -56,6 +59,7 @@ export default {
   methods: {
     copyLink() {
       navigator.clipboard.writeText(this.shareLink);
+      window.umami.trackEvent(this.userData.value.email, 'copy-form-link');
     },
   },
 };

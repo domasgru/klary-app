@@ -301,6 +301,7 @@ export default {
           picture: this.userData.picture || '',
         },
       });
+      window.umami.trackEvent(this.userData.value.email, 'create-form');
       this.$router.push(`/edit-form/${id}`);
     },
     deleteForm(id) {
@@ -402,7 +403,7 @@ export default {
 
   &__forms-scroll {
     flex-grow: 1;
-    padding: 0 8px 20px 8px;
+    padding: 0 8px 20px;
     overflow-y: auto;
   }
 

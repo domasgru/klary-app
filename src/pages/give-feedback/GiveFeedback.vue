@@ -156,6 +156,7 @@ export default {
         feedbackRequestId: requestId,
       });
       sentFeedbackId.value = sentFeedback.id;
+      window.umami.trackEvent(userData.value.email, 'send-feedback');
       openFeedback();
     };
 

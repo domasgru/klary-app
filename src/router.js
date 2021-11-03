@@ -187,6 +187,7 @@ router.beforeEach(async (to, from, next) => {
 // RESET LOADER
 router.afterEach(async (to, from, next) => {
   store.commit('setLoading', false);
+  window.umami.trackView(to.path);
 });
 
 async function isLoggedIn() {
