@@ -1,21 +1,24 @@
 <template>
   <div class="header">
-    <div class="header__emoji-container">
-      <div
-        class="header__emoji h4"
-        @paste="pasteAsPlainText"
-      >
-        {{ feedbackRequestData.emoji }}&nbsp;
-      </div>
-    </div>
+    <EmojiPicker
+      v-if="feedbackRequestData.emoji"
+      class="header__emoji"
+      :is-open="showEmojiPicker"
+      hover-background-color="grey-150"
+      :emoji="feedbackRequestData.emoji"
+      size="md"
+      @toggle="showEmojiPicker = !showEmojiPicker"
+      @close="showEmojiPicker = false"
+      @update-emoji="updateFormData('emoji', $event)"
+    />
 
     <h4
-      ref="feedbackRequestName"
       class="header__title h4"
       contenteditable="true"
       spellcheck="false"
       @keydown.enter.prevent
-      @blur="editName"
+      @blur="updateFormData('title', $event.target.textContent)"
+      @paste="pasteAsPlainText"
       v-text="feedbackRequestData.title || 'Untitled'"
     />
 
@@ -73,6 +76,7 @@ import { useFeedbackList } from '@/composables/useFeedback';
 import { RECEIVED_TYPE, ACTIVE_STATUS, CLOSED_STATUS } from '@/constants/feedback';
 import { updateFeedbackRequest } from '@/firebase';
 import { pasteAsPlainText } from '@/utils/pasteAsPlainText';
+import EmojiPicker from '@/pages/EmojiPicker.vue';
 import WorkspaceFeedbackList from './WorkspaceFeedbackList.vue';
 import WorkspaceInboxEmptyState from './WorkspaceInboxEmptyState.vue';
 import WorkspaceShareFormPopup from './WorkspaceShareFormPopup.vue';
@@ -82,6 +86,7 @@ export default {
     WorkspaceFeedbackList,
     WorkspaceInboxEmptyState,
     WorkspaceShareFormPopup,
+    EmojiPicker,
   },
   props: {
     feedbackRequestData: {
@@ -93,6 +98,7 @@ export default {
     const { isLoading, getFilteredAndSortedFeedbacks } = useFeedbackList(RECEIVED_TYPE);
     const router = useRouter();
     const feedbackRequestId = computed(() => props.feedbackRequestData.id);
+    const showEmojiPicker = ref(false);
 
     const pendingFeedbacks = getFilteredAndSortedFeedbacks({
       filter: {
@@ -107,10 +113,9 @@ export default {
       },
     });
 
-    const feedbackRequestName = ref(null);
-    const editName = (e) => {
+    const updateFormData = (key, value) => {
       updateFeedbackRequest(feedbackRequestId.value, {
-        title: e.target.textContent,
+        [key]: value,
       });
     };
 
@@ -122,9 +127,9 @@ export default {
       isLoading,
       openFeedback,
       RECEIVED_TYPE,
-      feedbackRequestName,
-      editName,
+      updateFormData,
       pasteAsPlainText,
+      showEmojiPicker,
     };
   },
 };
@@ -146,6 +151,7 @@ export default {
   }
 
   &__title {
+    flex-basis: 0;
     flex-grow: 1;
     padding: 8px;
     margin-right: 32px;

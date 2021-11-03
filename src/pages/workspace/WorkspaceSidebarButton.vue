@@ -18,7 +18,7 @@
     >
       <WorkspaceSidebarButtonIcon
         class="mr-8"
-        :show-emoji-popup="showEmojiPopup"
+        :is-open="!showFeedbackRequestRenamePopup && showEmojiPopup"
         :color="isActive ? 'primary' : 'dark'"
         :hover-background-color="isActive ? 'primary-light-20' : 'grey-200'"
         :emoji="emoji"
@@ -60,7 +60,7 @@
     <template #content>
       <div class="settings">
         <WorkspaceSidebarButtonIcon
-          :show-emoji-popup="showEmojiPopup"
+          :is-open="showEmojiPopup"
           hover-background-color="light"
           class="mr-8"
           :emoji="emoji"
@@ -161,7 +161,7 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-  padding: 4px 8px;
+  padding: 6px 8px;
   color: $dark;
   cursor: pointer;
   border-radius: 6px;
