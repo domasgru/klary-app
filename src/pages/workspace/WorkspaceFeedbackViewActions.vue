@@ -63,7 +63,7 @@ export default {
 
     const updateFeedbackStateAndClose = (state) => {
       updateFeedbackState(state);
-      router.push(`/${router.currentRoute.value.params.type}`);
+      goBack();
     };
 
     const goBack = () => {
