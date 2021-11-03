@@ -301,7 +301,7 @@ export default {
           picture: this.userData.picture || '',
         },
       });
-      window.umami.trackEvent(this.userData.value.email, 'create-form');
+      window.umami.trackEvent(this.userData.email, 'create-form');
       this.$router.push(`/edit-form/${id}`);
     },
     deleteForm(id) {
