@@ -76,6 +76,7 @@ export default {
     return {
       step: 'welcome',
       fullName: '',
+      isLoading: false,
     };
   },
   computed: {
@@ -103,6 +104,11 @@ export default {
       }
     },
     async finishSignup() {
+      if (this.isLoading) {
+        return;
+      }
+
+      this.isLoading = true;
       const picture = this.userAuth.additionalUserInfo.profile?.picture
         ? { picture: this.userAuth.additionalUserInfo.profile?.picture } : {};
       await createUserProfileDocument(this.userAuth, {
