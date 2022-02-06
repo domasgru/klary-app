@@ -133,7 +133,7 @@
             </p>
             <BaseButton
               type="secondary"
-              href="https://klaryapp.notion.site/Klary-Guide-dfccd1ae915343df87f5a3ac55f81e71"
+              href="https://klary-app.notion.site/Klary-Guide-b5262bae4c664fe8aa9ec27a2cd6f9e6"
               target="_blank"
               v-text="'Learn more'"
             />

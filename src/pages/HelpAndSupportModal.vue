@@ -118,7 +118,7 @@ export default {
       if (id === 'contact') {
         this.currentlyShowedModal = 'support';
       } else if (id === 'guide') {
-        window.open('https://klaryapp.notion.site/Klary-guide-dfccd1ae915343df87f5a3ac55f81e71');
+        window.open('https://klary-app.notion.site/Klary-Guide-b5262bae4c664fe8aa9ec27a2cd6f9e6');
       }
     },
     async sendContactUsMessage() {
