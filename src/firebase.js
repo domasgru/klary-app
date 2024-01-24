@@ -8,7 +8,7 @@ import { COMMENT_ACTION } from '@/constants';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAFS8RVfGHghmSagIJ3FDRVcYTWaPCGMMw',
-  authDomain: 'login.klary.co',
+  authDomain: 'feedback-2263b.firebaseapp.com',
   databaseURL: 'https://feedback-2263b.firebaseio.com',
   projectId: 'feedback-2263b',
   storageBucket: 'feedback-2263b.appspot.com',
